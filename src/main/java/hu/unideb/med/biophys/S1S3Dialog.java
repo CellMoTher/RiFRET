@@ -446,7 +446,7 @@ public class S1S3Dialog extends JDialog implements ActionListener{
                             acceptorImg.changes = false;
                         }       break;
                     case "setfactor":
-                        if (s1ResultLabel.getText().equals("") || s3ResultLabel.getText().equals("")) {
+                        if (s1ResultLabel.getText().isEmpty() || s3ResultLabel.getText().isEmpty()) {
                             mainWindow.logError("S1 and S3 have to be calculated before setting them. (S1/S3 calc.)");
                             return;
                         }       mainWindow.setS1Factor(s1ResultLabel.getText());

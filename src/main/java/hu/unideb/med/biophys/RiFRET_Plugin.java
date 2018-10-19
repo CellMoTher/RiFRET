@@ -884,7 +884,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 logError("No open image.");
                                 return;
                             }               String radiusString =  JOptionPane.showInputDialog(this, "Enter radius (in pixels) for Gaussian blur", "Gaussian blur", JOptionPane.QUESTION_MESSAGE);
-                            if (radiusString == null || radiusString.trim().equals("")) {
+                            if (radiusString == null || radiusString.trim().isEmpty()) {
                                 return;
                             }               GaussianBlur gb = new GaussianBlur();
                             int nSlices = WindowManager.getCurrentImage().getImageStackSize();
@@ -1166,7 +1166,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 logError("No ROI is defined for donor channel.");
                                 return;
                             }               float autofl = 0;
-                            if (!autoflDInDField.getText().trim().equals("")) {
+                            if (!autoflDInDField.getText().trim().isEmpty()) {
                                 autofl = Float.parseFloat(autoflDInDField.getText().trim());
                             }               DecimalFormat df = new DecimalFormat("#.#");
                             int width = donorInDImage.getWidth();
@@ -1222,7 +1222,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 logError("No ROI is defined for transfer channel.");
                                 return;
                             }               float autofl = 0;
-                            if (!autoflAInDField.getText().trim().equals("")) {
+                            if (!autoflAInDField.getText().trim().isEmpty()) {
                                 autofl = Float.parseFloat(autoflAInDField.getText().trim());
                             }               DecimalFormat df = new DecimalFormat("#.#");
                             int width = donorInAImage.getWidth();
@@ -1278,7 +1278,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 logError("No ROI is defined for acceptor channel.");
                                 return;
                             }               float autofl = 0;
-                            if (!autoflAInAField.getText().trim().equals("")) {
+                            if (!autoflAInAField.getText().trim().isEmpty()) {
                                 autofl = Float.parseFloat(autoflAInAField.getText().trim());
                             }               DecimalFormat df = new DecimalFormat("#.#");
                             int width = acceptorInAImage.getWidth();
@@ -1417,7 +1417,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             logError("No image is set as donor channel.");
                             return;
                         } else {
-                            if (radiusFieldDD.getText().trim().equals("")) {
+                            if (radiusFieldDD.getText().trim().isEmpty()) {
                                 logError("Radius has to be given for Gaussian blur.");
                                 return;
                             } else {
@@ -1445,7 +1445,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             logError("No image is set as transfer channel.");
                             return;
                         } else {
-                            if (radiusFieldDA.getText().trim().equals("")) {
+                            if (radiusFieldDA.getText().trim().isEmpty()) {
                                 logError("Radius has to be given for Gaussian blur.");
                                 return;
                             } else {
@@ -1473,7 +1473,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             logError("No image is set as acceptor channel.");
                             return;
                         } else {
-                            if (radiusFieldAA.getText().trim().equals("")) {
+                            if (radiusFieldAA.getText().trim().isEmpty()) {
                                 logError("Radius has to be given for Gaussian blur.");
                                 return;
                             } else {
@@ -1542,27 +1542,27 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             return;
                         } else {
                             if (autoThresholdingCB.isSelected()) {
-                                if (autoThresholdMin.getText().trim().equals("")) {
+                                if (autoThresholdMin.getText().trim().isEmpty()) {
                                     logError("Auto-threshold min value has to be given.");
                                     return;
-                                } else if (autoThresholdMax.getText().trim().equals("")) {
+                                } else if (autoThresholdMax.getText().trim().isEmpty()) {
                                     logError("Auto-threshold max value has to be given.");
                                     return;
                                 }
                             }
-                            if (s1Field.getText().trim().equals("")) {
+                            if (s1Field.getText().trim().isEmpty()) {
                                 logError("S1 factor has to be given.");
                                 return;
-                            } else if (s2Field.getText().trim().equals("")) {
+                            } else if (s2Field.getText().trim().isEmpty()) {
                                 logError("S2 factor has to be given.");
                                 return;
-                            } else if (s3Field.getText().trim().equals("")) {
+                            } else if (s3Field.getText().trim().isEmpty()) {
                                 logError("S3 factor has to be given.");
                                 return;
-                            } else if (s4Field.getText().trim().equals("")) {
+                            } else if (s4Field.getText().trim().isEmpty()) {
                                 logError("S4 factor has to be given.");
                                 return;
-                            } else if (alphaField.getText().trim().equals("")) {
+                            } else if (alphaField.getText().trim().isEmpty()) {
                                 logError("Alpha factor has to be given.");
                                 return;
                             } else {

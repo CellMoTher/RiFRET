@@ -441,7 +441,7 @@ public class AlphaDialog extends JDialog implements ActionListener{
                                 return;
                             }
                         } else {
-                            if (eBlField.getText().trim().equals("")) {
+                            if (eBlField.getText().trim().isEmpty()) {
                                 mainWindow.logError("Ebl is not given. (\u03B1 calc.)");
                                 return;
                             }
@@ -546,25 +546,25 @@ public class AlphaDialog extends JDialog implements ActionListener{
                         ratioEpsilonsField.setText(df.format(eRatio).toString());
                         break;
                     case "calculate":
-                        if (i1dField.getText().trim().equals("")) {
+                        if (i1dField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant I1(donor) is not given. (\u03B1 calc.)");
                             return;
-                        } else if (i2aField.getText().trim().equals("")) {
+                        } else if (i2aField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant I2(acceptor) is not given. (\u03B1 calc.)");
                             return;
-                        } else if (ldField.getText().trim().equals("")) {
+                        } else if (ldField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant Ld is not given. (\u03B1 calc.)");
                             return;
-                        } else if (laField.getText().trim().equals("")) {
+                        } else if (laField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant La is not given. (\u03B1 calc.)");
                             return;
-                        } else if (bdField.getText().trim().equals("")) {
+                        } else if (bdField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant Bd is not given. (\u03B1 calc.)");
                             return;
-                        } else if (baField.getText().trim().equals("")) {
+                        } else if (baField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant Ba is not given. (\u03B1 calc.)");
                             return;
-                        } else if (ratioEpsilonsField.getText().trim().equals("")) {
+                        } else if (ratioEpsilonsField.getText().trim().isEmpty()) {
                             mainWindow.logError("Ratio \u03B5d / \u03B5a is not given. (\u03B1 calc.)");
                             return;
                         } else {
@@ -581,7 +581,7 @@ public class AlphaDialog extends JDialog implements ActionListener{
                             calculateButton.setBackground(mainWindow.greenColor);
                         }       break;
                     case "setfactor":
-                        if (alphaResultLabel.getText().equals("")) {
+                        if (alphaResultLabel.getText().isEmpty()) {
                             mainWindow.logError("\u03B1 has to be calculated before setting it. (\u03B1 calc.)");
                             return;
                         }       mainWindow.setAlphaFactor(alphaResultLabel.getText());

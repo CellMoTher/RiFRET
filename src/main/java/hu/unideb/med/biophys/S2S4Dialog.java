@@ -446,7 +446,7 @@ public class S2S4Dialog extends JDialog implements ActionListener{
                             acceptorImg.changes = false;
                         }       break;
                     case "setfactor":
-                        if (s2ResultLabel.getText().equals("") || s4ResultLabel.getText().equals("")) {
+                        if (s2ResultLabel.getText().isEmpty() || s4ResultLabel.getText().isEmpty()) {
                             mainWindow.logError("S2 and S4 have to be calculated before setting them. (S2/S4 calc.)");
                             return;
                         }       mainWindow.setS2Factor(s2ResultLabel.getText());
