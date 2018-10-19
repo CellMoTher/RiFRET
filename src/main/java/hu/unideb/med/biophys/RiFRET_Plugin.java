@@ -723,1195 +723,1182 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
     public void actionPerformed(ActionEvent e) {
     	try {
-        if (e.getActionCommand().equals("exit")) {
-	        exit();
-      	} else if (e.getActionCommand().equals("split")) {
-            if (WindowManager.getCurrentImage() == null) {
-                logError("No open image.");
-                return;
-            }
-            if (WindowManager.getCurrentImage().isHyperStack()) {
-                ij.plugin.HyperStackConverter hc = new ij.plugin.HyperStackConverter();
-                hc.run("hstostack");
-            }
-            StackEditor se = new StackEditor();
-            se.run("toimages");
-      	} else if (e.getActionCommand().equals("applyMask")) {
-            if (applyMaskRiDialog != null) {
-                applyMaskRiDialog.setVisible(false);
-                applyMaskRiDialog.dispose();
-            }
-            applyMaskRiDialog = new ApplyMaskRiDialog(this);
-		    applyMaskRiDialog.setVisible(true);
-      	} else if (e.getActionCommand().equals("registerTransferCh")) {
-      	    if (donorInDImage == null) {
-                logError("No image is set as donor channel.");
-                return;
-            } else if (donorInAImage == null) {
-                logError("No image is set as transfer channel.");
-                return;
-            } else {
-                FHT fht1 = new FHT(donorInDImage.getProcessor().duplicate());
-                fht1.transform();
-                FHT fht2 = new FHT(donorInAImage.getProcessor().duplicate());
-                fht2.transform();
-                FHT res = fht1.conjugateMultiply(fht2);
-                res.inverseTransform();
-                ImagePlus image = new ImagePlus("Result of registration", res);
-                ImageProcessor ip = image.getProcessor();
-                int width = ip.getWidth();
-                int height = ip.getHeight();
-                int maximum = 0;
-                int maxx = -1;
-                int maxy = -1;
-                for (int i = 0; i < width; i++) {
-                    for (int j = 0; j < height; j++) {
-                        if (ip.getPixel(i, j) > maximum) {
-                            maximum = ip.getPixel(i, j);
-                            maxx = i;
-                            maxy = j;
-                        }
-                    }
-                }
-                int shiftX = 0;
-                int shiftY = 0;
-                if (maxx != 0 || maxy != 0){
-                    ShiftDialogRi sd = new ShiftDialogRi(this);
-                    if (maxy > height/2) {
-                        log("Shifting transfer channel image up " + (height-maxy) + " pixel" + ((height-maxy)>1?"s":"") + ".");
-                        sd.shiftUp(donorInAImage, height-maxy);
-                    } else if (maxy != 0) {
-                        log("Shifting transfer channel image down " + maxy + " pixel" + (maxy>1?"s":"") + ".");
-                        sd.shiftDown(donorInAImage, maxy);
-                    }
-                    if (maxx > width/2) {
-                        log("Shifting transfer channel image to the left " + (width-maxx) + " pixel" + ((width-maxx)>1?"s":"") + ".");
-                        sd.shiftLeft(donorInAImage, width-maxx);
-                    } else if (maxx != 0) {
-                        log("Shifting transfer channel image to the right " + maxx + " pixel" + (maxx>1?"s":"") + ".");
-                        sd.shiftRight(donorInAImage, maxx);
-                    }
-                    actionPerformed(new ActionEvent(registerMenuItem, 1, "registerTransferCh"));
-                } else {
-                    log("Registration of transfer channel has been finished.");
-                    actionPerformed(new ActionEvent(registerMenuItem, 1, "registerAcceptorCh"));
-                }
-            }
-      	} else if (e.getActionCommand().equals("registerAcceptorCh")) {
-      	    if (donorInDImage == null) {
-                logError("No image is set as donor channel.");
-                return;
-            } else if (acceptorInAImage == null) {
-                logError("No image is set as acceptor channel.");
-                return;
-            } else {
-                FHT fht1 = new FHT(donorInDImage.getProcessor().duplicate());
-                fht1.transform();
-                FHT fht2 = new FHT(acceptorInAImage.getProcessor().duplicate());
-                fht2.transform();
-                FHT res = fht1.conjugateMultiply(fht2);
-                res.inverseTransform();
-                ImagePlus image = new ImagePlus("Result of registration", res);
-                ImageProcessor ip = image.getProcessor();
-                int width = ip.getWidth();
-                int height = ip.getHeight();
-                int maximum = 0;
-                int maxx = -1;
-                int maxy = -1;
-                for (int i = 0; i < width; i++) {
-                    for (int j = 0; j < height; j++) {
-                        if (ip.getPixel(i, j) > maximum) {
-                            maximum = ip.getPixel(i, j);
-                            maxx = i;
-                            maxy = j;
-                        }
-                    }
-                }
-                int shiftX = 0;
-                int shiftY = 0;
-                if (maxx != 0 || maxy != 0){
-                    ShiftDialogRi sd = new ShiftDialogRi(this);
-                    if (maxy > height/2) {
-                        log("Shifting acceptor channel image up " + (height-maxy) + " pixel" + ((height-maxy)>1?"s":"") + ".");
-                        sd.shiftUp(acceptorInAImage, height-maxy);
-                    } else if (maxy != 0) {
-                        log("Shifting acceptor channel image down " + maxy + " pixel" + (maxy>1?"s":"") + ".");
-                        sd.shiftDown(acceptorInAImage, maxy);
-                    }
-                    if (maxx > width/2) {
-                        log("Shifting acceptor channel image to the left " + (width-maxx) + " pixel" + ((width-maxx)>1?"s":"") + ".");
-                        sd.shiftLeft(acceptorInAImage, width-maxx);
-                    } else if (maxx != 0) {
-                        log("Shifting acceptor channel image to the right " + maxx + " pixel" + (maxx>1?"s":"") + ".");
-                        sd.shiftRight(acceptorInAImage, maxx);
-                    }
-                    actionPerformed(new ActionEvent(registerMenuItem, 1, "registerAcceptorCh"));
-                } else {
-                    log("Registration of acceptor channel has been finished.");
-                }
-            }
-      	} else if (e.getActionCommand().equals("calculateRatio")) {
-            if (calculateRatioDialog != null) {
-                calculateRatioDialog.setVisible(false);
-                calculateRatioDialog.dispose();
-            }
-            calculateRatioDialog = new CalculateRatioDialog(this);
-		    calculateRatioDialog.setVisible(true);
-      	} else if (e.getActionCommand().equals("calculateAF")) {
-            if (autoflDialog != null) {
-                autoflDialog.setVisible(false);
-                autoflDialog.dispose();
-            }
-            autoflDialog = new AutoflDialog(this);
-		    autoflDialog.setVisible(true);
-        } else if (e.getActionCommand().equals("threshold")) {
-            if (WindowManager.getCurrentImage() == null) {
-                logError("No open image.");
-                return;
-            }
-		    IJ.run("Threshold...");
-      	} else if (e.getActionCommand().equals("convertto32bit")) {
-            if (WindowManager.getCurrentImage() == null) {
-                logError("No open image.");
-                return;
-            }
-		    new ImageConverter(WindowManager.getCurrentImage()).convertToGray32();
-      	} else if (e.getActionCommand().equals("gaussianblur-menu")) {
-            if (WindowManager.getCurrentImage() == null) {
-                logError("No open image.");
-                return;
-            }
-            String radiusString =  (String)JOptionPane.showInputDialog(this, "Enter radius (in pixels) for Gaussian blur", "Gaussian blur", JOptionPane.QUESTION_MESSAGE);
-            if (radiusString == null || radiusString.trim().equals("")) {
-                return;
-            }
-            GaussianBlur gb = new GaussianBlur();
-            int nSlices = WindowManager.getCurrentImage().getImageStackSize();
-            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                if(!gb.blur(WindowManager.getCurrentImage().getStack().getProcessor(currentSlice), Float.parseFloat(radiusString)))  {
-                    return;
-                }
-            }
-    		WindowManager.getCurrentImage().updateAndDraw();
-    		log("Gaussian blurred the current image with radius " + Float.parseFloat(radiusString) + ".");
-      	} else if (e.getActionCommand().equals("lutFire")) {
-            if (WindowManager.getCurrentImage() == null) {
-                logError("No open image.");
-                return;
-            }
-		    IJ.run("Fire");
-      	} else if (e.getActionCommand().equals("lutSpectrum")) {
-            if (WindowManager.getCurrentImage() == null) {
-                logError("No open image.");
-                return;
-            }
-		    IJ.run("Spectrum");
-      	} else if (e.getActionCommand().equals("histogram")) {
-            if (WindowManager.getCurrentImage() == null) {
-                logError("No open image.");
-                return;
-            }
-		    IJ.run("Histogram");
-      	} else if (e.getActionCommand().equals("openImage")) {
-      	    (new Opener()).open();
-      	} else if (e.getActionCommand().equals("saveImageAsTiff")) {
-            ImagePlus image = WindowManager.getCurrentImage();
-            if (image == null) {
-                logError("No open image.");
-                return;
-            }
-			FileSaver fs = new FileSaver(image);
-	 		if (fs.saveAsTiff()){
-                log("Tiff file is saved.");
-            }
-            image.updateAndDraw();
-      	} else if (e.getActionCommand().equals("saveImageAsBmp")) {
-            ImagePlus image = WindowManager.getCurrentImage();
-            if (image == null) {
-                logError("No open image.");
-                return;
-            }
-			FileSaver fs = new FileSaver(image);
-	 		if (fs.saveAsBmp()){
-                log("Bmp file is saved.");
-            }
-            image.updateAndDraw();
-      	} else if (e.getActionCommand().equals("saveMessages")) {
-            JFileChooser jfc = new JFileChooser(currentDirectory);
-            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            jfc.setDialogTitle("Save messages...");
-            jfc.showSaveDialog(this);
-            if (jfc.getSelectedFile() == null) {
-                return;
-            }
-            if (jfc.getSelectedFile().exists()) {
-                currentDirectory = jfc.getCurrentDirectory().toString();
-                int resp = JOptionPane.showConfirmDialog(this,
-                    "Overwrite existing file?","Confirmation",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-                if (resp == JOptionPane.CANCEL_OPTION) {
-                    return;
-                }
-            }
-            try {
-                BufferedWriter out = new BufferedWriter(new FileWriter(jfc.getSelectedFile().getAbsolutePath()));
-                out.write(log.getText());
-                out.close();
-            } catch (IOException ioe) {
-                logError("Could not save messages.");
-            }
-      	} else if (e.getActionCommand().equals("clearMessages")) {
-            log.setText("");
-      	} else if (e.getActionCommand().equals("openLsmImage")) {
-            JFileChooser jfc = new JFileChooser(currentDirectory);
-            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            jfc.setDialogTitle("Open LSM image...");
-            jfc.showOpenDialog(this);
-            if (jfc.getSelectedFile() == null) {
-                return;
-            }
-            if (!jfc.getSelectedFile().exists()) {
-                logError("Selected file does not exist.");
-                return;
-            }
-            try {
-                currentDirectory = jfc.getCurrentDirectory().toString();
-                boolean close = false;
-                boolean resultsWindow = false;
-                while(WindowManager.getCurrentImage() != null) {
-                    WindowManager.getCurrentImage().close();
-                }
-
-                resetAllButtonColors();
-
-                File imageFile = jfc.getSelectedFile();
-                (new Opener()).open(imageFile.getAbsolutePath());
-                WindowManager.putBehind();
-                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"split"));
-                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"setAcceptorInAImage"));
-                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"lutSpectrum"));
-                WindowManager.putBehind();
-                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"setDonorInAImage"));
-                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"lutSpectrum"));
-                WindowManager.putBehind();
-                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"setDonorInDImage"));
-                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"lutSpectrum"));
-            } catch (Exception ex) {
-                logError("Could not open and set the selected LSM image.");
-                logException(ex.getMessage(), ex);
-            }
-      	} else if (e.getActionCommand().equals("setDonorInDImage")) {
-            ImagePlus ip = WindowManager.getCurrentImage();
-      	    if (ip == null) {
-                logError("No image is selected.");
-                setDonorInDImageButton.setBackground(originalButtonColor);
-                return;
-            }
-            if (ip.isHyperStack()) {
-                logError("Current image is a hyperstack.");
-                donorInDImage = null;
-                setDonorInDImageButton.setBackground(originalButtonColor);
-                return;
-            }
-            if (donorInAImage != null && donorInAImage.equals(ip)) {
-                logError("This image has already been set as transfer channel.");
-                donorInDImage = null;
-                setDonorInDImageButton.setBackground(originalButtonColor);
-                return;
-            } else if (acceptorInAImage != null && acceptorInAImage.equals(ip)) {
-                logError("This image has already been set as acceptor channel.");
-                donorInDImage = null;
-                setDonorInDImageButton.setBackground(originalButtonColor);
-                return;
-            }
-            if (donorInAImage != null && ip.getImageStackSize() != donorInAImage.getImageStackSize()) {
-                logError("Transfer channel contains " + donorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
-                donorInDImage = null;
-                setDonorInDImageButton.setBackground(originalButtonColor);
-                return;
-            } else if (acceptorInAImage != null && ip.getImageStackSize() != acceptorInAImage.getImageStackSize()) {
-                logError("Acceptor channel contains " + acceptorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
-                donorInDImage = null;
-                setDonorInDImageButton.setBackground(originalButtonColor);
-                return;
-            } else if (ip.getImageStackSize() > 1) {
-                logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
-            }
-            donorInDImage = ip;
-            donorInDImage.setTitle("Donor channel - " + new Date().toString());
-            if (ip.getImageStackSize() > 1) {
-                new StackConverter(donorInDImage).convertToGray32();
-            } else {
-                new ImageConverter(donorInDImage).convertToGray32();
-            }
-            if (automaticallyProcessedFiles == null) {
-                currentlyProcessedFileName = null;
-            }
-            setDonorInDImageButton.setBackground(greenColor);
-      	} else if (e.getActionCommand().equals("setDonorInAImage")) {
-            ImagePlus ip = WindowManager.getCurrentImage();
-      	    if (ip == null) {
-                logError("No image is selected.");
-                setDonorInAImageButton.setBackground(originalButtonColor);
-                return;
-            }
-            if (ip.isHyperStack()) {
-                logError("Current image is a hyperstack.");
-                donorInAImage = null;
-                setDonorInAImageButton.setBackground(originalButtonColor);
-                return;
-            }
-            if (donorInDImage != null && donorInDImage.equals(ip)) {
-                logError("This image has already been set as donor channel.");
-                donorInAImage = null;
-                setDonorInAImageButton.setBackground(originalButtonColor);
-                return;
-            } else if (acceptorInAImage != null && acceptorInAImage.equals(ip)) {
-                logError("This image has already been set as acceptor channel.");
-                donorInAImage = null;
-                setDonorInAImageButton.setBackground(originalButtonColor);
-                return;
-            }
-            if (donorInDImage != null && ip.getImageStackSize() != donorInDImage.getImageStackSize()) {
-                logError("Donor channel contains " + donorInDImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
-                donorInAImage = null;
-                setDonorInAImageButton.setBackground(originalButtonColor);
-                return;
-            } else if (acceptorInAImage != null && ip.getImageStackSize() != acceptorInAImage.getImageStackSize()) {
-                logError("Acceptor channel contains " + acceptorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
-                donorInAImage = null;
-                setDonorInAImageButton.setBackground(originalButtonColor);
-                return;
-            } else if (ip.getImageStackSize() > 1) {
-                logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
-            }
-            donorInAImage = ip;
-            donorInAImage.setTitle("Transfer channel - " + new Date().toString());
-            if (ip.getImageStackSize() > 1) {
-                new StackConverter(donorInAImage).convertToGray32();
-            } else {
-                new ImageConverter(donorInAImage).convertToGray32();
-            }
-            setDonorInAImageButton.setBackground(greenColor);
-      	} else if (e.getActionCommand().equals("setAcceptorInAImage")) {
-            ImagePlus ip = WindowManager.getCurrentImage();
-      	    if (ip == null) {
-                logError("No image is selected.");
-                setAcceptorInAImageButton.setBackground(originalButtonColor);
-                return;
-            }
-            if (ip.isHyperStack()) {
-                logError("Current image is a hyperstack.");
-                acceptorInAImage = null;
-                setAcceptorInAImageButton.setBackground(originalButtonColor);
-                return;
-            }
-            if (donorInDImage != null && donorInDImage.equals(ip)) {
-                logError("This image has already been set as donor channel.");
-                acceptorInAImage = null;
-                setAcceptorInAImageButton.setBackground(originalButtonColor);
-                return;
-            } else if (donorInAImage != null && donorInAImage.equals(ip)) {
-                logError("This image has already been set as transfer channel.");
-                acceptorInAImage = null;
-                setAcceptorInAImageButton.setBackground(originalButtonColor);
-                return;
-            }
-            if (donorInDImage != null && ip.getImageStackSize() != donorInDImage.getImageStackSize()) {
-                logError("Donor channel contains " + donorInDImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
-                acceptorInAImage = null;
-                setAcceptorInAImageButton.setBackground(originalButtonColor);
-                return;
-            } else if (donorInAImage != null && ip.getImageStackSize() != donorInAImage.getImageStackSize()) {
-                logError("Transfer channel contains " + donorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
-                acceptorInAImage = null;
-                setAcceptorInAImageButton.setBackground(originalButtonColor);
-                return;
-            } else if (ip.getImageStackSize() > 1) {
-                logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
-            }
-            acceptorInAImage = ip;
-            acceptorInAImage.setTitle("Acceptor channel - " + new Date().toString());
-            if (ip.getImageStackSize() > 1) {
-                new StackConverter(acceptorInAImage).convertToGray32();
-            } else {
-                new ImageConverter(acceptorInAImage).convertToGray32();
-            }
-            setAcceptorInAImageButton.setBackground(greenColor);
-      	} else if (e.getActionCommand().equals("copyRoi")) {
-      	    if (donorInDImage == null) {
-                logError("No image is set as donor channel.");
-                return;
-            }
-            if (donorInDImage.getRoi() != null) {
-          	    if (donorInAImage != null) {
-                    donorInAImage.setRoi(donorInDImage.getRoi());
-                }
-          	    if (acceptorInAImage != null) {
-                    acceptorInAImage.setRoi(donorInDImage.getRoi());
-                }
-            } else {
-          	    if (donorInAImage != null) {
-                    donorInAImage.killRoi();
-                }
-          	    if (acceptorInAImage != null) {
-                    acceptorInAImage.killRoi();
-                }
-            }
-      	} else if (e.getActionCommand().equals("subtractDonorInDImage")) {
-      	    if (donorInDImage == null) {
-                logError("No image is set as donor channel.");
-                return;
-            } else if (donorInDImage.getRoi() == null) {
-                logError("No ROI is defined for donor channel.");
-                return;
-            }
-
-            float autofl = 0;
-            if (!autoflDInDField.getText().trim().equals("")) {
-               autofl = Float.parseFloat(autoflDInDField.getText().trim());
-            }
-
-            DecimalFormat df = new DecimalFormat("#.#");
-            int width = donorInDImage.getWidth();
-            int height = donorInDImage.getHeight();
-            int nSlices = donorInDImage.getImageStackSize();
-            donorInDImageSave = new ImageStack(donorInDImage.getProcessor().getWidth(), donorInDImage.getProcessor().getHeight());
-            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i < width; i++) {
-                    for (int j=0; j < height; j++) {
-                        if (donorInDImage.getRoi().contains(i, j)) {
-                            sum += donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(i,j);
-                            count++;
-                        }
-		            }
-		        }
-		        float backgroundAvg = (float)(sum/count);
-
-		        backgroundAvg = backgroundAvg + autofl;
-
-                float i = 0;
-                for (int x=0; x < width; x++) {
-                    for (int y=0; y < height; y++) {
-                        i = donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(x,y);
-                        i = i - backgroundAvg;
-                        if (i < 0) {
-                           i=0;
-                        }
-		                donorInDImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
-		            }
-		        }
-     		    FloatProcessor flp = new FloatProcessor(donorInDImage.getStack().getProcessor(currentSlice).getWidth(), donorInDImage.getStack().getProcessor(currentSlice).getHeight());
-                flp.setPixels(currentSlice, (FloatProcessor)donorInDImage.getStack().getProcessor(currentSlice).duplicate());
-                donorInDImageSave.addSlice(""+currentSlice, flp);
-                if (nSlices == 1) {
-                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of donor channel.");
-                } else {
-                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of slice " + currentSlice + " of donor channel.");
-                }
-		    }
-		    donorInDImage.updateAndDraw();
-		    donorInDImage.killRoi();
-		    donorInDImageSave.setColorModel(donorInDImage.getProcessor().getColorModel());
-            subtractDonorInDImageButton.setBackground(greenColor);
-      	} else if (e.getActionCommand().equals("subtractDonorInAImage")) {
-      	    if (donorInAImage == null) {
-                logError("No image is set as transfer channel.");
-                return;
-            } else if (donorInAImage.getRoi() == null) {
-                logError("No ROI is defined for transfer channel.");
-                return;
-            }
-
-            float autofl = 0;
-            if (!autoflAInDField.getText().trim().equals("")) {
-               autofl = Float.parseFloat(autoflAInDField.getText().trim());
-            }
-
-            DecimalFormat df = new DecimalFormat("#.#");
-            int width = donorInAImage.getWidth();
-            int height = donorInAImage.getHeight();
-            int nSlices = donorInAImage.getImageStackSize();
-            donorInAImageSave = new ImageStack(donorInAImage.getProcessor().getWidth(), donorInAImage.getProcessor().getHeight());
-            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i < width; i++) {
-                    for (int j=0; j < height; j++) {
-                        if (donorInAImage.getRoi().contains(i, j)) {
-                            sum += donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(i,j);
-                            count++;
-                        }
-		            }
-		        }
-		        float backgroundAvg = (float)(sum/count);
-
-		        backgroundAvg = backgroundAvg + autofl;
-
-                float i = 0;
-                for (int x=0; x < width; x++) {
-                    for (int y=0; y < height; y++) {
-                        i = donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x,y);
-                        i = i - backgroundAvg;
-                        if (i < 0) {
-                           i=0;
-                        }
-		                donorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
-		            }
-		        }
-     		    FloatProcessor flp = new FloatProcessor(donorInAImage.getStack().getProcessor(currentSlice).getWidth(), donorInAImage.getStack().getProcessor(currentSlice).getHeight());
-                flp.setPixels(currentSlice, (FloatProcessor)donorInAImage.getStack().getProcessor(currentSlice).duplicate());
-                donorInAImageSave.addSlice(""+currentSlice, flp);
-                if (nSlices == 1) {
-                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of transfer channel.");
-                } else {
-                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of slice " + currentSlice + " of transfer channel.");
-                }
-		    }
-		    donorInAImage.updateAndDraw();
-		    donorInAImage.killRoi();
-		    donorInAImageSave.setColorModel(donorInAImage.getProcessor().getColorModel());
-            subtractDonorInAImageButton.setBackground(greenColor);
-      	} else if (e.getActionCommand().equals("subtractAcceptorInAImage")) {
-      	    if (acceptorInAImage == null) {
-                logError("No image is set as acceptor channel.");
-                return;
-            } else if (acceptorInAImage.getRoi() == null) {
-                logError("No ROI is defined for acceptor channel.");
-                return;
-            }
-
-            float autofl = 0;
-            if (!autoflAInAField.getText().trim().equals("")) {
-               autofl = Float.parseFloat(autoflAInAField.getText().trim());
-            }
-
-            DecimalFormat df = new DecimalFormat("#.#");
-            int width = acceptorInAImage.getWidth();
-            int height = acceptorInAImage.getHeight();
-            int nSlices = acceptorInAImage.getImageStackSize();
-            acceptorInAImageSave = new ImageStack(acceptorInAImage.getProcessor().getWidth(), acceptorInAImage.getProcessor().getHeight());
-            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i < width; i++) {
-                    for (int j=0; j < height; j++) {
-                        if (acceptorInAImage.getRoi().contains(i, j)) {
-                            sum += acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(i,j);
-                            count++;
-                        }
-		            }
-		        }
-		        float backgroundAvg = (float)(sum/count);
-
-		        backgroundAvg = backgroundAvg + autofl;
-
-                float i = 0;
-                for (int x=0; x < width; x++) {
-                    for (int y=0; y < height; y++) {
-                        i = acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x,y);
-                        i = i - backgroundAvg;
-                        if (i < 0) {
-                           i=0;
-                        }
-		                acceptorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
-		            }
-		        }
-     		    FloatProcessor flp = new FloatProcessor(acceptorInAImage.getStack().getProcessor(currentSlice).getWidth(), acceptorInAImage.getStack().getProcessor(currentSlice).getHeight());
-                flp.setPixels(currentSlice, (FloatProcessor)acceptorInAImage.getStack().getProcessor(currentSlice).duplicate());
-                acceptorInAImageSave.addSlice(""+currentSlice, flp);
-                if (nSlices == 1) {
-                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of acceptor channel.");
-                } else {
-                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of slice " + currentSlice + " of acceptor channel.");
-                }
-		    }
-		    acceptorInAImage.updateAndDraw();
-		    acceptorInAImage.killRoi();
-		    acceptorInAImageSave.setColorModel(acceptorInAImage.getProcessor().getColorModel());
-            subtractAcceptorInAImageButton.setBackground(greenColor);
-      	} else if (e.getActionCommand().equals("thresholdDonorInDImage")) {
-      	    if (donorInDImage == null) {
-                logError("No image is set as donor channel.");
-                return;
-            }
-            IJ.selectWindow(donorInDImage.getTitle());
-            IJ.run("Threshold...");
-            thresholdDonorInDImageButton.setBackground(greenColor);
-      	} else if (e.getActionCommand().equals("thresholdDonorInAImage")) {
-      	    if (donorInAImage == null) {
-                logError("No image is set as transfer channel.");
-                return;
-            }
-            IJ.selectWindow(donorInAImage.getTitle());
-            IJ.run("Threshold...");
-            thresholdDonorInAImageButton.setBackground(greenColor);
-      	} else if (e.getActionCommand().equals("thresholdAcceptorInAImage")) {
-      	    if (acceptorInAImage == null) {
-                logError("No image is set as acceptor channel.");
-                return;
-            }
-            IJ.selectWindow(acceptorInAImage.getTitle());
-            IJ.run("Threshold...");
-            thresholdAcceptorInAImageButton.setBackground(greenColor);
-      	} else if (e.getActionCommand().equals("resetDD")) {
-      	    if (donorInDImage == null) {
-                logError("No image is set as donor channel.");
-                return;
-            }
-      	    if (donorInDImageSave == null) {
-                logError("No saved image.");
-                return;
-            }
-            int nSlices = donorInDImage.getImageStackSize();
-            ImageStack newStack = new ImageStack(donorInDImageSave.getWidth(), donorInDImageSave.getHeight());
-            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-     		    FloatProcessor flp = new FloatProcessor(donorInDImageSave.getProcessor(currentSlice).getWidth(), donorInDImageSave.getProcessor(currentSlice).getHeight());
-                flp.setPixels(currentSlice, (FloatProcessor)donorInDImageSave.getProcessor(currentSlice).duplicate());
-                newStack.addSlice(""+currentSlice, flp);
-            }
-            donorInDImage.setStack(donorInDImage.getTitle(), newStack);
-            donorInDImage.getProcessor().setColorModel(donorInDImageSave.getColorModel());
-            donorInDImage.updateAndDraw();
-            thresholdDonorInDImageButton.setBackground(originalButtonColor);
-            smoothDonorInDImageButton.setBackground(originalButtonColor);
-      	} else if (e.getActionCommand().equals("resetDA")) {
-      	    if (donorInAImage == null) {
-                logError("No image is set as transfer channel.");
-                return;
-            }
-      	    if (donorInAImageSave == null) {
-                logError("No saved image.");
-                return;
-            }
-            int nSlices = donorInAImage.getImageStackSize();
-            ImageStack newStack = new ImageStack(donorInAImageSave.getWidth(), donorInAImageSave.getHeight());
-            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-     		    FloatProcessor flp = new FloatProcessor(donorInAImageSave.getProcessor(currentSlice).getWidth(), donorInAImageSave.getProcessor(currentSlice).getHeight());
-                flp.setPixels(currentSlice, (FloatProcessor)donorInAImageSave.getProcessor(currentSlice).duplicate());
-                newStack.addSlice(""+currentSlice, flp);
-            }
-            donorInAImage.setStack(donorInAImage.getTitle(), newStack);
-            donorInAImage.getProcessor().setColorModel(donorInAImageSave.getColorModel());
-            donorInAImage.updateAndDraw();
-            thresholdDonorInAImageButton.setBackground(originalButtonColor);
-            smoothDonorInAImageButton.setBackground(originalButtonColor);
-      	} else if (e.getActionCommand().equals("resetAA")) {
-      	    if (acceptorInAImage == null) {
-                logError("No image is set as acceptor channel.");
-                return;
-            }
-      	    if (acceptorInAImageSave == null) {
-                logError("No saved image.");
-                return;
-            }
-            int nSlices = acceptorInAImage.getImageStackSize();
-            ImageStack newStack = new ImageStack(acceptorInAImageSave.getWidth(), acceptorInAImageSave.getHeight());
-            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-     		    FloatProcessor flp = new FloatProcessor(acceptorInAImageSave.getProcessor(currentSlice).getWidth(), acceptorInAImageSave.getProcessor(currentSlice).getHeight());
-                flp.setPixels(currentSlice, (FloatProcessor)acceptorInAImageSave.getProcessor(currentSlice).duplicate());
-                newStack.addSlice(""+currentSlice, flp);
-            }
-            acceptorInAImage.setStack(acceptorInAImage.getTitle(), newStack);
-            acceptorInAImage.getProcessor().setColorModel(acceptorInAImageSave.getColorModel());
-            acceptorInAImage.updateAndDraw();
-            thresholdAcceptorInAImageButton.setBackground(originalButtonColor);
-            smoothAcceptorInAImageButton.setBackground(originalButtonColor);
-      	} else if (e.getActionCommand().equals("smoothDD")) {
-      	    if (donorInDImage == null) {
-                logError("No image is set as donor channel.");
-                return;
-            } else {
-                if (radiusFieldDD.getText().trim().equals("")) {
-                    logError("Radius has to be given for Gaussian blur.");
-                    return;
-                } else {
-                    double radius = 0;
-                    try {
-                        radius = Double.parseDouble(radiusFieldDD.getText().trim());
-                    } catch (Exception ex) {
-                        logError("Radius has to be given for Gaussian blur.");
-                        return;
-                    }
-                    GaussianBlur gb = new GaussianBlur();
-                    int nSlices = donorInDImage.getImageStackSize();
-                    for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                        if(!gb.blur(donorInDImage.getStack().getProcessor(currentSlice), radius))  {
+                switch (e.getActionCommand()) {
+                    case "exit":
+                        exit();
+                        break;
+                    case "split":
+                        if (WindowManager.getCurrentImage() == null) {
+                            logError("No open image.");
                             return;
-                        }
-                    }
-    		        donorInDImage.updateAndDraw();
-                    smoothDonorInDImageButton.setBackground(greenColor);
-    		        log("Gaussian blurred donor channel.");
-    		    }
-            }
-      	} else if (e.getActionCommand().equals("smoothDA")) {
-      	    if (donorInAImage == null) {
-                logError("No image is set as transfer channel.");
-                return;
-            } else {
-                if (radiusFieldDA.getText().trim().equals("")) {
-                    logError("Radius has to be given for Gaussian blur.");
-                    return;
-                } else {
-                    double radius = 0;
-                    try {
-                        radius = Double.parseDouble(radiusFieldDA.getText().trim());
-                    } catch (Exception ex) {
-                        logError("Radius has to be given for Gaussian blur.");
-                        return;
-                    }
-                    GaussianBlur gb = new GaussianBlur();
-                    int nSlices = donorInAImage.getImageStackSize();
-                    for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                        if(!gb.blur(donorInAImage.getStack().getProcessor(currentSlice), radius))  {
+                        }           if (WindowManager.getCurrentImage().isHyperStack()) {
+                            ij.plugin.HyperStackConverter hc = new ij.plugin.HyperStackConverter();
+                            hc.run("hstostack");
+                        }           StackEditor se = new StackEditor();
+                        se.run("toimages");
+                        break;
+                    case "applyMask":
+                        if (applyMaskRiDialog != null) {
+                            applyMaskRiDialog.setVisible(false);
+                            applyMaskRiDialog.dispose();
+                        }           applyMaskRiDialog = new ApplyMaskRiDialog(this);
+                        applyMaskRiDialog.setVisible(true);
+                        break;
+                    case "registerTransferCh":
+                        if (donorInDImage == null) {
+                            logError("No image is set as donor channel.");
                             return;
-                        }
-                    }
-    		        donorInAImage.updateAndDraw();
-                    smoothDonorInAImageButton.setBackground(greenColor);
-    		        log("Gaussian blurred transfer channel.");
-    		    }
-            }
-      	} else if (e.getActionCommand().equals("smoothAA")) {
-      	    if (acceptorInAImage == null) {
-                logError("No image is set as acceptor channel.");
-                return;
-            } else {
-                if (radiusFieldAA.getText().trim().equals("")) {
-                    logError("Radius has to be given for Gaussian blur.");
-                    return;
-                } else {
-                    double radius = 0;
-                    try {
-                        radius = Double.parseDouble(radiusFieldAA.getText().trim());
-                    } catch (Exception ex) {
-                        logError("Radius has to be given for Gaussian blur.");
-                        return;
-                    }
-                    GaussianBlur gb = new GaussianBlur();
-                    int nSlices = acceptorInAImage.getImageStackSize();
-                    for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                        if(!gb.blur(acceptorInAImage.getStack().getProcessor(currentSlice), radius))  {
+                        } else if (donorInAImage == null) {
+                            logError("No image is set as transfer channel.");
                             return;
-                        }
-                    }
-    		        acceptorInAImage.updateAndDraw();
-                    smoothAcceptorInAImageButton.setBackground(greenColor);
-    		        log("Gaussian blurred acceptor channel.");
-    		    }
-            }
-      	} else if (e.getActionCommand().equals("useLsmImages")) {
-          	if (useLsmImages.isSelected()) {
-          	    setDonorInDImageButton.setText("Open & Set LSM");
-          	    setDonorInDImageButton.setActionCommand("openLsmImage");
-          	    setDonorInAImageButton.setEnabled(false);
-          	    setAcceptorInAImageButton.setEnabled(false);
-          	} else {
-          	    setDonorInDImageButton.setText("Set image");
-          	    setDonorInDImageButton.setActionCommand("setDonorInDImage");
-          	    setDonorInAImageButton.setEnabled(true);
-          	    setAcceptorInAImageButton.setEnabled(true);
-          	}
-            logScrollPane.setPreferredSize(new Dimension(10,10));
-      	} else if (e.getActionCommand().equals("calculateS1S3Button")) {
-            if (s1S3Dialog != null) {
-                s1S3Dialog.setVisible(false);
-                s1S3Dialog.dispose();
-            }
-            s1S3Dialog = new S1S3Dialog(this);
-		    s1S3Dialog.setVisible(true);
-      	} else if (e.getActionCommand().equals("calculateS2S4Button")) {
-            if (s2S4Dialog != null) {
-                s2S4Dialog.setVisible(false);
-                s2S4Dialog.dispose();
-            }
-            s2S4Dialog = new S2S4Dialog(this);
-		    s2S4Dialog.setVisible(true);
-      	} else if (e.getActionCommand().equals("calculateAlphaButton")) {
-            if (alphaDialog != null) {
-                alphaDialog.setVisible(true);
-            } else {
-                alphaDialog = new AlphaDialog(this);
-		        alphaDialog.setVisible(true);
-		    }
-      	} else if (e.getActionCommand().equals("createFretImage")) {
-            if (donorInDImage == null) {
-                logError("No image is set as donor channel.");
-                return;
-      	    } else if (donorInAImage == null) {
-                logError("No image is set as transfer channel.");
-                return;
-      	    } else if (acceptorInAImage == null) {
-                logError("No image is set as acceptor channel.");
-                return;
-            } else {
-                if (autoThresholdingCB.isSelected()) {
-                    if (autoThresholdMin.getText().trim().equals("")) {
-                        logError("Auto-threshold min value has to be given.");
-                        return;
-                    } else if (autoThresholdMax.getText().trim().equals("")) {
-                        logError("Auto-threshold max value has to be given.");
-                        return;
-                    }
-                }
-                if (s1Field.getText().trim().equals("")) {
-                    logError("S1 factor has to be given.");
-                    return;
-                } else if (s2Field.getText().trim().equals("")) {
-                    logError("S2 factor has to be given.");
-                    return;
-                } else if (s3Field.getText().trim().equals("")) {
-                    logError("S3 factor has to be given.");
-                    return;
-                } else if (s4Field.getText().trim().equals("")) {
-                    logError("S4 factor has to be given.");
-                    return;
-                } else if (alphaField.getText().trim().equals("")) {
-                    logError("Alpha factor has to be given.");
-                    return;
-                } else {
-                    double s1Factor = 0;
-                    try {
-                        s1Factor = Double.parseDouble(s1Field.getText().trim());
-                    } catch (Exception ex) {
-                        logError("S1 factor has to be given.");
-                        return;
-                    }
-                    if (s1Factor <= 0) {
-                        logWarning("S1 factor should be higher than 0.");
-                    }
-                    double s2Factor = 0;
-                    try {
-                        s2Factor = Double.parseDouble(s2Field.getText().trim());
-                    } catch (Exception ex) {
-                        logError("S2 factor has to be given.");
-                        return;
-                    }
-                    if (s2Factor <= 0) {
-                        logWarning("S2 factor should be higher than 0.");
-                    }
-                    double s3Factor = 0;
-                    try {
-                        s3Factor = Double.parseDouble(s3Field.getText().trim());
-                    } catch (Exception ex) {
-                        logError("S3 factor has to be given.");
-                        return;
-                    }
-                    if (s3Factor < 0) {
-                        logWarning("S3 factor should be higher than 0.");
-                    }
-                    double s4Factor = 0;
-                    try {
-                        s4Factor = Double.parseDouble(s4Field.getText().trim());
-                    } catch (Exception ex) {
-                        logError("S4 factor has to be given.");
-                        return;
-                    }
-                    if (s4Factor < 0) {
-                        logWarning("S4 factor should be higher than 0.");
-                    }
-                    double alphaFactor = 0;
-                    try {
-                        alphaFactor = Double.parseDouble(alphaField.getText().trim());
-                    } catch (Exception ex) {
-                        logError("Alpha factor has to be given.");
-                        return;
-                    }
-
-                    double autoThMin = 0;
-                    double autoThMax = 0;
-                    if (autoThresholdingCB.isSelected()) {
-                        try {
-                            autoThMin = Double.parseDouble(autoThresholdMin.getText().trim());
-                        } catch (Exception ex) {
-                            logError("Auto-threshold min value has to be given.");
-                            return;
-                        }
-
-                        try {
-                            autoThMax = Double.parseDouble(autoThresholdMax.getText().trim());
-                        } catch (Exception ex) {
-                            logError("Auto-threshold max value has to be given.");
-                            return;
-                        }
-                    }
-
-                    int nSlices = donorInDImage.getImageStackSize();
-                    ImageStack transferStack = new ImageStack(donorInDImage.getProcessor().getWidth(), donorInDImage.getProcessor().getHeight());
-                    for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                        ImageProcessor ipDD = donorInDImage.getStack().getProcessor(currentSlice).duplicate();
-                        ImageProcessor ipDA = donorInAImage.getStack().getProcessor(currentSlice).duplicate();
-                        ImageProcessor ipAA = acceptorInAImage.getStack().getProcessor(currentSlice).duplicate();
-
-                        float[] ipDDP = (float[])ipDD.getPixels();
-                        float[] ipDAP = (float[])ipDA.getPixels();
-                        float[] ipAAP = (float[])ipAA.getPixels();
-
-                        for (int i = 0; i < ipDDP.length; i++) {
-                            if (!Float.isNaN(ipDDP[i]) && !Float.isNaN(ipDAP[i]) && !Float.isNaN(ipAAP[i])) {
-                                ipDDP[i] = (float)((s1Factor*s2Factor*(ipDAP[i]*((double)1-s3Factor*s4Factor)-ipDDP[i]*(s1Factor-s2Factor*s3Factor)-ipAAP[i]*(s2Factor-s1Factor*s4Factor)))/((s1Factor-s2Factor*s3Factor)*(ipDDP[i]*s2Factor-ipDAP[i]*s4Factor)*alphaFactor));
-                            } else {
-                                ipDDP[i] = Float.NaN;
-                            }
-                        }
-
-                        for (int i = 0; i < ipDDP.length; i++) {
-                            ipDDP[i] = ipDDP[i]/((float)1 + ipDDP[i]);
-                        }
-
-                        int width = ipDD.getWidth();
-                        int height = ipDD.getHeight();
-                        float[][] tiPoints = new float[width][height];
-                        for (int i = 0; i < width; i++) {
-                            for (int j = 0; j < height; j++) {
-                                if (autoThresholdingCB.isSelected()) {
-                                    if (ipDDP[width*j+i] >= autoThMin && ipDDP[width*j+i] <= autoThMax) {
-                                        tiPoints[i][j] = ipDDP[width*j+i];
-                                    } else {
-                                        tiPoints[i][j] = Float.NaN;
+                        } else {
+                            FHT fht1 = new FHT(donorInDImage.getProcessor().duplicate());
+                            fht1.transform();
+                            FHT fht2 = new FHT(donorInAImage.getProcessor().duplicate());
+                            fht2.transform();
+                            FHT res = fht1.conjugateMultiply(fht2);
+                            res.inverseTransform();
+                            ImagePlus image = new ImagePlus("Result of registration", res);
+                            ImageProcessor ip = image.getProcessor();
+                            int width = ip.getWidth();
+                            int height = ip.getHeight();
+                            int maximum = 0;
+                            int maxx = -1;
+                            int maxy = -1;
+                            for (int i = 0; i < width; i++) {
+                                for (int j = 0; j < height; j++) {
+                                    if (ip.getPixel(i, j) > maximum) {
+                                        maximum = ip.getPixel(i, j);
+                                        maxx = i;
+                                        maxy = j;
                                     }
-                                } else {
-                                    tiPoints[i][j] = ipDDP[width*j+i];
                                 }
                             }
-                        }
-
-                        FloatProcessor tiFp = new FloatProcessor(tiPoints);
-                        transferStack.addSlice(""+currentSlice, tiFp);
-                    }
-                    if (transferImage != null) {
-                        transferImage.close();
-                    }
-                    transferImage = new ImagePlus("Transfer (FRET) image", transferStack);
-                    transferImage.setCalibration(donorInDImage.getCalibration());
-                    transferImage.show();
-
-                    analyzer = new Analyzer();
-            		resultsTable =Analyzer.getResultsTable();
-		            resultsTable.setPrecision(3);
-                    resultsTable.incrementCounter();
-                    int widthTi = transferImage.getWidth();
-                    int heightTi = transferImage.getHeight();
-                    if(currentlyProcessedFileName != null) {
-                        resultsTable.addLabel("File", currentlyProcessedFileName);
-                    }
-                    if (transferImage.getRoi() != null) {
-                        Roi roi = transferImage.getRoi();
-                        int count = 0;
-                        int notNan = 0;
-                        for (int i=0; i<widthTi; i++) {
-                            for (int j=0; j<heightTi; j++) {
-                                if (roi.contains(i, j)) {
-                                   count++;
-                                   if (transferImage.getStack().getProcessor(1).getPixelValue(i, j) >= -1) {
-                                       notNan++;
-                                   }
-                               }
-		                    }
-		                }
-                        resultsTable.addValue("Pixels", count);
-                        resultsTable.addValue("Not NaN p.", notNan);
-                    } else {
-                        int notNan = 0;
-                        for (int i=0; i<widthTi; i++) {
-                            for (int j=0; j<heightTi; j++) {
-                               if (transferImage.getStack().getProcessor(1).getPixelValue(i, j) >= -1) {
-                                   notNan++;
-                               }
-		                    }
-		                }
-                        resultsTable.addValue("Pixels", widthTi*heightTi);
-                        resultsTable.addValue("Not NaN p.", notNan);
-                    }
-                    ImageStatistics isMean = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.MEAN,null);
-                    resultsTable.addValue("Mean", (float)isMean.mean);
-                    ImageStatistics isMedian = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.MEDIAN,null);
-                    resultsTable.addValue("Median", (float)isMedian.median);
-                    ImageStatistics isStdDev = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.STD_DEV,null);
-                    resultsTable.addValue("Std. dev.", (float)isStdDev.stdDev);
-                    ImageStatistics isMinMax = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.MIN_MAX,null);
-                    resultsTable.addValue("Min", (float)isMinMax.min);
-                    resultsTable.addValue("Max", (float)isMinMax.max);
-                    if (transferImage.getRoi() != null) {
-                       donorInDImage.setRoi(transferImage.getRoi());
-                       donorInAImage.setRoi(transferImage.getRoi());
-                       acceptorInAImage.setRoi(transferImage.getRoi());
-                    } else {
-                       donorInDImage.killRoi();
-                       donorInAImage.killRoi();
-                       acceptorInAImage.killRoi();
-                    }
-                    analyzer.displayResults();
-                    analyzer.updateHeadings();
-    		    }
-            }
-            donorInDImage.changes = false;
-  	        donorInAImage.changes = false;
-  	        acceptorInAImage.changes = false;
-      	} else if (e.getActionCommand().equals("measureFretImage")) {
-            if (transferImage == null) {
-                logError("Transfer (FRET) image is required.");
-                return;
-            }
-            resultsTable.incrementCounter();
-            int currentSlice = transferImage.getCurrentSlice();
-            int width = transferImage.getWidth();
-            int height = transferImage.getHeight();
-            if(currentlyProcessedFileName != null) {
-                resultsTable.addLabel("File", currentlyProcessedFileName);
-            }
-            ImageProcessor trProc = transferImage.getStack().getProcessor(currentSlice);
-            trProc.setRoi(transferImage.getRoi());
-            if (transferImage.getRoi() != null) {
-                Roi roi = transferImage.getRoi();
-                int count = 0;
-                int notNan = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (roi.contains(i, j)) {
-                            count++;
-                            if (trProc.getPixelValue(i, j) >= -1) {
-                                notNan++;
+                            int shiftX = 0;
+                            int shiftY = 0;
+                            if (maxx != 0 || maxy != 0){
+                                ShiftDialogRi sd = new ShiftDialogRi(this);
+                                if (maxy > height/2) {
+                                    log("Shifting transfer channel image up " + (height-maxy) + " pixel" + ((height-maxy)>1?"s":"") + ".");
+                                    sd.shiftUp(donorInAImage, height-maxy);
+                                } else if (maxy != 0) {
+                                    log("Shifting transfer channel image down " + maxy + " pixel" + (maxy>1?"s":"") + ".");
+                                    sd.shiftDown(donorInAImage, maxy);
+                                }
+                                if (maxx > width/2) {
+                                    log("Shifting transfer channel image to the left " + (width-maxx) + " pixel" + ((width-maxx)>1?"s":"") + ".");
+                                    sd.shiftLeft(donorInAImage, width-maxx);
+                                } else if (maxx != 0) {
+                                    log("Shifting transfer channel image to the right " + maxx + " pixel" + (maxx>1?"s":"") + ".");
+                                    sd.shiftRight(donorInAImage, maxx);
+                                }
+                                actionPerformed(new ActionEvent(registerMenuItem, 1, "registerTransferCh"));
+                            } else {
+                                log("Registration of transfer channel has been finished.");
+                                actionPerformed(new ActionEvent(registerMenuItem, 1, "registerAcceptorCh"));
                             }
+                        }           break;
+                    case "registerAcceptorCh":
+                        if (donorInDImage == null) {
+                            logError("No image is set as donor channel.");
+                            return;
+                        } else if (acceptorInAImage == null) {
+                            logError("No image is set as acceptor channel.");
+                            return;
+                        } else {
+                            FHT fht1 = new FHT(donorInDImage.getProcessor().duplicate());
+                            fht1.transform();
+                            FHT fht2 = new FHT(acceptorInAImage.getProcessor().duplicate());
+                            fht2.transform();
+                            FHT res = fht1.conjugateMultiply(fht2);
+                            res.inverseTransform();
+                            ImagePlus image = new ImagePlus("Result of registration", res);
+                            ImageProcessor ip = image.getProcessor();
+                            int width = ip.getWidth();
+                            int height = ip.getHeight();
+                            int maximum = 0;
+                            int maxx = -1;
+                            int maxy = -1;
+                            for (int i = 0; i < width; i++) {
+                                for (int j = 0; j < height; j++) {
+                                    if (ip.getPixel(i, j) > maximum) {
+                                        maximum = ip.getPixel(i, j);
+                                        maxx = i;
+                                        maxy = j;
+                                    }
+                                }
+                            }
+                            int shiftX = 0;
+                            int shiftY = 0;
+                            if (maxx != 0 || maxy != 0){
+                                ShiftDialogRi sd = new ShiftDialogRi(this);
+                                if (maxy > height/2) {
+                                    log("Shifting acceptor channel image up " + (height-maxy) + " pixel" + ((height-maxy)>1?"s":"") + ".");
+                                    sd.shiftUp(acceptorInAImage, height-maxy);
+                                } else if (maxy != 0) {
+                                    log("Shifting acceptor channel image down " + maxy + " pixel" + (maxy>1?"s":"") + ".");
+                                    sd.shiftDown(acceptorInAImage, maxy);
+                                }
+                                if (maxx > width/2) {
+                                    log("Shifting acceptor channel image to the left " + (width-maxx) + " pixel" + ((width-maxx)>1?"s":"") + ".");
+                                    sd.shiftLeft(acceptorInAImage, width-maxx);
+                                } else if (maxx != 0) {
+                                    log("Shifting acceptor channel image to the right " + maxx + " pixel" + (maxx>1?"s":"") + ".");
+                                    sd.shiftRight(acceptorInAImage, maxx);
+                                }
+                                actionPerformed(new ActionEvent(registerMenuItem, 1, "registerAcceptorCh"));
+                            } else {
+                                log("Registration of acceptor channel has been finished.");
+                            }
+                        }           break;
+                    case "calculateRatio":
+                        if (calculateRatioDialog != null) {
+                            calculateRatioDialog.setVisible(false);
+                            calculateRatioDialog.dispose();
+                        }           calculateRatioDialog = new CalculateRatioDialog(this);
+                        calculateRatioDialog.setVisible(true);
+                        break;
+                    case "calculateAF":
+                        if (autoflDialog != null) {
+                            autoflDialog.setVisible(false);
+                            autoflDialog.dispose();
+                        }           autoflDialog = new AutoflDialog(this);
+                        autoflDialog.setVisible(true);
+                        break;
+                    case "threshold":
+                        if (WindowManager.getCurrentImage() == null) {
+                            logError("No open image.");
+                            return;
+                        }           IJ.run("Threshold...");
+                        break;
+                    case "convertto32bit":
+                        if (WindowManager.getCurrentImage() == null) {
+                            logError("No open image.");
+                            return;
+                        }           new ImageConverter(WindowManager.getCurrentImage()).convertToGray32();
+                        break;
+                    case "gaussianblur-menu":
+                        {
+                            if (WindowManager.getCurrentImage() == null) {
+                                logError("No open image.");
+                                return;
+                            }               String radiusString =  (String)JOptionPane.showInputDialog(this, "Enter radius (in pixels) for Gaussian blur", "Gaussian blur", JOptionPane.QUESTION_MESSAGE);
+                            if (radiusString == null || radiusString.trim().equals("")) {
+                                return;
+                            }               GaussianBlur gb = new GaussianBlur();
+                            int nSlices = WindowManager.getCurrentImage().getImageStackSize();
+                            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                if(!gb.blur(WindowManager.getCurrentImage().getStack().getProcessor(currentSlice), Float.parseFloat(radiusString)))  {
+                                    return;
+                                }
+                            }               WindowManager.getCurrentImage().updateAndDraw();
+                            log("Gaussian blurred the current image with radius " + Float.parseFloat(radiusString) + ".");
+                            break;
                         }
-		            }
-		        }
-                resultsTable.addValue("Pixels", count);
-                resultsTable.addValue("Not NaN p.", notNan);
-            } else {
-                int notNan = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (!Float.isNaN(trProc.getPixelValue(i, j))) {
-                            notNan++;
+                    case "lutFire":
+                        if (WindowManager.getCurrentImage() == null) {
+                            logError("No open image.");
+                            return;
+                        }           IJ.run("Fire");
+                        break;
+                    case "lutSpectrum":
+                        if (WindowManager.getCurrentImage() == null) {
+                            logError("No open image.");
+                            return;
+                        }           IJ.run("Spectrum");
+                        break;
+                    case "histogram":
+                        if (WindowManager.getCurrentImage() == null) {
+                            logError("No open image.");
+                            return;
+                        }           IJ.run("Histogram");
+                        break;
+                    case "openImage":
+                        (new Opener()).open();
+                        break;
+                    case "saveImageAsTiff":
+                        {
+                            ImagePlus image = WindowManager.getCurrentImage();
+                            if (image == null) {
+                                logError("No open image.");
+                                return;
+                            }               FileSaver fs = new FileSaver(image);
+                            if (fs.saveAsTiff()){
+                                log("Tiff file is saved.");
+                            }               image.updateAndDraw();
+                            break;
                         }
-		            }
-		        }
-                resultsTable.addValue("Pixels", width*height);
-                resultsTable.addValue("Not NaN p.", notNan);
-            }
-            ImageStatistics isMean = ImageStatistics.getStatistics(trProc, Measurements.MEAN,null);
-            resultsTable.addValue("Mean", (float)isMean.mean);
-            ImageStatistics isMedian = ImageStatistics.getStatistics(trProc, Measurements.MEDIAN,null);
-            resultsTable.addValue("Median", (float)isMedian.median);
-            ImageStatistics isStdDev = ImageStatistics.getStatistics(trProc, Measurements.STD_DEV,null);
-            resultsTable.addValue("Std. dev.", (float)isStdDev.stdDev);
-            ImageStatistics isMinMax = ImageStatistics.getStatistics(trProc, Measurements.MIN_MAX,null);
-            resultsTable.addValue("Min", (float)isMinMax.min);
-            resultsTable.addValue("Max", (float)isMinMax.max);
-            if (transferImage.getRoi() != null) {
-                donorInDImage.setRoi(transferImage.getRoi());
-                donorInAImage.setRoi(transferImage.getRoi());
-                acceptorInAImage.setRoi(transferImage.getRoi());
-            } else {
-                donorInDImage.killRoi();
-                donorInAImage.killRoi();
-                acceptorInAImage.killRoi();
-            }
-            analyzer.displayResults();
-            analyzer.updateHeadings();
-      	} else if (e.getActionCommand().equals("semiAutomaticProcessing")) {
-        	int choice = JOptionPane.showConfirmDialog(this, "Semi-automatic processing of images\n\nOpens and processes FRET images in a given directory. It works with\n"+
-                                                             "Zeiss LSM images (tested with LSM 510 Version 4.0), which contain three\n"+
-                                                             "channels:\n"+
-                                                             "1. donor channel\n"+
-                                                             "2. transfer channel\n"+
-                                                             "3. acceptor channel\n\n"+
-                                                             "The upper left corner (1/6 x 1/6 of the image) is considered as background.\n"+
-                                                             "Threshold settings, creation of FRET image and measurements have to be\n"+
-                                                             "made manually.\n\n"+
-                                                             "Every previously opened image and result window will be closed when you\n"+
-                                                             "press \"Ok\".\n\n"+
-                                                             "Press \"Ok\" to select the directory. To continue with the next "+
-                                                             "image, do\nnot close any windows, just press the \"Next\" button.\n", "Semi-automatic processing of images", JOptionPane.OK_CANCEL_OPTION);
-            if(choice == JOptionPane.YES_OPTION) {
-                currentlyProcessedFile = 0;
-                automaticallyProcessedFiles = null;
-                currentlyProcessedFileName = null;
-                WindowManager.closeAllWindows();
-                JFileChooser chooser = new JFileChooser(currentDirectory);
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                chooser.setDialogTitle("Select directory");
-                chooser.setAcceptAllFileFilterUsed(false);
-                if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                    log("Processing files in directory: " + chooser.getSelectedFile());
-                    currentDirectory = chooser.getSelectedFile().toString();
-                } else {
-                    log("Semi-automatic processing: no directory is selected.");
-                    return;
+                    case "saveImageAsBmp":
+                        {
+                            ImagePlus image = WindowManager.getCurrentImage();
+                            if (image == null) {
+                                logError("No open image.");
+                                return;
+                            }               FileSaver fs = new FileSaver(image);
+                            if (fs.saveAsBmp()){
+                                log("Bmp file is saved.");
+                            }               image.updateAndDraw();
+                            break;
+                        }
+                    case "saveMessages":
+                        {
+                            JFileChooser jfc = new JFileChooser(currentDirectory);
+                            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                            jfc.setDialogTitle("Save messages...");
+                            jfc.showSaveDialog(this);
+                            if (jfc.getSelectedFile() == null) {
+                                return;
+                            }               if (jfc.getSelectedFile().exists()) {
+                                currentDirectory = jfc.getCurrentDirectory().toString();
+                                int resp = JOptionPane.showConfirmDialog(this,
+                                        "Overwrite existing file?","Confirmation",
+                                        JOptionPane.OK_CANCEL_OPTION,
+                                        JOptionPane.QUESTION_MESSAGE);
+                                if (resp == JOptionPane.CANCEL_OPTION) {
+                                    return;
+                                }
+                            }               try {
+                                BufferedWriter out = new BufferedWriter(new FileWriter(jfc.getSelectedFile().getAbsolutePath()));
+                                out.write(log.getText());
+                                out.close();
+                            } catch (IOException ioe) {
+                                logError("Could not save messages.");
+                            }               break;
+                        }
+                    case "clearMessages":
+                        log.setText("");
+                        break;
+                    case "openLsmImage":
+                        {
+                            JFileChooser jfc = new JFileChooser(currentDirectory);
+                            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                            jfc.setDialogTitle("Open LSM image...");
+                            jfc.showOpenDialog(this);
+                            if (jfc.getSelectedFile() == null) {
+                                return;
+                            }               if (!jfc.getSelectedFile().exists()) {
+                                logError("Selected file does not exist.");
+                                return;
+                            }               try {
+                                currentDirectory = jfc.getCurrentDirectory().toString();
+                                boolean close = false;
+                                boolean resultsWindow = false;
+                                while(WindowManager.getCurrentImage() != null) {
+                                    WindowManager.getCurrentImage().close();
+                                }
+                                
+                                resetAllButtonColors();
+                                
+                                File imageFile = jfc.getSelectedFile();
+                                (new Opener()).open(imageFile.getAbsolutePath());
+                                WindowManager.putBehind();
+                                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"split"));
+                                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"setAcceptorInAImage"));
+                                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"lutSpectrum"));
+                                WindowManager.putBehind();
+                                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"setDonorInAImage"));
+                                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"lutSpectrum"));
+                                WindowManager.putBehind();
+                                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"setDonorInDImage"));
+                                this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"lutSpectrum"));
+                            } catch (Exception ex) {
+                                logError("Could not open and set the selected LSM image.");
+                                logException(ex.getMessage(), ex);
+                            }               break;
+                        }
+                    case "setDonorInDImage":
+                        {
+                            ImagePlus ip = WindowManager.getCurrentImage();
+                            if (ip == null) {
+                                logError("No image is selected.");
+                                setDonorInDImageButton.setBackground(originalButtonColor);
+                                return;
+                            }               if (ip.isHyperStack()) {
+                                logError("Current image is a hyperstack.");
+                                donorInDImage = null;
+                                setDonorInDImageButton.setBackground(originalButtonColor);
+                                return;
+                            }               if (donorInAImage != null && donorInAImage.equals(ip)) {
+                                logError("This image has already been set as transfer channel.");
+                                donorInDImage = null;
+                                setDonorInDImageButton.setBackground(originalButtonColor);
+                                return;
+                            } else if (acceptorInAImage != null && acceptorInAImage.equals(ip)) {
+                                logError("This image has already been set as acceptor channel.");
+                                donorInDImage = null;
+                                setDonorInDImageButton.setBackground(originalButtonColor);
+                                return;
+                            }               if (donorInAImage != null && ip.getImageStackSize() != donorInAImage.getImageStackSize()) {
+                                logError("Transfer channel contains " + donorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
+                                donorInDImage = null;
+                                setDonorInDImageButton.setBackground(originalButtonColor);
+                                return;
+                            } else if (acceptorInAImage != null && ip.getImageStackSize() != acceptorInAImage.getImageStackSize()) {
+                                logError("Acceptor channel contains " + acceptorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
+                                donorInDImage = null;
+                                setDonorInDImageButton.setBackground(originalButtonColor);
+                                return;
+                            } else if (ip.getImageStackSize() > 1) {
+                                logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
+                            }               donorInDImage = ip;
+                            donorInDImage.setTitle("Donor channel - " + new Date().toString());
+                            if (ip.getImageStackSize() > 1) {
+                                new StackConverter(donorInDImage).convertToGray32();
+                            } else {
+                                new ImageConverter(donorInDImage).convertToGray32();
+                            }               if (automaticallyProcessedFiles == null) {
+                                currentlyProcessedFileName = null;
+                            }               setDonorInDImageButton.setBackground(greenColor);
+                            break;
+                        }
+                    case "setDonorInAImage":
+                        {
+                            ImagePlus ip = WindowManager.getCurrentImage();
+                            if (ip == null) {
+                                logError("No image is selected.");
+                                setDonorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            }               if (ip.isHyperStack()) {
+                                logError("Current image is a hyperstack.");
+                                donorInAImage = null;
+                                setDonorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            }               if (donorInDImage != null && donorInDImage.equals(ip)) {
+                                logError("This image has already been set as donor channel.");
+                                donorInAImage = null;
+                                setDonorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            } else if (acceptorInAImage != null && acceptorInAImage.equals(ip)) {
+                                logError("This image has already been set as acceptor channel.");
+                                donorInAImage = null;
+                                setDonorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            }               if (donorInDImage != null && ip.getImageStackSize() != donorInDImage.getImageStackSize()) {
+                                logError("Donor channel contains " + donorInDImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
+                                donorInAImage = null;
+                                setDonorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            } else if (acceptorInAImage != null && ip.getImageStackSize() != acceptorInAImage.getImageStackSize()) {
+                                logError("Acceptor channel contains " + acceptorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
+                                donorInAImage = null;
+                                setDonorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            } else if (ip.getImageStackSize() > 1) {
+                                logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
+                            }               donorInAImage = ip;
+                            donorInAImage.setTitle("Transfer channel - " + new Date().toString());
+                            if (ip.getImageStackSize() > 1) {
+                                new StackConverter(donorInAImage).convertToGray32();
+                            } else {
+                                new ImageConverter(donorInAImage).convertToGray32();
+                            }               setDonorInAImageButton.setBackground(greenColor);
+                            break;
+                        }
+                    case "setAcceptorInAImage":
+                        {
+                            ImagePlus ip = WindowManager.getCurrentImage();
+                            if (ip == null) {
+                                logError("No image is selected.");
+                                setAcceptorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            }               if (ip.isHyperStack()) {
+                                logError("Current image is a hyperstack.");
+                                acceptorInAImage = null;
+                                setAcceptorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            }               if (donorInDImage != null && donorInDImage.equals(ip)) {
+                                logError("This image has already been set as donor channel.");
+                                acceptorInAImage = null;
+                                setAcceptorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            } else if (donorInAImage != null && donorInAImage.equals(ip)) {
+                                logError("This image has already been set as transfer channel.");
+                                acceptorInAImage = null;
+                                setAcceptorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            }               if (donorInDImage != null && ip.getImageStackSize() != donorInDImage.getImageStackSize()) {
+                                logError("Donor channel contains " + donorInDImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
+                                acceptorInAImage = null;
+                                setAcceptorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            } else if (donorInAImage != null && ip.getImageStackSize() != donorInAImage.getImageStackSize()) {
+                                logError("Transfer channel contains " + donorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
+                                acceptorInAImage = null;
+                                setAcceptorInAImageButton.setBackground(originalButtonColor);
+                                return;
+                            } else if (ip.getImageStackSize() > 1) {
+                                logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
+                            }               acceptorInAImage = ip;
+                            acceptorInAImage.setTitle("Acceptor channel - " + new Date().toString());
+                            if (ip.getImageStackSize() > 1) {
+                                new StackConverter(acceptorInAImage).convertToGray32();
+                            } else {
+                                new ImageConverter(acceptorInAImage).convertToGray32();
+                            }               setAcceptorInAImageButton.setBackground(greenColor);
+                            break;
+                        }
+                    case "copyRoi":
+                        if (donorInDImage == null) {
+                            logError("No image is set as donor channel.");
+                            return;
+                        }           if (donorInDImage.getRoi() != null) {
+                            if (donorInAImage != null) {
+                                donorInAImage.setRoi(donorInDImage.getRoi());
+                            }
+                            if (acceptorInAImage != null) {
+                                acceptorInAImage.setRoi(donorInDImage.getRoi());
+                            }
+                        } else {
+                            if (donorInAImage != null) {
+                                donorInAImage.killRoi();
+                            }
+                            if (acceptorInAImage != null) {
+                                acceptorInAImage.killRoi();
+                            }
+                        }           break;
+                    case "subtractDonorInDImage":
+                        {
+                            if (donorInDImage == null) {
+                                logError("No image is set as donor channel.");
+                                return;
+                            } else if (donorInDImage.getRoi() == null) {
+                                logError("No ROI is defined for donor channel.");
+                                return;
+                            }               float autofl = 0;
+                            if (!autoflDInDField.getText().trim().equals("")) {
+                                autofl = Float.parseFloat(autoflDInDField.getText().trim());
+                            }               DecimalFormat df = new DecimalFormat("#.#");
+                            int width = donorInDImage.getWidth();
+                            int height = donorInDImage.getHeight();
+                            int nSlices = donorInDImage.getImageStackSize();
+                            donorInDImageSave = new ImageStack(donorInDImage.getProcessor().getWidth(), donorInDImage.getProcessor().getHeight());
+                            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                double sum = 0;
+                                int count = 0;
+                                for (int i=0; i < width; i++) {
+                                    for (int j=0; j < height; j++) {
+                                        if (donorInDImage.getRoi().contains(i, j)) {
+                                            sum += donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(i,j);
+                                            count++;
+                                        }
+                                    }
+                                }
+                                float backgroundAvg = (float)(sum/count);
+                                
+                                backgroundAvg = backgroundAvg + autofl;
+                                
+                                float i = 0;
+                                for (int x=0; x < width; x++) {
+                                    for (int y=0; y < height; y++) {
+                                        i = donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(x,y);
+                                        i = i - backgroundAvg;
+                                        if (i < 0) {
+                                            i=0;
+                                        }
+                                        donorInDImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                                    }
+                                }
+                                FloatProcessor flp = new FloatProcessor(donorInDImage.getStack().getProcessor(currentSlice).getWidth(), donorInDImage.getStack().getProcessor(currentSlice).getHeight());
+                                flp.setPixels(currentSlice, (FloatProcessor)donorInDImage.getStack().getProcessor(currentSlice).duplicate());
+                                donorInDImageSave.addSlice(""+currentSlice, flp);
+                                if (nSlices == 1) {
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of donor channel.");
+                                } else {
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of slice " + currentSlice + " of donor channel.");
+                                }
+                            }       donorInDImage.updateAndDraw();
+                            donorInDImage.killRoi();
+                            donorInDImageSave.setColorModel(donorInDImage.getProcessor().getColorModel());
+                            subtractDonorInDImageButton.setBackground(greenColor);
+                            break;
+                        }
+                    case "subtractDonorInAImage":
+                        {
+                            if (donorInAImage == null) {
+                                logError("No image is set as transfer channel.");
+                                return;
+                            } else if (donorInAImage.getRoi() == null) {
+                                logError("No ROI is defined for transfer channel.");
+                                return;
+                            }               float autofl = 0;
+                            if (!autoflAInDField.getText().trim().equals("")) {
+                                autofl = Float.parseFloat(autoflAInDField.getText().trim());
+                            }               DecimalFormat df = new DecimalFormat("#.#");
+                            int width = donorInAImage.getWidth();
+                            int height = donorInAImage.getHeight();
+                            int nSlices = donorInAImage.getImageStackSize();
+                            donorInAImageSave = new ImageStack(donorInAImage.getProcessor().getWidth(), donorInAImage.getProcessor().getHeight());
+                            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                double sum = 0;
+                                int count = 0;
+                                for (int i=0; i < width; i++) {
+                                    for (int j=0; j < height; j++) {
+                                        if (donorInAImage.getRoi().contains(i, j)) {
+                                            sum += donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(i,j);
+                                            count++;
+                                        }
+                                    }
+                                }
+                                float backgroundAvg = (float)(sum/count);
+                                
+                                backgroundAvg = backgroundAvg + autofl;
+                                
+                                float i = 0;
+                                for (int x=0; x < width; x++) {
+                                    for (int y=0; y < height; y++) {
+                                        i = donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x,y);
+                                        i = i - backgroundAvg;
+                                        if (i < 0) {
+                                            i=0;
+                                        }
+                                        donorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                                    }
+                                }
+                                FloatProcessor flp = new FloatProcessor(donorInAImage.getStack().getProcessor(currentSlice).getWidth(), donorInAImage.getStack().getProcessor(currentSlice).getHeight());
+                                flp.setPixels(currentSlice, (FloatProcessor)donorInAImage.getStack().getProcessor(currentSlice).duplicate());
+                                donorInAImageSave.addSlice(""+currentSlice, flp);
+                                if (nSlices == 1) {
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of transfer channel.");
+                                } else {
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of slice " + currentSlice + " of transfer channel.");
+                                }
+                            }       donorInAImage.updateAndDraw();
+                            donorInAImage.killRoi();
+                            donorInAImageSave.setColorModel(donorInAImage.getProcessor().getColorModel());
+                            subtractDonorInAImageButton.setBackground(greenColor);
+                            break;
+                        }
+                    case "subtractAcceptorInAImage":
+                        {
+                            if (acceptorInAImage == null) {
+                                logError("No image is set as acceptor channel.");
+                                return;
+                            } else if (acceptorInAImage.getRoi() == null) {
+                                logError("No ROI is defined for acceptor channel.");
+                                return;
+                            }               float autofl = 0;
+                            if (!autoflAInAField.getText().trim().equals("")) {
+                                autofl = Float.parseFloat(autoflAInAField.getText().trim());
+                            }               DecimalFormat df = new DecimalFormat("#.#");
+                            int width = acceptorInAImage.getWidth();
+                            int height = acceptorInAImage.getHeight();
+                            int nSlices = acceptorInAImage.getImageStackSize();
+                            acceptorInAImageSave = new ImageStack(acceptorInAImage.getProcessor().getWidth(), acceptorInAImage.getProcessor().getHeight());
+                            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                double sum = 0;
+                                int count = 0;
+                                for (int i=0; i < width; i++) {
+                                    for (int j=0; j < height; j++) {
+                                        if (acceptorInAImage.getRoi().contains(i, j)) {
+                                            sum += acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(i,j);
+                                            count++;
+                                        }
+                                    }
+                                }
+                                float backgroundAvg = (float)(sum/count);
+                                
+                                backgroundAvg = backgroundAvg + autofl;
+                                
+                                float i = 0;
+                                for (int x=0; x < width; x++) {
+                                    for (int y=0; y < height; y++) {
+                                        i = acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x,y);
+                                        i = i - backgroundAvg;
+                                        if (i < 0) {
+                                            i=0;
+                                        }
+                                        acceptorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                                    }
+                                }
+                                FloatProcessor flp = new FloatProcessor(acceptorInAImage.getStack().getProcessor(currentSlice).getWidth(), acceptorInAImage.getStack().getProcessor(currentSlice).getHeight());
+                                flp.setPixels(currentSlice, (FloatProcessor)acceptorInAImage.getStack().getProcessor(currentSlice).duplicate());
+                                acceptorInAImageSave.addSlice(""+currentSlice, flp);
+                                if (nSlices == 1) {
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of acceptor channel.");
+                                } else {
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of slice " + currentSlice + " of acceptor channel.");
+                                }
+                            }       acceptorInAImage.updateAndDraw();
+                            acceptorInAImage.killRoi();
+                            acceptorInAImageSave.setColorModel(acceptorInAImage.getProcessor().getColorModel());
+                            subtractAcceptorInAImageButton.setBackground(greenColor);
+                            break;
+                        }
+                    case "thresholdDonorInDImage":
+                        if (donorInDImage == null) {
+                            logError("No image is set as donor channel.");
+                            return;
+                        }           IJ.selectWindow(donorInDImage.getTitle());
+                        IJ.run("Threshold...");
+                        thresholdDonorInDImageButton.setBackground(greenColor);
+                        break;
+                    case "thresholdDonorInAImage":
+                        if (donorInAImage == null) {
+                            logError("No image is set as transfer channel.");
+                            return;
+                        }           IJ.selectWindow(donorInAImage.getTitle());
+                        IJ.run("Threshold...");
+                        thresholdDonorInAImageButton.setBackground(greenColor);
+                        break;
+                    case "thresholdAcceptorInAImage":
+                        if (acceptorInAImage == null) {
+                            logError("No image is set as acceptor channel.");
+                            return;
+                        }           IJ.selectWindow(acceptorInAImage.getTitle());
+                        IJ.run("Threshold...");
+                        thresholdAcceptorInAImageButton.setBackground(greenColor);
+                        break;
+                    case "resetDD":
+                        {
+                            if (donorInDImage == null) {
+                                logError("No image is set as donor channel.");
+                                return;
+                            }               if (donorInDImageSave == null) {
+                                logError("No saved image.");
+                                return;
+                            }               int nSlices = donorInDImage.getImageStackSize();
+                            ImageStack newStack = new ImageStack(donorInDImageSave.getWidth(), donorInDImageSave.getHeight());
+                            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                FloatProcessor flp = new FloatProcessor(donorInDImageSave.getProcessor(currentSlice).getWidth(), donorInDImageSave.getProcessor(currentSlice).getHeight());
+                                flp.setPixels(currentSlice, (FloatProcessor)donorInDImageSave.getProcessor(currentSlice).duplicate());
+                                newStack.addSlice(""+currentSlice, flp);
+                            }               donorInDImage.setStack(donorInDImage.getTitle(), newStack);
+                            donorInDImage.getProcessor().setColorModel(donorInDImageSave.getColorModel());
+                            donorInDImage.updateAndDraw();
+                            thresholdDonorInDImageButton.setBackground(originalButtonColor);
+                            smoothDonorInDImageButton.setBackground(originalButtonColor);
+                            break;
+                        }
+                    case "resetDA":
+                        {
+                            if (donorInAImage == null) {
+                                logError("No image is set as transfer channel.");
+                                return;
+                            }               if (donorInAImageSave == null) {
+                                logError("No saved image.");
+                                return;
+                            }               int nSlices = donorInAImage.getImageStackSize();
+                            ImageStack newStack = new ImageStack(donorInAImageSave.getWidth(), donorInAImageSave.getHeight());
+                            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                FloatProcessor flp = new FloatProcessor(donorInAImageSave.getProcessor(currentSlice).getWidth(), donorInAImageSave.getProcessor(currentSlice).getHeight());
+                                flp.setPixels(currentSlice, (FloatProcessor)donorInAImageSave.getProcessor(currentSlice).duplicate());
+                                newStack.addSlice(""+currentSlice, flp);
+                            }               donorInAImage.setStack(donorInAImage.getTitle(), newStack);
+                            donorInAImage.getProcessor().setColorModel(donorInAImageSave.getColorModel());
+                            donorInAImage.updateAndDraw();
+                            thresholdDonorInAImageButton.setBackground(originalButtonColor);
+                            smoothDonorInAImageButton.setBackground(originalButtonColor);
+                            break;
+                        }
+                    case "resetAA":
+                        {
+                            if (acceptorInAImage == null) {
+                                logError("No image is set as acceptor channel.");
+                                return;
+                            }               if (acceptorInAImageSave == null) {
+                                logError("No saved image.");
+                                return;
+                            }               int nSlices = acceptorInAImage.getImageStackSize();
+                            ImageStack newStack = new ImageStack(acceptorInAImageSave.getWidth(), acceptorInAImageSave.getHeight());
+                            for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                FloatProcessor flp = new FloatProcessor(acceptorInAImageSave.getProcessor(currentSlice).getWidth(), acceptorInAImageSave.getProcessor(currentSlice).getHeight());
+                                flp.setPixels(currentSlice, (FloatProcessor)acceptorInAImageSave.getProcessor(currentSlice).duplicate());
+                                newStack.addSlice(""+currentSlice, flp);
+                            }               acceptorInAImage.setStack(acceptorInAImage.getTitle(), newStack);
+                            acceptorInAImage.getProcessor().setColorModel(acceptorInAImageSave.getColorModel());
+                            acceptorInAImage.updateAndDraw();
+                            thresholdAcceptorInAImageButton.setBackground(originalButtonColor);
+                            smoothAcceptorInAImageButton.setBackground(originalButtonColor);
+                            break;
+                        }
+                    case "smoothDD":
+                        if (donorInDImage == null) {
+                            logError("No image is set as donor channel.");
+                            return;
+                        } else {
+                            if (radiusFieldDD.getText().trim().equals("")) {
+                                logError("Radius has to be given for Gaussian blur.");
+                                return;
+                            } else {
+                                double radius = 0;
+                                try {
+                                    radius = Double.parseDouble(radiusFieldDD.getText().trim());
+                                } catch (Exception ex) {
+                                    logError("Radius has to be given for Gaussian blur.");
+                                    return;
+                                }
+                                GaussianBlur gb = new GaussianBlur();
+                                int nSlices = donorInDImage.getImageStackSize();
+                                for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                    if(!gb.blur(donorInDImage.getStack().getProcessor(currentSlice), radius))  {
+                                        return;
+                                    }
+                                }
+                                donorInDImage.updateAndDraw();
+                                smoothDonorInDImageButton.setBackground(greenColor);
+                                log("Gaussian blurred donor channel.");
+                            }
+                        }           break;
+                    case "smoothDA":
+                        if (donorInAImage == null) {
+                            logError("No image is set as transfer channel.");
+                            return;
+                        } else {
+                            if (radiusFieldDA.getText().trim().equals("")) {
+                                logError("Radius has to be given for Gaussian blur.");
+                                return;
+                            } else {
+                                double radius = 0;
+                                try {
+                                    radius = Double.parseDouble(radiusFieldDA.getText().trim());
+                                } catch (Exception ex) {
+                                    logError("Radius has to be given for Gaussian blur.");
+                                    return;
+                                }
+                                GaussianBlur gb = new GaussianBlur();
+                                int nSlices = donorInAImage.getImageStackSize();
+                                for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                    if(!gb.blur(donorInAImage.getStack().getProcessor(currentSlice), radius))  {
+                                        return;
+                                    }
+                                }
+                                donorInAImage.updateAndDraw();
+                                smoothDonorInAImageButton.setBackground(greenColor);
+                                log("Gaussian blurred transfer channel.");
+                            }
+                        }           break;
+                    case "smoothAA":
+                        if (acceptorInAImage == null) {
+                            logError("No image is set as acceptor channel.");
+                            return;
+                        } else {
+                            if (radiusFieldAA.getText().trim().equals("")) {
+                                logError("Radius has to be given for Gaussian blur.");
+                                return;
+                            } else {
+                                double radius = 0;
+                                try {
+                                    radius = Double.parseDouble(radiusFieldAA.getText().trim());
+                                } catch (Exception ex) {
+                                    logError("Radius has to be given for Gaussian blur.");
+                                    return;
+                                }
+                                GaussianBlur gb = new GaussianBlur();
+                                int nSlices = acceptorInAImage.getImageStackSize();
+                                for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                    if(!gb.blur(acceptorInAImage.getStack().getProcessor(currentSlice), radius))  {
+                                        return;
+                                    }
+                                }
+                                acceptorInAImage.updateAndDraw();
+                                smoothAcceptorInAImageButton.setBackground(greenColor);
+                                log("Gaussian blurred acceptor channel.");
+                            }
+                        }           break;
+                    case "useLsmImages":
+                        if (useLsmImages.isSelected()) {
+                            setDonorInDImageButton.setText("Open & Set LSM");
+                            setDonorInDImageButton.setActionCommand("openLsmImage");
+                            setDonorInAImageButton.setEnabled(false);
+                            setAcceptorInAImageButton.setEnabled(false);
+                        } else {
+                            setDonorInDImageButton.setText("Set image");
+                            setDonorInDImageButton.setActionCommand("setDonorInDImage");
+                            setDonorInAImageButton.setEnabled(true);
+                            setAcceptorInAImageButton.setEnabled(true);
+                        }       logScrollPane.setPreferredSize(new Dimension(10,10));
+                        break;
+                    case "calculateS1S3Button":
+                        if (s1S3Dialog != null) {
+                            s1S3Dialog.setVisible(false);
+                            s1S3Dialog.dispose();
+                        }           s1S3Dialog = new S1S3Dialog(this);
+                        s1S3Dialog.setVisible(true);
+                        break;
+                    case "calculateS2S4Button":
+                        if (s2S4Dialog != null) {
+                            s2S4Dialog.setVisible(false);
+                            s2S4Dialog.dispose();
+                        }           s2S4Dialog = new S2S4Dialog(this);
+                        s2S4Dialog.setVisible(true);
+                        break;
+                    case "calculateAlphaButton":
+                        if (alphaDialog != null) {
+                            alphaDialog.setVisible(true);
+                        } else {
+                            alphaDialog = new AlphaDialog(this);
+                            alphaDialog.setVisible(true);
+                        }   break;
+                    case "createFretImage":
+                        if (donorInDImage == null) {
+                            logError("No image is set as donor channel.");
+                            return;
+                        } else if (donorInAImage == null) {
+                            logError("No image is set as transfer channel.");
+                            return;
+                        } else if (acceptorInAImage == null) {
+                            logError("No image is set as acceptor channel.");
+                            return;
+                        } else {
+                            if (autoThresholdingCB.isSelected()) {
+                                if (autoThresholdMin.getText().trim().equals("")) {
+                                    logError("Auto-threshold min value has to be given.");
+                                    return;
+                                } else if (autoThresholdMax.getText().trim().equals("")) {
+                                    logError("Auto-threshold max value has to be given.");
+                                    return;
+                                }
+                            }
+                            if (s1Field.getText().trim().equals("")) {
+                                logError("S1 factor has to be given.");
+                                return;
+                            } else if (s2Field.getText().trim().equals("")) {
+                                logError("S2 factor has to be given.");
+                                return;
+                            } else if (s3Field.getText().trim().equals("")) {
+                                logError("S3 factor has to be given.");
+                                return;
+                            } else if (s4Field.getText().trim().equals("")) {
+                                logError("S4 factor has to be given.");
+                                return;
+                            } else if (alphaField.getText().trim().equals("")) {
+                                logError("Alpha factor has to be given.");
+                                return;
+                            } else {
+                                double s1Factor = 0;
+                                try {
+                                    s1Factor = Double.parseDouble(s1Field.getText().trim());
+                                } catch (Exception ex) {
+                                    logError("S1 factor has to be given.");
+                                    return;
+                                }
+                                if (s1Factor <= 0) {
+                                    logWarning("S1 factor should be higher than 0.");
+                                }
+                                double s2Factor = 0;
+                                try {
+                                    s2Factor = Double.parseDouble(s2Field.getText().trim());
+                                } catch (Exception ex) {
+                                    logError("S2 factor has to be given.");
+                                    return;
+                                }
+                                if (s2Factor <= 0) {
+                                    logWarning("S2 factor should be higher than 0.");
+                                }
+                                double s3Factor = 0;
+                                try {
+                                    s3Factor = Double.parseDouble(s3Field.getText().trim());
+                                } catch (Exception ex) {
+                                    logError("S3 factor has to be given.");
+                                    return;
+                                }
+                                if (s3Factor < 0) {
+                                    logWarning("S3 factor should be higher than 0.");
+                                }
+                                double s4Factor = 0;
+                                try {
+                                    s4Factor = Double.parseDouble(s4Field.getText().trim());
+                                } catch (Exception ex) {
+                                    logError("S4 factor has to be given.");
+                                    return;
+                                }
+                                if (s4Factor < 0) {
+                                    logWarning("S4 factor should be higher than 0.");
+                                }
+                                double alphaFactor = 0;
+                                try {
+                                    alphaFactor = Double.parseDouble(alphaField.getText().trim());
+                                } catch (Exception ex) {
+                                    logError("Alpha factor has to be given.");
+                                    return;
+                                }
+                                
+                                double autoThMin = 0;
+                                double autoThMax = 0;
+                                if (autoThresholdingCB.isSelected()) {
+                                    try {
+                                        autoThMin = Double.parseDouble(autoThresholdMin.getText().trim());
+                                    } catch (Exception ex) {
+                                        logError("Auto-threshold min value has to be given.");
+                                        return;
+                                    }
+                                    
+                                    try {
+                                        autoThMax = Double.parseDouble(autoThresholdMax.getText().trim());
+                                    } catch (Exception ex) {
+                                        logError("Auto-threshold max value has to be given.");
+                                        return;
+                                    }
+                                }
+                                
+                                int nSlices = donorInDImage.getImageStackSize();
+                                ImageStack transferStack = new ImageStack(donorInDImage.getProcessor().getWidth(), donorInDImage.getProcessor().getHeight());
+                                for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                                    ImageProcessor ipDD = donorInDImage.getStack().getProcessor(currentSlice).duplicate();
+                                    ImageProcessor ipDA = donorInAImage.getStack().getProcessor(currentSlice).duplicate();
+                                    ImageProcessor ipAA = acceptorInAImage.getStack().getProcessor(currentSlice).duplicate();
+                                    
+                                    float[] ipDDP = (float[])ipDD.getPixels();
+                                    float[] ipDAP = (float[])ipDA.getPixels();
+                                    float[] ipAAP = (float[])ipAA.getPixels();
+                                    
+                                    for (int i = 0; i < ipDDP.length; i++) {
+                                        if (!Float.isNaN(ipDDP[i]) && !Float.isNaN(ipDAP[i]) && !Float.isNaN(ipAAP[i])) {
+                                            ipDDP[i] = (float)((s1Factor*s2Factor*(ipDAP[i]*((double)1-s3Factor*s4Factor)-ipDDP[i]*(s1Factor-s2Factor*s3Factor)-ipAAP[i]*(s2Factor-s1Factor*s4Factor)))/((s1Factor-s2Factor*s3Factor)*(ipDDP[i]*s2Factor-ipDAP[i]*s4Factor)*alphaFactor));
+                                        } else {
+                                            ipDDP[i] = Float.NaN;
+                                        }
+                                    }
+                                    
+                                    for (int i = 0; i < ipDDP.length; i++) {
+                                        ipDDP[i] = ipDDP[i]/((float)1 + ipDDP[i]);
+                                    }
+                                    
+                                    int width = ipDD.getWidth();
+                                    int height = ipDD.getHeight();
+                                    float[][] tiPoints = new float[width][height];
+                                    for (int i = 0; i < width; i++) {
+                                        for (int j = 0; j < height; j++) {
+                                            if (autoThresholdingCB.isSelected()) {
+                                                if (ipDDP[width*j+i] >= autoThMin && ipDDP[width*j+i] <= autoThMax) {
+                                                    tiPoints[i][j] = ipDDP[width*j+i];
+                                                } else {
+                                                    tiPoints[i][j] = Float.NaN;
+                                                }
+                                            } else {
+                                                tiPoints[i][j] = ipDDP[width*j+i];
+                                            }
+                                        }
+                                    }
+                                    
+                                    FloatProcessor tiFp = new FloatProcessor(tiPoints);
+                                    transferStack.addSlice(""+currentSlice, tiFp);
+                                }
+                                if (transferImage != null) {
+                                    transferImage.close();
+                                }
+                                transferImage = new ImagePlus("Transfer (FRET) image", transferStack);
+                                transferImage.setCalibration(donorInDImage.getCalibration());
+                                transferImage.show();
+                                
+                                analyzer = new Analyzer();
+                                resultsTable =Analyzer.getResultsTable();
+                                resultsTable.setPrecision(3);
+                                resultsTable.incrementCounter();
+                                int widthTi = transferImage.getWidth();
+                                int heightTi = transferImage.getHeight();
+                                if(currentlyProcessedFileName != null) {
+                                    resultsTable.addLabel("File", currentlyProcessedFileName);
+                                }
+                                if (transferImage.getRoi() != null) {
+                                    Roi roi = transferImage.getRoi();
+                                    int count = 0;
+                                    int notNan = 0;
+                                    for (int i=0; i<widthTi; i++) {
+                                        for (int j=0; j<heightTi; j++) {
+                                            if (roi.contains(i, j)) {
+                                                count++;
+                                                if (transferImage.getStack().getProcessor(1).getPixelValue(i, j) >= -1) {
+                                                    notNan++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    resultsTable.addValue("Pixels", count);
+                                    resultsTable.addValue("Not NaN p.", notNan);
+                                } else {
+                                    int notNan = 0;
+                                    for (int i=0; i<widthTi; i++) {
+                                        for (int j=0; j<heightTi; j++) {
+                                            if (transferImage.getStack().getProcessor(1).getPixelValue(i, j) >= -1) {
+                                                notNan++;
+                                            }
+                                        }
+                                    }
+                                    resultsTable.addValue("Pixels", widthTi*heightTi);
+                                    resultsTable.addValue("Not NaN p.", notNan);
+                                }
+                                ImageStatistics isMean = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.MEAN,null);
+                                resultsTable.addValue("Mean", (float)isMean.mean);
+                                ImageStatistics isMedian = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.MEDIAN,null);
+                                resultsTable.addValue("Median", (float)isMedian.median);
+                                ImageStatistics isStdDev = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.STD_DEV,null);
+                                resultsTable.addValue("Std. dev.", (float)isStdDev.stdDev);
+                                ImageStatistics isMinMax = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.MIN_MAX,null);
+                                resultsTable.addValue("Min", (float)isMinMax.min);
+                                resultsTable.addValue("Max", (float)isMinMax.max);
+                                if (transferImage.getRoi() != null) {
+                                    donorInDImage.setRoi(transferImage.getRoi());
+                                    donorInAImage.setRoi(transferImage.getRoi());
+                                    acceptorInAImage.setRoi(transferImage.getRoi());
+                                } else {
+                                    donorInDImage.killRoi();
+                                    donorInAImage.killRoi();
+                                    acceptorInAImage.killRoi();
+                                }
+                                analyzer.displayResults();
+                                analyzer.updateHeadings();
+                            }
+                        }           donorInDImage.changes = false;
+                        donorInAImage.changes = false;
+                        acceptorInAImage.changes = false;
+                        break;
+                    case "measureFretImage":
+                        {
+                            if (transferImage == null) {
+                                logError("Transfer (FRET) image is required.");
+                                return;
+                            }               resultsTable.incrementCounter();
+                            int currentSlice = transferImage.getCurrentSlice();
+                            int width = transferImage.getWidth();
+                            int height = transferImage.getHeight();
+                            if(currentlyProcessedFileName != null) {
+                                resultsTable.addLabel("File", currentlyProcessedFileName);
+                            }               ImageProcessor trProc = transferImage.getStack().getProcessor(currentSlice);
+                            trProc.setRoi(transferImage.getRoi());
+                            if (transferImage.getRoi() != null) {
+                                Roi roi = transferImage.getRoi();
+                                int count = 0;
+                                int notNan = 0;
+                                for (int i=0; i<width; i++) {
+                                    for (int j=0; j<height; j++) {
+                                        if (roi.contains(i, j)) {
+                                            count++;
+                                            if (trProc.getPixelValue(i, j) >= -1) {
+                                                notNan++;
+                                            }
+                                        }
+                                    }
+                                }
+                                resultsTable.addValue("Pixels", count);
+                                resultsTable.addValue("Not NaN p.", notNan);
+                            } else {
+                                int notNan = 0;
+                                for (int i=0; i<width; i++) {
+                                    for (int j=0; j<height; j++) {
+                                        if (!Float.isNaN(trProc.getPixelValue(i, j))) {
+                                            notNan++;
+                                        }
+                                    }
+                                }
+                                resultsTable.addValue("Pixels", width*height);
+                                resultsTable.addValue("Not NaN p.", notNan);
+                            }               ImageStatistics isMean = ImageStatistics.getStatistics(trProc, Measurements.MEAN,null);
+                            resultsTable.addValue("Mean", (float)isMean.mean);
+                            ImageStatistics isMedian = ImageStatistics.getStatistics(trProc, Measurements.MEDIAN,null);
+                            resultsTable.addValue("Median", (float)isMedian.median);
+                            ImageStatistics isStdDev = ImageStatistics.getStatistics(trProc, Measurements.STD_DEV,null);
+                            resultsTable.addValue("Std. dev.", (float)isStdDev.stdDev);
+                            ImageStatistics isMinMax = ImageStatistics.getStatistics(trProc, Measurements.MIN_MAX,null);
+                            resultsTable.addValue("Min", (float)isMinMax.min);
+                            resultsTable.addValue("Max", (float)isMinMax.max);
+                            if (transferImage.getRoi() != null) {
+                                donorInDImage.setRoi(transferImage.getRoi());
+                                donorInAImage.setRoi(transferImage.getRoi());
+                                acceptorInAImage.setRoi(transferImage.getRoi());
+                            } else {
+                                donorInDImage.killRoi();
+                                donorInAImage.killRoi();
+                                acceptorInAImage.killRoi();
+                            }               analyzer.displayResults();
+                            analyzer.updateHeadings();
+                            break;
+                        }
+                    case "semiAutomaticProcessing":
+                        int choice = JOptionPane.showConfirmDialog(this, "Semi-automatic processing of images\n\nOpens and processes FRET images in a given directory. It works with\n"+
+                                "Zeiss LSM images (tested with LSM 510 Version 4.0), which contain three\n"+
+                                "channels:\n"+
+                                "1. donor channel\n"+
+                                "2. transfer channel\n"+
+                                "3. acceptor channel\n\n"+
+                                "The upper left corner (1/6 x 1/6 of the image) is considered as background.\n"+
+                                "Threshold settings, creation of FRET image and measurements have to be\n"+
+                                "made manually.\n\n"+
+                                "Every previously opened image and result window will be closed when you\n"+
+                                "press \"Ok\".\n\n"+
+                                "Press \"Ok\" to select the directory. To continue with the next "+
+                                "image, do\nnot close any windows, just press the \"Next\" button.\n", "Semi-automatic processing of images", JOptionPane.OK_CANCEL_OPTION);
+                        if(choice == JOptionPane.YES_OPTION) {
+                            currentlyProcessedFile = 0;
+                            automaticallyProcessedFiles = null;
+                            currentlyProcessedFileName = null;
+                            WindowManager.closeAllWindows();
+                            JFileChooser chooser = new JFileChooser(currentDirectory);
+                            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                            chooser.setDialogTitle("Select directory");
+                            chooser.setAcceptAllFileFilterUsed(false);
+                            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                                log("Processing files in directory: " + chooser.getSelectedFile());
+                                currentDirectory = chooser.getSelectedFile().toString();
+                            } else {
+                                log("Semi-automatic processing: no directory is selected.");
+                                return;
+                            }
+                            nextButton.setVisible(true);
+                            useLsmImages.setSelected(true);
+                            logScrollPane.setPreferredSize(new Dimension(10,10));
+                            automaticallyProcessedFiles = chooser.getSelectedFile().listFiles();
+                            processFile(0);
+                        }           break;
+                    case "nextImage":
+                        if(transferImage != null) {
+                            transferImage.changes = false;
+                            transferImage.close();
+                        }           if(donorInDImage != null) {
+                            donorInDImage.changes = false;
+                            donorInDImage.close();
+                        }           if(donorInAImage != null) {
+                            donorInAImage.changes = false;
+                            donorInAImage.close();
+                        }           if(acceptorInAImage != null) {
+                            acceptorInAImage.changes = false;
+                            acceptorInAImage.close();
+                        }           IJ.selectWindow("Results");
+                        WindowManager.putBehind();
+                        if(WindowManager.getCurrentImage() != null) {
+                            WindowManager.getCurrentImage().close();
+                        }           processFile(++currentlyProcessedFile);
+                        break;
+                    case "resetImages":
+                        resetAll();
+                        break;
+                    case "closeImages":
+                        if(transferImage != null) {
+                            transferImage.changes = false;
+                            transferImage.close();
+                        }           if(donorInDImage != null) {
+                            donorInDImage.changes = false;
+                            donorInDImage.close();
+                        }           if(donorInAImage != null) {
+                            donorInAImage.changes = false;
+                            donorInAImage.close();
+                        }           if(acceptorInAImage != null) {
+                            acceptorInAImage.changes = false;
+                            acceptorInAImage.close();
+                        }           resetAll();
+                        break;
+                    case "help":
+                        if (helpWindow != null) {
+                            helpWindow.setVisible(false);
+                            helpWindow.dispose();
+                        }           helpWindow = new RiHelpWindow(this);
+                        helpWindow.setVisible(true);
+                        break;
+                    case "about":
+                        JOptionPane optionPane = new JOptionPane();
+                        optionPane.setMessage("RiFRET - an ImageJ plugin for intensity-based ratiometric FRET imaging\n" +
+                                "Homepage: http://biophys.med.unideb.hu/rifret/\n" +
+                                "Written by: János Roszik (janosr@med.unideb.hu), Duarte Lisboa (duarte@med.unideb.hu),\n" +
+                                "János Szöllõsi (szollo@med.unideb.hu) and György Vereb (vereb@med.unideb.hu)\n" +
+                                "Version: " + version + " (" + lastModified + ")\n" +
+                                        "The plugin was tested with ImageJ version " + imageJVersion + " using Java " + javaVersion + ".\n");
+                        optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+                        JDialog dialog = optionPane.createDialog(this, "About");
+                        dialog.setVisible(true);
+                        break;
+                    default:
+                        break;
                 }
-                nextButton.setVisible(true);
-                useLsmImages.setSelected(true);
-                logScrollPane.setPreferredSize(new Dimension(10,10));
-                automaticallyProcessedFiles = chooser.getSelectedFile().listFiles();
-                processFile(0);
-            }
-      	} else if (e.getActionCommand().equals("nextImage")) {
-            if(transferImage != null) {
-                transferImage.changes = false;
-                transferImage.close();
-      	    }
-            if(donorInDImage != null) {
-                donorInDImage.changes = false;
-                donorInDImage.close();
-      	    }
-      	    if(donorInAImage != null) {
-      	        donorInAImage.changes = false;
-                donorInAImage.close();
-      	    }
-      	    if(acceptorInAImage != null) {
-      	        acceptorInAImage.changes = false;
-                acceptorInAImage.close();
-      	    }
-            IJ.selectWindow("Results");
-       	    WindowManager.putBehind();
-       	    if(WindowManager.getCurrentImage() != null) {
-                WindowManager.getCurrentImage().close();
-            }
-         	processFile(++currentlyProcessedFile);
-      	} else if (e.getActionCommand().equals("resetImages")) {
-      	    resetAll();
-      	} else if (e.getActionCommand().equals("closeImages")) {
-            if(transferImage != null) {
-                transferImage.changes = false;
-                transferImage.close();
-      	    }
-            if(donorInDImage != null) {
-                donorInDImage.changes = false;
-                donorInDImage.close();
-      	    }
-      	    if(donorInAImage != null) {
-      	        donorInAImage.changes = false;
-                donorInAImage.close();
-      	    }
-      	    if(acceptorInAImage != null) {
-      	        acceptorInAImage.changes = false;
-                acceptorInAImage.close();
-      	    }
-            resetAll();
-      	} else if (e.getActionCommand().equals("help")) {
-            if (helpWindow != null) {
-                helpWindow.setVisible(false);
-                helpWindow.dispose();
-            }
-      	    helpWindow = new RiHelpWindow(this);
-      	    helpWindow.setVisible(true);
-      	} else if (e.getActionCommand().equals("about")) {
-            JOptionPane optionPane = new JOptionPane();
-            optionPane.setMessage("RiFRET - an ImageJ plugin for intensity-based ratiometric FRET imaging\n" +
-                                  "Homepage: http://biophys.med.unideb.hu/rifret/\n" +
-			                      "Written by: János Roszik (janosr@med.unideb.hu), Duarte Lisboa (duarte@med.unideb.hu),\n" +
-                                  "János Szöllõsi (szollo@med.unideb.hu) and György Vereb (vereb@med.unideb.hu)\n" +
-                                  "Version: " + version + " (" + lastModified + ")\n" +
-                                  "The plugin was tested with ImageJ version " + imageJVersion + " using Java " + javaVersion + ".\n");
-            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-            JDialog dialog = optionPane.createDialog(this, "About");
-            dialog.setVisible(true);
-        }
         } catch (Throwable t) {
             logException(t.toString(), t);
         }

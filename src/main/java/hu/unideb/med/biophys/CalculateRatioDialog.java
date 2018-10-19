@@ -106,90 +106,88 @@ public class CalculateRatioDialog extends JDialog implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
     	try {
-            if (e.getActionCommand().equals("setFirstImage")) {
-                firstImg = WindowManager.getCurrentImage();
-      	        if (firstImg == null) {
-                    mainWindow.logError("No image is selected. (Ratio)");
-                    return;
+                switch (e.getActionCommand()) {
+                    case "setFirstImage":
+                        firstImg = WindowManager.getCurrentImage();
+                        if (firstImg == null) {
+                            mainWindow.logError("No image is selected. (Ratio)");
+                            return;
+                        }       if (firstImg.getImageStackSize() > 1) {
+                            mainWindow.logError("Current image contains more than 1 channel ("+firstImg.getImageStackSize()+"). Please split it into parts. (Ratio)");
+                            firstImg = null;
+                            return;
+                        } else if (firstImg.getNSlices() > 1) {
+                            mainWindow.logError("Current image contains more than 1 slice ("+firstImg.getNSlices()+"). Please split it into parts. (Ratio)");
+                            firstImg = null;
+                            return;
+                        }       firstImg.setTitle("Image 1 - " + new Date().toString());
+                        new ImageConverter(firstImg).convertToGray32();
+                        setFirstImgButton.setBackground(mainWindow.greenColor);
+                        break;
+                    case "setSecondImage":
+                        secondImg = WindowManager.getCurrentImage();
+                        if (secondImg == null) {
+                            mainWindow.logError("No image is selected. (Ratio)");
+                            return;
+                        }       if (secondImg.getImageStackSize() > 1) {
+                            mainWindow.logError("Current image contains more than 1 channel ("+secondImg.getImageStackSize()+"). Please split it into parts. (Ratio)");
+                            secondImg = null;
+                            return;
+                        } else if (secondImg.getNSlices() > 1) {
+                            mainWindow.logError("Current image contains more than 1 slice ("+secondImg.getNSlices()+"). Please split it into parts. (Ratio)");
+                            secondImg = null;
+                            return;
+                        }       secondImg.setTitle("Image 2 - " + new Date().toString());
+                        new ImageConverter(secondImg).convertToGray32();
+                        setSecondImgButton.setBackground(mainWindow.greenColor);
+                        break;
+                    case "useMainWindowImages":
+                        if (useMainWindowImages.isSelected()) {
+                            setFirstImgButton.setEnabled(false);
+                            setSecondImgButton.setEnabled(false);
+                        } else {
+                            setFirstImgButton.setEnabled(true);
+                            setSecondImgButton.setEnabled(true);
+                        }   break;
+                    case "createRatioImage":
+                        ImageProcessor ip1 = null;
+                        ImageProcessor ip2 = null;
+                        if (!useMainWindowImages.isSelected()) {
+                            if (firstImg == null) {
+                                mainWindow.logError("No image 1 is set. (Ratio)");
+                                return;
+                            } else if (secondImg == null) {
+                                mainWindow.logError("No image 2 is set. (Ratio)");
+                                return;
+                            }
+                            ip1 = firstImg.getProcessor();
+                            ip2 = secondImg.getProcessor();
+                        } else {
+                            if (mainWindow.getDonorInDImage() == null) {
+                                mainWindow.logError("No donor channel image is set. (Ratio)");
+                                return;
+                            } else if (mainWindow.getDonorInAImage() == null) {
+                                mainWindow.logError("No transfer channel image is set. (Ratio)");
+                                return;
+                            }
+                            ip1 = mainWindow.getDonorInDImage().getProcessor();
+                            ip2 = mainWindow.getDonorInAImage().getProcessor();
+                        }       float[] ip1P = (float[])ip1.getPixels();
+                        float[] ip2P = (float[])ip2.getPixels();
+                        int width = ip1.getWidth();
+                        int height = ip1.getHeight();
+                        float[][] ratioImgPoints = new float[width][height];
+                        for (int i = 0; i < width; i++) {
+                            for (int j = 0; j < height; j++) {
+                                ratioImgPoints[i][j] = ip1P[width*j+i] / ip2P[width*j+i];
+                            }
+                        }       FloatProcessor fp = new FloatProcessor(ratioImgPoints);
+                        ImagePlus ratioImg = new ImagePlus("Ratio of images", fp);
+                        ratioImg.show();
+                        break;
+                    default:
+                        break;
                 }
-                if (firstImg.getImageStackSize() > 1) {
-                   mainWindow.logError("Current image contains more than 1 channel ("+firstImg.getImageStackSize()+"). Please split it into parts. (Ratio)");
-                   firstImg = null;
-                   return;
-                } else if (firstImg.getNSlices() > 1) {
-                   mainWindow.logError("Current image contains more than 1 slice ("+firstImg.getNSlices()+"). Please split it into parts. (Ratio)");
-                   firstImg = null;
-                   return;
-                }
-                firstImg.setTitle("Image 1 - " + new Date().toString());
-                new ImageConverter(firstImg).convertToGray32();
-                setFirstImgButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("setSecondImage")) {
-                secondImg = WindowManager.getCurrentImage();
-      	        if (secondImg == null) {
-                    mainWindow.logError("No image is selected. (Ratio)");
-                    return;
-                }
-                if (secondImg.getImageStackSize() > 1) {
-                   mainWindow.logError("Current image contains more than 1 channel ("+secondImg.getImageStackSize()+"). Please split it into parts. (Ratio)");
-                   secondImg = null;
-                   return;
-                } else if (secondImg.getNSlices() > 1) {
-                   mainWindow.logError("Current image contains more than 1 slice ("+secondImg.getNSlices()+"). Please split it into parts. (Ratio)");
-                   secondImg = null;
-                   return;
-                }
-                secondImg.setTitle("Image 2 - " + new Date().toString());
-                new ImageConverter(secondImg).convertToGray32();
-                setSecondImgButton.setBackground(mainWindow.greenColor);
-            } else if (e.getActionCommand().equals("useMainWindowImages")) {
-          	    if (useMainWindowImages.isSelected()) {
-	                setFirstImgButton.setEnabled(false);
-	                setSecondImgButton.setEnabled(false);
-       	        } else {
-	                setFirstImgButton.setEnabled(true);
-	                setSecondImgButton.setEnabled(true);
-          	    }
-      	    } else if (e.getActionCommand().equals("createRatioImage")) {
-      	        ImageProcessor ip1 = null;
-      	        ImageProcessor ip2 = null;
-      	        if (!useMainWindowImages.isSelected()) {
-                    if (firstImg == null) {
-                        mainWindow.logError("No image 1 is set. (Ratio)");
-                        return;
-                    } else if (secondImg == null) {
-                        mainWindow.logError("No image 2 is set. (Ratio)");
-                        return;
-                    }
-                    ip1 = firstImg.getProcessor();
-                    ip2 = secondImg.getProcessor();
-                } else {
-                    if (mainWindow.getDonorInDImage() == null) {
-                        mainWindow.logError("No donor channel image is set. (Ratio)");
-                        return;
-                    } else if (mainWindow.getDonorInAImage() == null) {
-                        mainWindow.logError("No transfer channel image is set. (Ratio)");
-                        return;
-                    }
-                    ip1 = mainWindow.getDonorInDImage().getProcessor();
-                    ip2 = mainWindow.getDonorInAImage().getProcessor();
-                }
-
-                float[] ip1P = (float[])ip1.getPixels();
-                float[] ip2P = (float[])ip2.getPixels();
-
-                int width = ip1.getWidth();
-                int height = ip1.getHeight();
-                float[][] ratioImgPoints = new float[width][height];
-                for (int i = 0; i < width; i++) {
-                    for (int j = 0; j < height; j++) {
-                        ratioImgPoints[i][j] = ip1P[width*j+i] / ip2P[width*j+i];
-                    }
-                }
-                FloatProcessor fp = new FloatProcessor(ratioImgPoints);
-                ImagePlus ratioImg = new ImagePlus("Ratio of images", fp);
-                ratioImg.show();
-           }
         } catch (Throwable t) {
             mainWindow.logException(t.toString(), t);
         }

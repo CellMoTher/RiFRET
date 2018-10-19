@@ -146,254 +146,256 @@ public class AutoflDialog extends JDialog implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
     	try {
-            if (e.getActionCommand().equals("reset")) {
-                donorImg = null;
-                transferImg = null;
-                acceptorImg = null;
-	            setDonorButton.setBackground(mainWindow.originalButtonColor);
-	            setTransferButton.setBackground(mainWindow.originalButtonColor);
-	            setAcceptorButton.setBackground(mainWindow.originalButtonColor);
-                subtractDonorButton.setBackground(mainWindow.originalButtonColor);
-                subtractTransferButton.setBackground(mainWindow.originalButtonColor);
-                subtractAcceptorButton.setBackground(mainWindow.originalButtonColor);
-	            calculateDonorAfButton.setBackground(mainWindow.originalButtonColor);
-                calculateTransferAfButton.setBackground(mainWindow.originalButtonColor);
-                calculateAcceptorAfButton.setBackground(mainWindow.originalButtonColor);
-      	    } else if (e.getActionCommand().equals("setAutoFlDonor")) {
-                donorImg = WindowManager.getCurrentImage();
-      	        if (donorImg == null) {
-                    mainWindow.logError("No image is selected. (Autofl.)");
-                    return;
-                }
-                if (donorImg.getImageStackSize() > 1) {
-                   mainWindow.logError("Current image contains more than 1 channel ("+donorImg.getImageStackSize()+"). Please split it into parts. (Autofl.)");
-                   donorImg = null;
-                   return;
-                } else if (donorImg.getNSlices() > 1) {
-                   mainWindow.logError("Current image contains more than 1 slice ("+donorImg.getNSlices()+"). Please split it into parts. (Autofl.)");
-                   donorImg = null;
-                   return;
-                }
-                donorImg.setTitle("Donor channel (Autofl.) - " + new Date().toString());
-                new ImageConverter(donorImg).convertToGray32();
-                setDonorButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("setAutoFlTransfer")) {
-                transferImg = WindowManager.getCurrentImage();
-      	        if (transferImg == null) {
-                    mainWindow.logError("No image is selected. (Autofl.)");
-                    return;
-                }
-                if (transferImg.getImageStackSize() > 1) {
-                   mainWindow.logError("Current image contains more than 1 channel ("+transferImg.getImageStackSize()+"). Please split it into parts. (Autofl.)");
-                   transferImg = null;
-                   return;
-                } else if (transferImg.getNSlices() > 1) {
-                   mainWindow.logError("Current image contains more than 1 slice ("+transferImg.getNSlices()+"). Please split it into parts. (Autofl.)");
-                   transferImg = null;
-                   return;
-                }
-                transferImg.setTitle("Transfer channel (Autofl.) - " + new Date().toString());
-                new ImageConverter(transferImg).convertToGray32();
-                setTransferButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("setAutoFlAcceptor")) {
-                acceptorImg = WindowManager.getCurrentImage();
-      	        if (acceptorImg == null) {
-                    mainWindow.logError("No image is selected. (Autofl.)");
-                    return;
-                }
-                if (acceptorImg.getImageStackSize() > 1) {
-                   mainWindow.logError("Current image contains more than 1 channel ("+acceptorImg.getImageStackSize()+"). Please split it into parts. (Autofl.)");
-                   acceptorImg = null;
-                   return;
-                } else if (acceptorImg.getNSlices() > 1) {
-                   mainWindow.logError("Current image contains more than 1 slice ("+acceptorImg.getNSlices()+"). Please split it into parts. (Autofl.)");
-                   acceptorImg = null;
-                   return;
-                }
-                acceptorImg.setTitle("Acceptor channel (Autofl.) - " + new Date().toString());
-                new ImageConverter(acceptorImg).convertToGray32();
-                setAcceptorButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("subtractAutoFlDonor")) {
-      	        if (donorImg == null) {
-                    mainWindow.logError("No image is set as donor channel. (Autofl.)");
-                    return;
-                } else if (donorImg.getRoi() == null) {
-                    mainWindow.logError("No ROI is defined for donor channel. (Autofl.)");
-                    return;
-                }
-                ImageProcessor ipD = donorImg.getProcessor();
-                int width = donorImg.getWidth();
-                int height = donorImg.getHeight();
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (donorImg.getRoi().contains(i, j)) {
-                            sum += ipD.getPixelValue(i,j);
-                            count++;
+                switch (e.getActionCommand()) {
+                    case "reset":
+                        donorImg = null;
+                        transferImg = null;
+                        acceptorImg = null;
+                        setDonorButton.setBackground(mainWindow.originalButtonColor);
+                        setTransferButton.setBackground(mainWindow.originalButtonColor);
+                        setAcceptorButton.setBackground(mainWindow.originalButtonColor);
+                        subtractDonorButton.setBackground(mainWindow.originalButtonColor);
+                        subtractTransferButton.setBackground(mainWindow.originalButtonColor);
+                        subtractAcceptorButton.setBackground(mainWindow.originalButtonColor);
+                        calculateDonorAfButton.setBackground(mainWindow.originalButtonColor);
+                        calculateTransferAfButton.setBackground(mainWindow.originalButtonColor);
+                        calculateAcceptorAfButton.setBackground(mainWindow.originalButtonColor);
+                        break;
+                    case "setAutoFlDonor":
+                        donorImg = WindowManager.getCurrentImage();
+                        if (donorImg == null) {
+                            mainWindow.logError("No image is selected. (Autofl.)");
+                            return;
+                        }       if (donorImg.getImageStackSize() > 1) {
+                            mainWindow.logError("Current image contains more than 1 channel ("+donorImg.getImageStackSize()+"). Please split it into parts. (Autofl.)");
+                            donorImg = null;
+                            return;
+                        } else if (donorImg.getNSlices() > 1) {
+                            mainWindow.logError("Current image contains more than 1 slice ("+donorImg.getNSlices()+"). Please split it into parts. (Autofl.)");
+                            donorImg = null;
+                            return;
+                        }       donorImg.setTitle("Donor channel (Autofl.) - " + new Date().toString());
+                        new ImageConverter(donorImg).convertToGray32();
+                        setDonorButton.setBackground(mainWindow.greenColor);
+                        break;
+                    case "setAutoFlTransfer":
+                        transferImg = WindowManager.getCurrentImage();
+                        if (transferImg == null) {
+                            mainWindow.logError("No image is selected. (Autofl.)");
+                            return;
+                        }       if (transferImg.getImageStackSize() > 1) {
+                            mainWindow.logError("Current image contains more than 1 channel ("+transferImg.getImageStackSize()+"). Please split it into parts. (Autofl.)");
+                            transferImg = null;
+                            return;
+                        } else if (transferImg.getNSlices() > 1) {
+                            mainWindow.logError("Current image contains more than 1 slice ("+transferImg.getNSlices()+"). Please split it into parts. (Autofl.)");
+                            transferImg = null;
+                            return;
+                        }       transferImg.setTitle("Transfer channel (Autofl.) - " + new Date().toString());
+                        new ImageConverter(transferImg).convertToGray32();
+                        setTransferButton.setBackground(mainWindow.greenColor);
+                        break;
+                    case "setAutoFlAcceptor":
+                        acceptorImg = WindowManager.getCurrentImage();
+                        if (acceptorImg == null) {
+                            mainWindow.logError("No image is selected. (Autofl.)");
+                            return;
+                        }       if (acceptorImg.getImageStackSize() > 1) {
+                            mainWindow.logError("Current image contains more than 1 channel ("+acceptorImg.getImageStackSize()+"). Please split it into parts. (Autofl.)");
+                            acceptorImg = null;
+                            return;
+                        } else if (acceptorImg.getNSlices() > 1) {
+                            mainWindow.logError("Current image contains more than 1 slice ("+acceptorImg.getNSlices()+"). Please split it into parts. (Autofl.)");
+                            acceptorImg = null;
+                            return;
+                        }       acceptorImg.setTitle("Acceptor channel (Autofl.) - " + new Date().toString());
+                        new ImageConverter(acceptorImg).convertToGray32();
+                        setAcceptorButton.setBackground(mainWindow.greenColor);
+                        break;
+                    case "subtractAutoFlDonor":
+                        {
+                            if (donorImg == null) {
+                                mainWindow.logError("No image is set as donor channel. (Autofl.)");
+                                return;
+                            } else if (donorImg.getRoi() == null) {
+                                mainWindow.logError("No ROI is defined for donor channel. (Autofl.)");
+                                return;
+                            }           ImageProcessor ipD = donorImg.getProcessor();
+                            int width = donorImg.getWidth();
+                            int height = donorImg.getHeight();
+                            double sum = 0;
+                            int count = 0;
+                            for (int i=0; i<width; i++) {
+                                for (int j=0; j<height; j++) {
+                                    if (donorImg.getRoi().contains(i, j)) {
+                                        sum += ipD.getPixelValue(i,j);
+                                        count++;
+                                    }
+                                }
+                            }   float backgroundAvgD = (float)(sum/count);
+                            float value = 0;
+                            for (int x=0; x < width; x++) {
+                                for (int y=0; y < height; y++) {
+                                    value = ipD.getPixelValue(x,y);
+                                    value = value - backgroundAvgD;
+                                    ipD.putPixelValue(x, y, value);
+                                }
+                            }   donorImg.updateAndDraw();
+                            donorImg.killRoi();
+                            mainWindow.log("Subtracted background ("+backgroundAvgD+") of donor channel. (Autofl.)");
+                            subtractDonorButton.setBackground(mainWindow.greenColor);
+                            break;
                         }
-		            }
-        		}
-		        float backgroundAvgD = (float)(sum/count);
-
-                float value = 0;
-                for (int x=0; x < width; x++) {
-                    for (int y=0; y < height; y++) {
-                        value = ipD.getPixelValue(x,y);
-                        value = value - backgroundAvgD;
-		                ipD.putPixelValue(x, y, value);
-        		    }
-		        }
-		        donorImg.updateAndDraw();
-		        donorImg.killRoi();
-                mainWindow.log("Subtracted background ("+backgroundAvgD+") of donor channel. (Autofl.)");
-                subtractDonorButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("subtractAutoFlTransfer")) {
-      	        if (transferImg == null) {
-                    mainWindow.logError("No image is set as transfer channel. (Autofl.)");
-                    return;
-                } else if (transferImg.getRoi() == null) {
-                    mainWindow.logError("No ROI is defined for transfer channel. (Autofl.)");
-                    return;
-                }
-                ImageProcessor ipT = transferImg.getProcessor();
-                int width = transferImg.getWidth();
-                int height = transferImg.getHeight();
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (transferImg.getRoi().contains(i, j)) {
-                            sum += ipT.getPixelValue(i,j);
-                            count++;
+                    case "subtractAutoFlTransfer":
+                        {
+                            if (transferImg == null) {
+                                mainWindow.logError("No image is set as transfer channel. (Autofl.)");
+                                return;
+                            } else if (transferImg.getRoi() == null) {
+                                mainWindow.logError("No ROI is defined for transfer channel. (Autofl.)");
+                                return;
+                            }           ImageProcessor ipT = transferImg.getProcessor();
+                            int width = transferImg.getWidth();
+                            int height = transferImg.getHeight();
+                            double sum = 0;
+                            int count = 0;
+                            for (int i=0; i<width; i++) {
+                                for (int j=0; j<height; j++) {
+                                    if (transferImg.getRoi().contains(i, j)) {
+                                        sum += ipT.getPixelValue(i,j);
+                                        count++;
+                                    }
+                                }
+                            }   float backgroundAvgT = (float)(sum/count);
+                            float value = 0;
+                            for (int x=0; x < width; x++) {
+                                for (int y=0; y < height; y++) {
+                                    value = ipT.getPixelValue(x,y);
+                                    value = value - backgroundAvgT;
+                                    ipT.putPixelValue(x, y, value);
+                                }
+                            }   transferImg.updateAndDraw();
+                            transferImg.killRoi();
+                            mainWindow.log("Subtracted background ("+backgroundAvgT+") of transfer channel. (Autofl.)");
+                            subtractTransferButton.setBackground(mainWindow.greenColor);
+                            break;
                         }
-		            }
-        		}
-		        float backgroundAvgT = (float)(sum/count);
-
-                float value = 0;
-                for (int x=0; x < width; x++) {
-                    for (int y=0; y < height; y++) {
-                        value = ipT.getPixelValue(x,y);
-                        value = value - backgroundAvgT;
-		                ipT.putPixelValue(x, y, value);
-        		    }
-		        }
-		        transferImg.updateAndDraw();
-		        transferImg.killRoi();
-                mainWindow.log("Subtracted background ("+backgroundAvgT+") of transfer channel. (Autofl.)");
-                subtractTransferButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("subtractAutoFlAcceptor")) {
-      	        if (acceptorImg == null) {
-                    mainWindow.logError("No image is set as acceptor channel. (Autofl.)");
-                    return;
-                } else if (acceptorImg.getRoi() == null) {
-                    mainWindow.logError("No ROI is defined for acceptor channel. (Autofl.)");
-                    return;
-                }
-                ImageProcessor ipA = acceptorImg.getProcessor();
-                int width = acceptorImg.getWidth();
-                int height = acceptorImg.getHeight();
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (acceptorImg.getRoi().contains(i, j)) {
-                            sum += ipA.getPixelValue(i,j);
-                            count++;
+                    case "subtractAutoFlAcceptor":
+                        {
+                            if (acceptorImg == null) {
+                                mainWindow.logError("No image is set as acceptor channel. (Autofl.)");
+                                return;
+                            } else if (acceptorImg.getRoi() == null) {
+                                mainWindow.logError("No ROI is defined for acceptor channel. (Autofl.)");
+                                return;
+                            }           ImageProcessor ipA = acceptorImg.getProcessor();
+                            int width = acceptorImg.getWidth();
+                            int height = acceptorImg.getHeight();
+                            double sum = 0;
+                            int count = 0;
+                            for (int i=0; i<width; i++) {
+                                for (int j=0; j<height; j++) {
+                                    if (acceptorImg.getRoi().contains(i, j)) {
+                                        sum += ipA.getPixelValue(i,j);
+                                        count++;
+                                    }
+                                }
+                            }   float backgroundAvgA = (float)(sum/count);
+                            float value = 0;
+                            for (int x=0; x < width; x++) {
+                                for (int y=0; y < height; y++) {
+                                    value = ipA.getPixelValue(x,y);
+                                    value = value - backgroundAvgA;
+                                    ipA.putPixelValue(x, y, value);
+                                }
+                            }   acceptorImg.updateAndDraw();
+                            acceptorImg.killRoi();
+                            mainWindow.log("Subtracted background ("+backgroundAvgA+") of acceptor channel. (Autofl.)");
+                            subtractAcceptorButton.setBackground(mainWindow.greenColor);
+                            break;
                         }
-		            }
-        		}
-		        float backgroundAvgA = (float)(sum/count);
-
-                float value = 0;
-                for (int x=0; x < width; x++) {
-                    for (int y=0; y < height; y++) {
-                        value = ipA.getPixelValue(x,y);
-                        value = value - backgroundAvgA;
-		                ipA.putPixelValue(x, y, value);
-        		    }
-		        }
-		        acceptorImg.updateAndDraw();
-		        acceptorImg.killRoi();
-                mainWindow.log("Subtracted background ("+backgroundAvgA+") of acceptor channel. (Autofl.)");
-                subtractAcceptorButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("calculateDonorAF")) {
-      	        if (donorImg == null) {
-                    mainWindow.logError("No image is set as donor channel. (Autofl.)");
-                    return;
-                } else if (donorImg.getRoi() == null) {
-                    mainWindow.logError("No ROI is defined for donor channel. (Autofl.)");
-                    return;
-                }
-                DecimalFormat df = new DecimalFormat("#.#");
-                int width = donorImg.getWidth();
-                int height = donorImg.getHeight();
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (donorImg.getRoi().contains(i, j)) {
-                            sum += donorImg.getProcessor().getPixelValue(i,j);
-                            count++;
+                    case "calculateDonorAF":
+                        {
+                            if (donorImg == null) {
+                                mainWindow.logError("No image is set as donor channel. (Autofl.)");
+                                return;
+                            } else if (donorImg.getRoi() == null) {
+                                mainWindow.logError("No ROI is defined for donor channel. (Autofl.)");
+                                return;
+                            }           DecimalFormat df = new DecimalFormat("#.#");
+                            int width = donorImg.getWidth();
+                            int height = donorImg.getHeight();
+                            double sum = 0;
+                            int count = 0;
+                            for (int i=0; i<width; i++) {
+                                for (int j=0; j<height; j++) {
+                                    if (donorImg.getRoi().contains(i, j)) {
+                                        sum += donorImg.getProcessor().getPixelValue(i,j);
+                                        count++;
+                                    }
+                                }
+                            }   float autoflAvgD = (float)(sum/count);
+                            mainWindow.autoflDInDField.setText(df.format(autoflAvgD));
+                            calculateDonorAfButton.setBackground(mainWindow.greenColor);
+                            break;
                         }
-		            }
-        		}
-		        float autoflAvgD = (float)(sum/count);
-                mainWindow.autoflDInDField.setText(df.format(autoflAvgD));
-                calculateDonorAfButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("calculateTransferAF")) {
-      	        if (transferImg == null) {
-                    mainWindow.logError("No image is set as transfer channel. (Autofl.)");
-                    return;
-                } else if (transferImg.getRoi() == null) {
-                    mainWindow.logError("No ROI is defined for transfer channel. (Autofl.)");
-                    return;
-                }
-                DecimalFormat df = new DecimalFormat("#.#");
-                int width = transferImg.getWidth();
-                int height = transferImg.getHeight();
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (transferImg.getRoi().contains(i, j)) {
-                            sum += transferImg.getProcessor().getPixelValue(i,j);
-                            count++;
+                    case "calculateTransferAF":
+                        {
+                            if (transferImg == null) {
+                                mainWindow.logError("No image is set as transfer channel. (Autofl.)");
+                                return;
+                            } else if (transferImg.getRoi() == null) {
+                                mainWindow.logError("No ROI is defined for transfer channel. (Autofl.)");
+                                return;
+                            }           DecimalFormat df = new DecimalFormat("#.#");
+                            int width = transferImg.getWidth();
+                            int height = transferImg.getHeight();
+                            double sum = 0;
+                            int count = 0;
+                            for (int i=0; i<width; i++) {
+                                for (int j=0; j<height; j++) {
+                                    if (transferImg.getRoi().contains(i, j)) {
+                                        sum += transferImg.getProcessor().getPixelValue(i,j);
+                                        count++;
+                                    }
+                                }
+                            }   float autoflAvgT = (float)(sum/count);
+                            mainWindow.autoflAInDField.setText(df.format(autoflAvgT));
+                            calculateTransferAfButton.setBackground(mainWindow.greenColor);
+                            break;
                         }
-		            }
-        		}
-		        float autoflAvgT = (float)(sum/count);
-                mainWindow.autoflAInDField.setText(df.format(autoflAvgT));
-                calculateTransferAfButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("calculateAcceptorAF")) {
-      	        if (acceptorImg == null) {
-                    mainWindow.logError("No image is set as acceptor channel. (Autofl.)");
-                    return;
-                } else if (acceptorImg.getRoi() == null) {
-                    mainWindow.logError("No ROI is defined for acceptor channel. (Autofl.)");
-                    return;
-                }
-                DecimalFormat df = new DecimalFormat("#.#");
-                int width = acceptorImg.getWidth();
-                int height = acceptorImg.getHeight();
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (acceptorImg.getRoi().contains(i, j)) {
-                            sum += acceptorImg.getProcessor().getPixelValue(i,j);
-                            count++;
+                    case "calculateAcceptorAF":
+                        {
+                            if (acceptorImg == null) {
+                                mainWindow.logError("No image is set as acceptor channel. (Autofl.)");
+                                return;
+                            } else if (acceptorImg.getRoi() == null) {
+                                mainWindow.logError("No ROI is defined for acceptor channel. (Autofl.)");
+                                return;
+                            }           DecimalFormat df = new DecimalFormat("#.#");
+                            int width = acceptorImg.getWidth();
+                            int height = acceptorImg.getHeight();
+                            double sum = 0;
+                            int count = 0;
+                            for (int i=0; i<width; i++) {
+                                for (int j=0; j<height; j++) {
+                                    if (acceptorImg.getRoi().contains(i, j)) {
+                                        sum += acceptorImg.getProcessor().getPixelValue(i,j);
+                                        count++;
+                                    }
+                                }
+                            }   float autoflAvgA = (float)(sum/count);
+                            mainWindow.autoflAInAField.setText(df.format(autoflAvgA));
+                            calculateAcceptorAfButton.setBackground(mainWindow.greenColor);
+                            break;
                         }
-		            }
-        		}
-		        float autoflAvgA = (float)(sum/count);
-                mainWindow.autoflAInAField.setText(df.format(autoflAvgA));
-                calculateAcceptorAfButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("close")) {
-      	        setVisible(false);
-      	        dispose();
-            }
+                    case "close":
+                        setVisible(false);
+                        dispose();
+                        break;
+                    default:
+                        break;
+                }
         } catch (Throwable t) {
             mainWindow.logException(t.toString(), t);
         }

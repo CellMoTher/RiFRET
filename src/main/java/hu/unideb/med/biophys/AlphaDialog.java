@@ -270,339 +270,326 @@ public class AlphaDialog extends JDialog implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
     	try {
-            if (e.getActionCommand().equals("reset")) {
-                donorBeforeImg = null;
-                donorAfterImg = null;
-	            setDonorBeforeButton.setBackground(mainWindow.originalButtonColor);
-	            setDonorAfterButton.setBackground(mainWindow.originalButtonColor);
-                subtractDonorBButton.setBackground(mainWindow.originalButtonColor);
-                subtractDonorAButton.setBackground(mainWindow.originalButtonColor);
-                setDonorBThresholdButton.setBackground(mainWindow.originalButtonColor);
-                setDonorAThresholdButton.setBackground(mainWindow.originalButtonColor);
-                calculateButton.setBackground(mainWindow.originalButtonColor);
-                setButton.setBackground(mainWindow.originalButtonColor);
-                alphaResultLabel.setText("");
-            } else if (e.getActionCommand().equals("calculateRatioEps")) {
-          	    if (calculateRatioEps.isSelected()) {
-          	        mainWindow.logWarning("S1, S2, S3, S4 factors and thresholded images (Steps 1-4) are required in the main window to calculate the \u03B5d / \u03B5a ratio.");
-	                setDonorBeforeButton.setEnabled(true);
-	                setDonorAfterButton.setEnabled(true);
-                    subtractDonorBButton.setEnabled(true);
-                    subtractDonorAButton.setEnabled(true);
-                    setDonorBThresholdButton.setEnabled(true);
-                    setDonorAThresholdButton.setEnabled(true);
-                    ratioEpsilonsField.setEditable(false);
-                    epsilonButton.setEnabled(true);
-       	        } else {
-	                setDonorBeforeButton.setEnabled(false);
-	                setDonorAfterButton.setEnabled(false);
-                    subtractDonorBButton.setEnabled(false);
-                    subtractDonorAButton.setEnabled(false);
-                    setDonorBThresholdButton.setEnabled(false);
-                    setDonorAThresholdButton.setEnabled(false);
-                    ratioEpsilonsField.setEditable(true);
-                    epsilonButton.setEnabled(false);
-          	    }
-            } else if (e.getActionCommand().equals("setEblManually")) {
-          	    if (setEblManually.isSelected()) {
-                    eBlField.setEditable(true);
-       	        } else {
-                    eBlField.setEditable(false);
-          	    }
-      	    } else if (e.getActionCommand().equals("setDonorBefore")) {
-                donorBeforeImg = WindowManager.getCurrentImage();
-      	        if (donorBeforeImg == null) {
-                    mainWindow.logError("No image is selected. (\u03B1 calc.)");
-                    return;
-                }
-                if (donorBeforeImg.getImageStackSize() > 1) {
-                   mainWindow.logError("Current image contains more than 1 channel ("+donorBeforeImg.getImageStackSize()+"). Please split it into parts. (\u03B1 calc.)");
-                   donorBeforeImg = null;
-                   return;
-                } else if (donorBeforeImg.getNSlices() > 1) {
-                   mainWindow.logError("Current image contains more than 1 slice ("+donorBeforeImg.getNSlices()+"). Please split it into parts. (\u03B1 calc.)");
-                   donorBeforeImg = null;
-                   return;
-                }
-                donorBeforeImg.setTitle("Donor before bleaching (\u03B1 calc.) - " + new Date().toString());
-                new ImageConverter(donorBeforeImg).convertToGray32();
-                setDonorBeforeButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("setDonorAfter")) {
-                donorAfterImg = WindowManager.getCurrentImage();
-      	        if (donorAfterImg == null) {
-                    mainWindow.logError("No image is selected. (\u03B1 calc.)");
-                    return;
-                }
-                if (donorAfterImg.getImageStackSize() > 1) {
-                   mainWindow.logError("Current image contains more than 1 channel ("+donorAfterImg.getImageStackSize()+"). Please split it into parts. (\u03B1 calc.)");
-                   donorAfterImg = null;
-                   return;
-                } else if (donorAfterImg.getNSlices() > 1) {
-                   mainWindow.logError("Current image contains more than 1 slice ("+donorAfterImg.getNSlices()+"). Please split it into parts. (\u03B1 calc.)");
-                   donorAfterImg = null;
-                   return;
-                }
-                donorAfterImg.setTitle("Donor after bleaching (\u03B1 calc.) - " + new Date().toString());
-                new ImageConverter(donorAfterImg).convertToGray32();
-                setDonorAfterButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("subtractAlphaDonorBefore")) {
-      	        if (donorBeforeImg == null) {
-                    mainWindow.logError("No image is set as donor before bleaching. (\u03B1 calc.)");
-                    return;
-                } else if (donorBeforeImg.getRoi() == null) {
-                    mainWindow.logError("No ROI is defined for donor before bleaching. (\u03B1 calc.)");
-                    return;
-                }
-                ImageProcessor ipT = donorBeforeImg.getProcessor();
-                int width = donorBeforeImg.getWidth();
-                int height = donorBeforeImg.getHeight();
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (donorBeforeImg.getRoi().contains(i, j)) {
-                            sum += ipT.getPixelValue(i,j);
-                            count++;
+                switch (e.getActionCommand()) {
+                    case "reset":
+                        donorBeforeImg = null;
+                        donorAfterImg = null;
+                        setDonorBeforeButton.setBackground(mainWindow.originalButtonColor);
+                        setDonorAfterButton.setBackground(mainWindow.originalButtonColor);
+                        subtractDonorBButton.setBackground(mainWindow.originalButtonColor);
+                        subtractDonorAButton.setBackground(mainWindow.originalButtonColor);
+                        setDonorBThresholdButton.setBackground(mainWindow.originalButtonColor);
+                        setDonorAThresholdButton.setBackground(mainWindow.originalButtonColor);
+                        calculateButton.setBackground(mainWindow.originalButtonColor);
+                        setButton.setBackground(mainWindow.originalButtonColor);
+                        alphaResultLabel.setText("");
+                        break;
+                    case "calculateRatioEps":
+                        if (calculateRatioEps.isSelected()) {
+                            mainWindow.logWarning("S1, S2, S3, S4 factors and thresholded images (Steps 1-4) are required in the main window to calculate the \u03B5d / \u03B5a ratio.");
+                            setDonorBeforeButton.setEnabled(true);
+                            setDonorAfterButton.setEnabled(true);
+                            subtractDonorBButton.setEnabled(true);
+                            subtractDonorAButton.setEnabled(true);
+                            setDonorBThresholdButton.setEnabled(true);
+                            setDonorAThresholdButton.setEnabled(true);
+                            ratioEpsilonsField.setEditable(false);
+                            epsilonButton.setEnabled(true);
+                        } else {
+                            setDonorBeforeButton.setEnabled(false);
+                            setDonorAfterButton.setEnabled(false);
+                            subtractDonorBButton.setEnabled(false);
+                            subtractDonorAButton.setEnabled(false);
+                            setDonorBThresholdButton.setEnabled(false);
+                            setDonorAThresholdButton.setEnabled(false);
+                            ratioEpsilonsField.setEditable(true);
+                            epsilonButton.setEnabled(false);
+                        }   break;
+                    case "setEblManually":
+                        if (setEblManually.isSelected()) {
+                            eBlField.setEditable(true);
+                        } else {
+                            eBlField.setEditable(false);
+                        }   break;
+                    case "setDonorBefore":
+                        donorBeforeImg = WindowManager.getCurrentImage();
+                        if (donorBeforeImg == null) {
+                            mainWindow.logError("No image is selected. (\u03B1 calc.)");
+                            return;
+                        }       if (donorBeforeImg.getImageStackSize() > 1) {
+                            mainWindow.logError("Current image contains more than 1 channel ("+donorBeforeImg.getImageStackSize()+"). Please split it into parts. (\u03B1 calc.)");
+                            donorBeforeImg = null;
+                            return;
+                        } else if (donorBeforeImg.getNSlices() > 1) {
+                            mainWindow.logError("Current image contains more than 1 slice ("+donorBeforeImg.getNSlices()+"). Please split it into parts. (\u03B1 calc.)");
+                            donorBeforeImg = null;
+                            return;
+                        }       donorBeforeImg.setTitle("Donor before bleaching (\u03B1 calc.) - " + new Date().toString());
+                        new ImageConverter(donorBeforeImg).convertToGray32();
+                        setDonorBeforeButton.setBackground(mainWindow.greenColor);
+                        break;
+                    case "setDonorAfter":
+                        donorAfterImg = WindowManager.getCurrentImage();
+                        if (donorAfterImg == null) {
+                            mainWindow.logError("No image is selected. (\u03B1 calc.)");
+                            return;
+                        }       if (donorAfterImg.getImageStackSize() > 1) {
+                            mainWindow.logError("Current image contains more than 1 channel ("+donorAfterImg.getImageStackSize()+"). Please split it into parts. (\u03B1 calc.)");
+                            donorAfterImg = null;
+                            return;
+                        } else if (donorAfterImg.getNSlices() > 1) {
+                            mainWindow.logError("Current image contains more than 1 slice ("+donorAfterImg.getNSlices()+"). Please split it into parts. (\u03B1 calc.)");
+                            donorAfterImg = null;
+                            return;
+                        }       donorAfterImg.setTitle("Donor after bleaching (\u03B1 calc.) - " + new Date().toString());
+                        new ImageConverter(donorAfterImg).convertToGray32();
+                        setDonorAfterButton.setBackground(mainWindow.greenColor);
+                        break;
+                    case "subtractAlphaDonorBefore":
+                        {
+                            if (donorBeforeImg == null) {
+                                mainWindow.logError("No image is set as donor before bleaching. (\u03B1 calc.)");
+                                return;
+                            } else if (donorBeforeImg.getRoi() == null) {
+                                mainWindow.logError("No ROI is defined for donor before bleaching. (\u03B1 calc.)");
+                                return;
+                            }           ImageProcessor ipT = donorBeforeImg.getProcessor();
+                            int width = donorBeforeImg.getWidth();
+                            int height = donorBeforeImg.getHeight();
+                            double sum = 0;
+                            int count = 0;
+                            for (int i=0; i<width; i++) {
+                                for (int j=0; j<height; j++) {
+                                    if (donorBeforeImg.getRoi().contains(i, j)) {
+                                        sum += ipT.getPixelValue(i,j);
+                                        count++;
+                                    }
+                                }
+                            }   float backgroundAvgT = (float)(sum/count);
+                            float value = 0;
+                            for (int x=0; x < width; x++) {
+                                for (int y=0; y < height; y++) {
+                                    value = ipT.getPixelValue(x,y);
+                                    value = value - backgroundAvgT;
+                                    ipT.putPixelValue(x, y, value);
+                                }
+                            }   donorBeforeImg.updateAndDraw();
+                            donorBeforeImg.killRoi();
+                            mainWindow.log("Subtracted background ("+backgroundAvgT+") of donor before bleaching. (\u03B1 calc.)");
+                            subtractDonorBButton.setBackground(mainWindow.greenColor);
+                            break;
                         }
-		            }
-        		}
-		        float backgroundAvgT = (float)(sum/count);
-
-                float value = 0;
-                for (int x=0; x < width; x++) {
-                    for (int y=0; y < height; y++) {
-                        value = ipT.getPixelValue(x,y);
-                        value = value - backgroundAvgT;
-		                ipT.putPixelValue(x, y, value);
-        		    }
-		        }
-		        donorBeforeImg.updateAndDraw();
-		        donorBeforeImg.killRoi();
-                mainWindow.log("Subtracted background ("+backgroundAvgT+") of donor before bleaching. (\u03B1 calc.)");
-                subtractDonorBButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("subtractAlphaDonorAfter")) {
-      	        if (donorAfterImg == null) {
-                    mainWindow.logError("No image is set as donor after bleaching. (\u03B1 calc.)");
-                    return;
-                } else if (donorAfterImg.getRoi() == null) {
-                    mainWindow.logError("No ROI is defined for donor after bleaching. (\u03B1 calc.)");
-                    return;
-                }
-                ImageProcessor ipA = donorAfterImg.getProcessor();
-                int width = donorAfterImg.getWidth();
-                int height = donorAfterImg.getHeight();
-                double sum = 0;
-                int count = 0;
-                for (int i=0; i<width; i++) {
-                    for (int j=0; j<height; j++) {
-                        if (donorAfterImg.getRoi().contains(i, j)) {
-                            sum += ipA.getPixelValue(i,j);
-                            count++;
+                    case "subtractAlphaDonorAfter":
+                        {
+                            if (donorAfterImg == null) {
+                                mainWindow.logError("No image is set as donor after bleaching. (\u03B1 calc.)");
+                                return;
+                            } else if (donorAfterImg.getRoi() == null) {
+                                mainWindow.logError("No ROI is defined for donor after bleaching. (\u03B1 calc.)");
+                                return;
+                            }           ImageProcessor ipA = donorAfterImg.getProcessor();
+                            int width = donorAfterImg.getWidth();
+                            int height = donorAfterImg.getHeight();
+                            double sum = 0;
+                            int count = 0;
+                            for (int i=0; i<width; i++) {
+                                for (int j=0; j<height; j++) {
+                                    if (donorAfterImg.getRoi().contains(i, j)) {
+                                        sum += ipA.getPixelValue(i,j);
+                                        count++;
+                                    }
+                                }
+                            }   float backgroundAvgA = (float)(sum/count);
+                            float value = 0;
+                            for (int x=0; x < width; x++) {
+                                for (int y=0; y < height; y++) {
+                                    value = ipA.getPixelValue(x,y);
+                                    value = value - backgroundAvgA;
+                                    ipA.putPixelValue(x, y, value);
+                                }
+                            }   donorAfterImg.updateAndDraw();
+                            donorAfterImg.killRoi();
+                            mainWindow.log("Subtracted background ("+backgroundAvgA+") of donor after bleaching. (\u03B1 calc.)");
+                            subtractDonorAButton.setBackground(mainWindow.greenColor);
+                            break;
                         }
-		            }
-        		}
-		        float backgroundAvgA = (float)(sum/count);
-
-                float value = 0;
-                for (int x=0; x < width; x++) {
-                    for (int y=0; y < height; y++) {
-                        value = ipA.getPixelValue(x,y);
-                        value = value - backgroundAvgA;
-		                ipA.putPixelValue(x, y, value);
-        		    }
-		        }
-		        donorAfterImg.updateAndDraw();
-		        donorAfterImg.killRoi();
-                mainWindow.log("Subtracted background ("+backgroundAvgA+") of donor after bleaching. (\u03B1 calc.)");
-                subtractDonorAButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("setAlphaDonorBThreshold")) {
-      	        if (donorBeforeImg == null) {
-                    mainWindow.logError("No image is set as donor before bleaching. (\u03B1 calc.)");
-                    return;
-                }
-                IJ.selectWindow(donorBeforeImg.getTitle());
-                IJ.run("Threshold...");
-                setDonorBThresholdButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("setAlphaDonorAThreshold")) {
-      	        if (donorAfterImg == null) {
-                    mainWindow.logError("No image is set as donor after bleaching. (\u03B1 calc.)");
-                    return;
-                }
-                IJ.selectWindow(donorAfterImg.getTitle());
-                IJ.run("Threshold...");
-                setDonorAThresholdButton.setBackground(mainWindow.greenColor);
-      	    } else if (e.getActionCommand().equals("epsilonButton")) {
-                DecimalFormat df = new DecimalFormat("#.###");
-                if(!setEblManually.isSelected()) {
-                    if (donorBeforeImg == null) {
-                        mainWindow.logError("No image is set as donor before bleaching. (\u03B1 calc.)");
-                        return;
-      	            } else if (donorAfterImg == null) {
-                        mainWindow.logError("No image is set as donor in after bleaching. (\u03B1 calc.)");
-                        return;
-          	        }
-          	    } else {
-      	            if (eBlField.getText().trim().equals("")) {
-                        mainWindow.logError("Ebl is not given. (\u03B1 calc.)");
-                        return;
-      	            }
-          	    }
-      	        float s1 = mainWindow.getS1Factor();
-      	        if (s1 < 0) {
-                    mainWindow.logError("Constant S1 is not given. (\u03B1 calc.)");
-                    return;
-      	        }
-      	        float s2 = mainWindow.getS2Factor();
-      	        if (s2 < 0) {
-                    mainWindow.logError("Constant S2 is not given. (\u03B1 calc.)");
-                    return;
-      	        }
-      	        float s3 = mainWindow.getS3Factor();
-      	        if (s3 < 0) {
-                    mainWindow.logError("Constant S3 is not given. (\u03B1 calc.)");
-                    return;
-      	        }
-      	        float s4 = mainWindow.getS4Factor();
-      	        if (s4 < 0) {
-                    mainWindow.logError("Constant S4 is not given. (\u03B1 calc.)");
-                    return;
-      	        }
-      	        ImagePlus ddImage = mainWindow.getDonorInDImage();
-      	        if (ddImage == null) {
-                    mainWindow.logError("Donor channel image is not given. (\u03B1 calc.)");
-                    return;
-      	        }
-      	        ImagePlus dtImage = mainWindow.getDonorInAImage();
-      	        if (dtImage == null) {
-                    mainWindow.logError("Transfer channel image is not given. (\u03B1 calc.)");
-                    return;
-      	        }
-      	        ImagePlus aaImage = mainWindow.getAcceptorInAImage();
-      	        if (aaImage == null) {
-                    mainWindow.logError("Acceptor channel image is not given. (\u03B1 calc.)");
-                    return;
-      	        }
-
-                double sumDD = 0;
-                int countDD = 0;
-                ImageProcessor ipDD = ddImage.getStack().getProcessor(ddImage.getCurrentSlice());
-                for (int i=0; i<ddImage.getWidth(); i++) {
-                    for (int j=0; j<ddImage.getHeight(); j++) {
-                        if (!Float.isNaN(ipDD.getPixelValue(i, j))) {
-                            sumDD += ipDD.getPixelValue(i,j);
-                            countDD++;
-                        }
-		            }
-        		}
-		        float avgDD = (float)(sumDD/countDD);
-
-                double sumDT = 0;
-                int countDT = 0;
-                ImageProcessor ipDT = dtImage.getStack().getProcessor(dtImage.getCurrentSlice());
-                for (int i=0; i<dtImage.getWidth(); i++) {
-                    for (int j=0; j<dtImage.getHeight(); j++) {
-                        if (!Float.isNaN(ipDT.getPixelValue(i, j))) {
-                            sumDT += ipDT.getPixelValue(i,j);
-                            countDT++;
-                        }
-		            }
-        		}
-		        float avgDT = (float)(sumDT/countDT);
-
-                double sumAA = 0;
-                int countAA = 0;
-                ImageProcessor ipAA = aaImage.getStack().getProcessor(aaImage.getCurrentSlice());
-                for (int i=0; i<aaImage.getWidth(); i++) {
-                    for (int j=0; j<aaImage.getHeight(); j++) {
-                        if (!Float.isNaN(ipAA.getPixelValue(i, j))) {
-                            sumAA += ipAA.getPixelValue(i,j);
-                            countAA++;
-                        }
-		            }
-        		}
-		        float avgAA = (float)(sumAA/countAA);
-
-                float ebl = 0;
-                if(!setEblManually.isSelected()) {
-                    double sumDBefore = 0;
-                    int countDBefore = 0;
-                    ImageProcessor ipDBefore = donorBeforeImg.getProcessor();
-                    for (int i=0; i<donorBeforeImg.getWidth(); i++) {
-                        for (int j=0; j<donorBeforeImg.getHeight(); j++) {
-                            if (!Float.isNaN(ipDBefore.getPixelValue(i, j))) {
-                                sumDBefore += ipDBefore.getPixelValue(i,j);
-                                countDBefore++;
+                    case "setAlphaDonorBThreshold":
+                        if (donorBeforeImg == null) {
+                            mainWindow.logError("No image is set as donor before bleaching. (\u03B1 calc.)");
+                            return;
+                        }       IJ.selectWindow(donorBeforeImg.getTitle());
+                        IJ.run("Threshold...");
+                        setDonorBThresholdButton.setBackground(mainWindow.greenColor);
+                        break;
+                    case "setAlphaDonorAThreshold":
+                        if (donorAfterImg == null) {
+                            mainWindow.logError("No image is set as donor after bleaching. (\u03B1 calc.)");
+                            return;
+                        }       IJ.selectWindow(donorAfterImg.getTitle());
+                        IJ.run("Threshold...");
+                        setDonorAThresholdButton.setBackground(mainWindow.greenColor);
+                        break;
+                    case "epsilonButton":
+                        DecimalFormat df = new DecimalFormat("#.###");
+                        if(!setEblManually.isSelected()) {
+                            if (donorBeforeImg == null) {
+                                mainWindow.logError("No image is set as donor before bleaching. (\u03B1 calc.)");
+                                return;
+                            } else if (donorAfterImg == null) {
+                                mainWindow.logError("No image is set as donor in after bleaching. (\u03B1 calc.)");
+                                return;
                             }
-    		            }
-            		}
-		            float avgDBefore = (float)(sumDBefore/countDBefore);
-
-                    double sumDAfter = 0;
-                    int countDAfter = 0;
-                    ImageProcessor ipDAfter = donorAfterImg.getProcessor();
-                    for (int i=0; i<donorAfterImg.getWidth(); i++) {
-                        for (int j=0; j<donorAfterImg.getHeight(); j++) {
-                            if (!Float.isNaN(ipDAfter.getPixelValue(i, j))) {
-                                sumDAfter += ipDAfter.getPixelValue(i,j);
-                                countDAfter++;
+                        } else {
+                            if (eBlField.getText().trim().equals("")) {
+                                mainWindow.logError("Ebl is not given. (\u03B1 calc.)");
+                                return;
                             }
-    		            }
-            		}
-		            float avgDAfter = (float)(sumDAfter/countDAfter);
-
-                    ebl = (float)(((double)avgDAfter-(((double)avgDBefore-(double)s4*(double)avgDT)/((double)1-(double)s1*(double)s4)))/(double)avgDAfter);
-                    eBlField.setText(df.format(ebl).toString());
-                } else {
-                    ebl = Float.parseFloat(eBlField.getText().trim());
-                    eBlField.setText(df.format(ebl).toString());
+                        }   float s1 = mainWindow.getS1Factor();
+                        if (s1 < 0) {
+                            mainWindow.logError("Constant S1 is not given. (\u03B1 calc.)");
+                            return;
+                        }       float s2 = mainWindow.getS2Factor();
+                        if (s2 < 0) {
+                            mainWindow.logError("Constant S2 is not given. (\u03B1 calc.)");
+                            return;
+                        }       float s3 = mainWindow.getS3Factor();
+                        if (s3 < 0) {
+                            mainWindow.logError("Constant S3 is not given. (\u03B1 calc.)");
+                            return;
+                        }       float s4 = mainWindow.getS4Factor();
+                        if (s4 < 0) {
+                            mainWindow.logError("Constant S4 is not given. (\u03B1 calc.)");
+                            return;
+                        }       ImagePlus ddImage = mainWindow.getDonorInDImage();
+                        if (ddImage == null) {
+                            mainWindow.logError("Donor channel image is not given. (\u03B1 calc.)");
+                            return;
+                        }       ImagePlus dtImage = mainWindow.getDonorInAImage();
+                        if (dtImage == null) {
+                            mainWindow.logError("Transfer channel image is not given. (\u03B1 calc.)");
+                            return;
+                        }       ImagePlus aaImage = mainWindow.getAcceptorInAImage();
+                        if (aaImage == null) {
+                            mainWindow.logError("Acceptor channel image is not given. (\u03B1 calc.)");
+                            return;
+                        }       double sumDD = 0;
+                        int countDD = 0;
+                        ImageProcessor ipDD = ddImage.getStack().getProcessor(ddImage.getCurrentSlice());
+                        for (int i=0; i<ddImage.getWidth(); i++) {
+                            for (int j=0; j<ddImage.getHeight(); j++) {
+                                if (!Float.isNaN(ipDD.getPixelValue(i, j))) {
+                                    sumDD += ipDD.getPixelValue(i,j);
+                                    countDD++;
+                                }
+                            }
+                        }
+                        float avgDD = (float)(sumDD/countDD);
+                        double sumDT = 0;
+                        int countDT = 0;
+                        ImageProcessor ipDT = dtImage.getStack().getProcessor(dtImage.getCurrentSlice());
+                        for (int i=0; i<dtImage.getWidth(); i++) {
+                            for (int j=0; j<dtImage.getHeight(); j++) {
+                                if (!Float.isNaN(ipDT.getPixelValue(i, j))) {
+                                    sumDT += ipDT.getPixelValue(i,j);
+                                    countDT++;
+                                }
+                            }
+                        }
+                        float avgDT = (float)(sumDT/countDT);
+                        double sumAA = 0;
+                        int countAA = 0;
+                        ImageProcessor ipAA = aaImage.getStack().getProcessor(aaImage.getCurrentSlice());
+                        for (int i=0; i<aaImage.getWidth(); i++) {
+                            for (int j=0; j<aaImage.getHeight(); j++) {
+                                if (!Float.isNaN(ipAA.getPixelValue(i, j))) {
+                                    sumAA += ipAA.getPixelValue(i,j);
+                                    countAA++;
+                                }
+                            }
+                        }
+                        float avgAA = (float)(sumAA/countAA);
+                        float ebl = 0;
+                        if(!setEblManually.isSelected()) {
+                            double sumDBefore = 0;
+                            int countDBefore = 0;
+                            ImageProcessor ipDBefore = donorBeforeImg.getProcessor();
+                            for (int i=0; i<donorBeforeImg.getWidth(); i++) {
+                                for (int j=0; j<donorBeforeImg.getHeight(); j++) {
+                                    if (!Float.isNaN(ipDBefore.getPixelValue(i, j))) {
+                                        sumDBefore += ipDBefore.getPixelValue(i,j);
+                                        countDBefore++;
+                                    }
+                                }
+                            }
+                            float avgDBefore = (float)(sumDBefore/countDBefore);
+                            
+                            double sumDAfter = 0;
+                            int countDAfter = 0;
+                            ImageProcessor ipDAfter = donorAfterImg.getProcessor();
+                            for (int i=0; i<donorAfterImg.getWidth(); i++) {
+                                for (int j=0; j<donorAfterImg.getHeight(); j++) {
+                                    if (!Float.isNaN(ipDAfter.getPixelValue(i, j))) {
+                                        sumDAfter += ipDAfter.getPixelValue(i,j);
+                                        countDAfter++;
+                                    }
+                                }
+                            }
+                            float avgDAfter = (float)(sumDAfter/countDAfter);
+                            
+                            ebl = (float)(((double)avgDAfter-(((double)avgDBefore-(double)s4*(double)avgDT)/((double)1-(double)s1*(double)s4)))/(double)avgDAfter);
+                            eBlField.setText(df.format(ebl).toString());
+                        } else {
+                            ebl = Float.parseFloat(eBlField.getText().trim());
+                            eBlField.setText(df.format(ebl).toString());
+                        }       float eRatio = (float)(((double)avgDT - (double)s1*(double)avgDD - ((double)1-(double)s1*(double)s4)*(double)s2*(double)avgAA)/(((double)1-(double)s1*(double)s4)*(double)s2*(double)avgAA*(double)ebl));
+                        ratioEpsilonsField.setText(df.format(eRatio).toString());
+                        break;
+                    case "calculate":
+                        if (i1dField.getText().trim().equals("")) {
+                            mainWindow.logError("Constant I1(donor) is not given. (\u03B1 calc.)");
+                            return;
+                        } else if (i2aField.getText().trim().equals("")) {
+                            mainWindow.logError("Constant I2(acceptor) is not given. (\u03B1 calc.)");
+                            return;
+                        } else if (ldField.getText().trim().equals("")) {
+                            mainWindow.logError("Constant Ld is not given. (\u03B1 calc.)");
+                            return;
+                        } else if (laField.getText().trim().equals("")) {
+                            mainWindow.logError("Constant La is not given. (\u03B1 calc.)");
+                            return;
+                        } else if (bdField.getText().trim().equals("")) {
+                            mainWindow.logError("Constant Bd is not given. (\u03B1 calc.)");
+                            return;
+                        } else if (baField.getText().trim().equals("")) {
+                            mainWindow.logError("Constant Ba is not given. (\u03B1 calc.)");
+                            return;
+                        } else if (ratioEpsilonsField.getText().trim().equals("")) {
+                            mainWindow.logError("Ratio \u03B5d / \u03B5a is not given. (\u03B1 calc.)");
+                            return;
+                        } else {
+                            df = new DecimalFormat("#.###");
+                            float i1 = Float.parseFloat(i1dField.getText().trim());
+                            float i2 = Float.parseFloat(i2aField.getText().trim());
+                            float ld = Float.parseFloat(ldField.getText().trim());
+                            float la = Float.parseFloat(laField.getText().trim());
+                            float bd = Float.parseFloat(bdField.getText().trim());
+                            float ba = Float.parseFloat(baField.getText().trim());
+                            float er = Float.parseFloat(ratioEpsilonsField.getText().trim());
+                            float alpha = i2*ld*bd*er/(i1*la*ba);
+                            alphaResultLabel.setText(df.format(alpha).toString());
+                            calculateButton.setBackground(mainWindow.greenColor);
+                        }       break;
+                    case "setfactor":
+                        if (alphaResultLabel.getText().equals("")) {
+                            mainWindow.logError("\u03B1 has to be calculated before setting it. (\u03B1 calc.)");
+                            return;
+                        }       mainWindow.setAlphaFactor(alphaResultLabel.getText());
+                        setButton.setBackground(mainWindow.greenColor);
+                        mainWindow.calculateAlphaButton.setBackground(mainWindow.greenColor);
+                        break;
+                    default:
+                        break;
                 }
-
-                float eRatio = (float)(((double)avgDT - (double)s1*(double)avgDD - ((double)1-(double)s1*(double)s4)*(double)s2*(double)avgAA)/(((double)1-(double)s1*(double)s4)*(double)s2*(double)avgAA*(double)ebl));
-                ratioEpsilonsField.setText(df.format(eRatio).toString());
-      	    } else if (e.getActionCommand().equals("calculate")) {
-                if (i1dField.getText().trim().equals("")) {
-                    mainWindow.logError("Constant I1(donor) is not given. (\u03B1 calc.)");
-                    return;
-      	        } else if (i2aField.getText().trim().equals("")) {
-                    mainWindow.logError("Constant I2(acceptor) is not given. (\u03B1 calc.)");
-                    return;
-      	        } else if (ldField.getText().trim().equals("")) {
-                    mainWindow.logError("Constant Ld is not given. (\u03B1 calc.)");
-                    return;
-      	        } else if (laField.getText().trim().equals("")) {
-                    mainWindow.logError("Constant La is not given. (\u03B1 calc.)");
-                    return;
-      	        } else if (bdField.getText().trim().equals("")) {
-                    mainWindow.logError("Constant Bd is not given. (\u03B1 calc.)");
-                    return;
-      	        } else if (baField.getText().trim().equals("")) {
-                    mainWindow.logError("Constant Ba is not given. (\u03B1 calc.)");
-                    return;
-      	        } else if (ratioEpsilonsField.getText().trim().equals("")) {
-                    mainWindow.logError("Ratio \u03B5d / \u03B5a is not given. (\u03B1 calc.)");
-                    return;
-      	        } else {
-                    DecimalFormat df = new DecimalFormat("#.###");
-                    float i1 = Float.parseFloat(i1dField.getText().trim());
-                    float i2 = Float.parseFloat(i2aField.getText().trim());
-                    float ld = Float.parseFloat(ldField.getText().trim());
-                    float la = Float.parseFloat(laField.getText().trim());
-                    float bd = Float.parseFloat(bdField.getText().trim());
-                    float ba = Float.parseFloat(baField.getText().trim());
-                    float er = Float.parseFloat(ratioEpsilonsField.getText().trim());
-                    float alpha = i2*ld*bd*er/(i1*la*ba);
-                    alphaResultLabel.setText(df.format(alpha).toString());
-                    calculateButton.setBackground(mainWindow.greenColor);
-                }
-      	    } else if (e.getActionCommand().equals("setfactor")) {
-                if (alphaResultLabel.getText().equals("")) {
-                    mainWindow.logError("\u03B1 has to be calculated before setting it. (\u03B1 calc.)");
-                    return;
-                }
-                mainWindow.setAlphaFactor(alphaResultLabel.getText());
-                setButton.setBackground(mainWindow.greenColor);
-                mainWindow.calculateAlphaButton.setBackground(mainWindow.greenColor);
-            }
         } catch (Throwable t) {
             mainWindow.logException(t.toString(), t);
         }
