@@ -344,8 +344,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridx = 0;
         gc.gridy = 5;
         JPanel lineFactors = new JPanel();
-        lineFactors.setPreferredSize(new Dimension(windowWidth - 35, 2));
-        lineFactors.setBackground(Color.darkGray);
+        lineFactors.setPreferredSize(new Dimension(windowWidth - 35, 1));
+        lineFactors.setBackground(Color.lightGray);
         container.add(lineFactors, gc);
 
         gc.gridwidth = 9;
