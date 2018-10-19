@@ -387,13 +387,10 @@ public class S2S4Dialog extends JDialog implements ActionListener{
                     case "calculate":
                         if (donorImg == null) {
                             mainWindow.logError("No image is set as donor channel. (S2/S4 calc.)");
-                            return;
                         } else if (transferImg == null) {
                             mainWindow.logError("No image is set as transfer channel. (S2/S4 calc.)");
-                            return;
                         } else if (acceptorImg == null) {
                             mainWindow.logError("No image is set as acceptor channel. (S2/S4 calc.)");
-                            return;
                         } else {
                             DecimalFormat df = new DecimalFormat("#.###");
                             ImageProcessor ipDP = donorImg.getProcessor();

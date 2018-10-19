@@ -548,25 +548,18 @@ public class AlphaDialog extends JDialog implements ActionListener{
                     case "calculate":
                         if (i1dField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant I1(donor) is not given. (\u03B1 calc.)");
-                            return;
                         } else if (i2aField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant I2(acceptor) is not given. (\u03B1 calc.)");
-                            return;
                         } else if (ldField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant Ld is not given. (\u03B1 calc.)");
-                            return;
                         } else if (laField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant La is not given. (\u03B1 calc.)");
-                            return;
                         } else if (bdField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant Bd is not given. (\u03B1 calc.)");
-                            return;
                         } else if (baField.getText().trim().isEmpty()) {
                             mainWindow.logError("Constant Ba is not given. (\u03B1 calc.)");
-                            return;
                         } else if (ratioEpsilonsField.getText().trim().isEmpty()) {
                             mainWindow.logError("Ratio \u03B5d / \u03B5a is not given. (\u03B1 calc.)");
-                            return;
                         } else {
                             df = new DecimalFormat("#.###");
                             float i1 = Float.parseFloat(i1dField.getText().trim());

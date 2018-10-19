@@ -748,10 +748,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     case "registerTransferCh":
                         if (donorInDImage == null) {
                             logError("No image is set as donor channel.");
-                            return;
                         } else if (donorInAImage == null) {
                             logError("No image is set as transfer channel.");
-                            return;
                         } else {
                             FHT fht1 = new FHT(donorInDImage.getProcessor().duplicate());
                             fht1.transform();
@@ -802,10 +800,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     case "registerAcceptorCh":
                         if (donorInDImage == null) {
                             logError("No image is set as donor channel.");
-                            return;
                         } else if (acceptorInAImage == null) {
                             logError("No image is set as acceptor channel.");
-                            return;
                         } else {
                             FHT fht1 = new FHT(donorInDImage.getProcessor().duplicate());
                             fht1.transform();
@@ -1415,11 +1411,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     case "smoothDD":
                         if (donorInDImage == null) {
                             logError("No image is set as donor channel.");
-                            return;
                         } else {
                             if (radiusFieldDD.getText().trim().isEmpty()) {
                                 logError("Radius has to be given for Gaussian blur.");
-                                return;
                             } else {
                                 double radius = 0;
                                 try {
@@ -1443,11 +1437,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     case "smoothDA":
                         if (donorInAImage == null) {
                             logError("No image is set as transfer channel.");
-                            return;
                         } else {
                             if (radiusFieldDA.getText().trim().isEmpty()) {
                                 logError("Radius has to be given for Gaussian blur.");
-                                return;
                             } else {
                                 double radius = 0;
                                 try {
@@ -1471,11 +1463,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     case "smoothAA":
                         if (acceptorInAImage == null) {
                             logError("No image is set as acceptor channel.");
-                            return;
                         } else {
                             if (radiusFieldAA.getText().trim().isEmpty()) {
                                 logError("Radius has to be given for Gaussian blur.");
-                                return;
                             } else {
                                 double radius = 0;
                                 try {
