@@ -427,7 +427,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         copyRoiButton.addActionListener(this);
         copyRoiButton.setActionCommand("copyRoi");
         container.add(copyRoiButton, gc);
-        autoflDInDField = new JTextField("0", 3);
+        autoflDInDField = new JTextField("0", 5);
         autoflDInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated with<br>the \"Calculate autofluorescence\" item in the \"Image\" menu.<html>");
         gc.gridx = 10;
         gc.gridy = 10;
@@ -444,7 +444,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridx = 0;
         gc.gridy = 11;
         container.add(new JLabel("Step 2b: subtract avg. of a background ROI of transfer channel"), gc);
-        autoflAInDField = new JTextField("0", 3);
+        autoflAInDField = new JTextField("0", 5);
         autoflAInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated with<br>the \"Calculate autofluorescence\" item in the \"Image\" menu.<html>");
         gc.gridwidth = 1;
         gc.gridx = 10;
@@ -463,7 +463,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridx = 0;
         gc.gridy = 12;
         container.add(new JLabel("Step 2c: subtract avg. of a background ROI of acceptor channel"), gc);
-        autoflAInAField = new JTextField("0", 3);
+        autoflAInAField = new JTextField("0", 5);
         autoflAInAField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated with<br>the \"Calculate autofluorescence\" item in the \"Image\" menu.<html>");
         gc.gridwidth = 1;
         gc.gridx = 10;
