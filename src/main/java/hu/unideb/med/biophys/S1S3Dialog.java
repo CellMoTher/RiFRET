@@ -438,8 +438,8 @@ public class S1S3Dialog extends JDialog implements ActionListener{
                             }
                             float avgS1 = (float)(s1c / countc);
                             float avgS3 = (float)(s3c / countc);
-                            s1ResultLabel.setText(df.format(avgS1).toString());
-                            s3ResultLabel.setText(df.format(avgS3).toString());
+                            s1ResultLabel.setText(df.format(avgS1));
+                            s3ResultLabel.setText(df.format(avgS3));
                             calculateButton.setBackground(mainWindow.greenColor);
                             donorImg.changes = false;
                             transferImg.changes = false;

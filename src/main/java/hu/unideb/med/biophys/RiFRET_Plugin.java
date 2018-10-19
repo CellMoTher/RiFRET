@@ -1203,9 +1203,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 flp.setPixels(currentSlice, (FloatProcessor)donorInDImage.getStack().getProcessor(currentSlice).duplicate());
                                 donorInDImageSave.addSlice(""+currentSlice, flp);
                                 if (nSlices == 1) {
-                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of donor channel.");
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg) + ") of donor channel.");
                                 } else {
-                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of slice " + currentSlice + " of donor channel.");
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of donor channel.");
                                 }
                             }       donorInDImage.updateAndDraw();
                             donorInDImage.killRoi();
@@ -1259,9 +1259,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 flp.setPixels(currentSlice, (FloatProcessor)donorInAImage.getStack().getProcessor(currentSlice).duplicate());
                                 donorInAImageSave.addSlice(""+currentSlice, flp);
                                 if (nSlices == 1) {
-                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of transfer channel.");
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg) + ") of transfer channel.");
                                 } else {
-                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of slice " + currentSlice + " of transfer channel.");
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of transfer channel.");
                                 }
                             }       donorInAImage.updateAndDraw();
                             donorInAImage.killRoi();
@@ -1315,9 +1315,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 flp.setPixels(currentSlice, (FloatProcessor)acceptorInAImage.getStack().getProcessor(currentSlice).duplicate());
                                 acceptorInAImageSave.addSlice(""+currentSlice, flp);
                                 if (nSlices == 1) {
-                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of acceptor channel.");
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg) + ") of acceptor channel.");
                                 } else {
-                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg).toString() + ") of slice " + currentSlice + " of acceptor channel.");
+                                    log("Subtracted background "+(autofl>0?"and autofluorescence ":"")+"(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of acceptor channel.");
                                 }
                             }       acceptorInAImage.updateAndDraw();
                             acceptorInAImage.killRoi();

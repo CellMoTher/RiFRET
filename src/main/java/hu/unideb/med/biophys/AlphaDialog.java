@@ -538,12 +538,12 @@ public class AlphaDialog extends JDialog implements ActionListener{
                             float avgDAfter = (float)(sumDAfter/countDAfter);
                             
                             ebl = (float)(((double)avgDAfter-(((double)avgDBefore-(double)s4*(double)avgDT)/((double)1-(double)s1*(double)s4)))/(double)avgDAfter);
-                            eBlField.setText(df.format(ebl).toString());
+                            eBlField.setText(df.format(ebl));
                         } else {
                             ebl = Float.parseFloat(eBlField.getText().trim());
-                            eBlField.setText(df.format(ebl).toString());
+                            eBlField.setText(df.format(ebl));
                         }       float eRatio = (float)(((double)avgDT - (double)s1*(double)avgDD - ((double)1-(double)s1*(double)s4)*(double)s2*(double)avgAA)/(((double)1-(double)s1*(double)s4)*(double)s2*(double)avgAA*(double)ebl));
-                        ratioEpsilonsField.setText(df.format(eRatio).toString());
+                        ratioEpsilonsField.setText(df.format(eRatio));
                         break;
                     case "calculate":
                         if (i1dField.getText().trim().isEmpty()) {
@@ -577,7 +577,7 @@ public class AlphaDialog extends JDialog implements ActionListener{
                             float ba = Float.parseFloat(baField.getText().trim());
                             float er = Float.parseFloat(ratioEpsilonsField.getText().trim());
                             float alpha = i2*ld*bd*er/(i1*la*ba);
-                            alphaResultLabel.setText(df.format(alpha).toString());
+                            alphaResultLabel.setText(df.format(alpha));
                             calculateButton.setBackground(mainWindow.greenColor);
                         }       break;
                     case "setfactor":
