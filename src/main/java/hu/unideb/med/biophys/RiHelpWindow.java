@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package hu.unideb.med.biophys;
 
 import java.awt.Dimension;
@@ -31,9 +30,10 @@ import javax.swing.JScrollPane;
 
 /**
  *
- * 
+ *
  */
 public class RiHelpWindow extends JFrame {
+
     private RiFRET_Plugin mainWindow;
     private JPanel panel;
 
@@ -44,7 +44,7 @@ public class RiHelpWindow extends JFrame {
         createGui();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(600, 800);
-        setLocation((screen.width - getWidth())/2, (screen.height - getHeight())/2);
+        setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 
     public void createGui() {
@@ -54,7 +54,7 @@ public class RiHelpWindow extends JFrame {
         panel.setLayout(gridbaglayout);
         setFont(new Font("Helvetica", Font.PLAIN, 12));
 
-        gc.insets = new Insets(4,4,4,4);
+        gc.insets = new Insets(4, 4, 4, 4);
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 0;

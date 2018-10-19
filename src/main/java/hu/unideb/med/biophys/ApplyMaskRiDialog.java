@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package hu.unideb.med.biophys;
 
 import ij.ImagePlus;
@@ -40,9 +39,10 @@ import javax.swing.JPanel;
 
 /**
  *
- * 
+ *
  */
-public class ApplyMaskRiDialog extends JDialog implements ActionListener{
+public class ApplyMaskRiDialog extends JDialog implements ActionListener {
+
     private RiFRET_Plugin mainWindow;
     private ImagePlus toMaskImg, maskImg;
     private JPanel panel;
@@ -56,7 +56,7 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener{
         createDialogGui();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(275, 240);
-        setLocation((screen.width - getWidth())/2, (screen.height - getHeight())/2);
+        setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 
     public void createDialogGui() {
@@ -65,14 +65,14 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener{
         panel = new JPanel();
         panel.setLayout(gridbaglayout);
 
-        gc.insets = new Insets(2,2,6,2);
+        gc.insets = new Insets(2, 2, 6, 2);
         gc.fill = GridBagConstraints.BOTH;
         gc.gridwidth = 2;
         gc.gridx = 0;
         gc.gridy = 0;
         JLabel infoLabel = new JLabel("<html><center>After setting an image to mask and a mask image (with NaN background pixels), two images will be created. The first one will contain the pixles which are not NaN in the mask, and the second one the others.</center></html>");
         panel.add(infoLabel, gc);
-        gc.insets = new Insets(2,2,2,2);
+        gc.insets = new Insets(2, 2, 2, 2);
         gc.gridx = 0;
         gc.gridy = 1;
         setToMaskImgButton = new JButton("Set image to be masked");
@@ -97,77 +97,83 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-    	try {
-                switch (e.getActionCommand()) {
-                    case "setImageToMask":
-                        toMaskImg = WindowManager.getCurrentImage();
-                        if (toMaskImg == null) {
-                            mainWindow.logError("No image is selected. (Masking)");
-                            return;
-                        }       if (toMaskImg.getImageStackSize() > 1) {
-                            mainWindow.logError("Current image contains more than 1 channel ("+toMaskImg.getImageStackSize()+"). Please split it into parts. (Masking)");
-                            toMaskImg = null;
-                            return;
-                        } else if (toMaskImg.getNSlices() > 1) {
-                            mainWindow.logError("Current image contains more than 1 slice ("+toMaskImg.getNSlices()+"). Please split it into parts. (Masking)");
-                            toMaskImg = null;
-                            return;
-                        }       toMaskImg.setTitle("Image to mask - " + new Date().toString());
-                        new ImageConverter(toMaskImg).convertToGray32();
-                        setToMaskImgButton.setBackground(mainWindow.greenColor);
-                        break;
-                    case "setMaskImage":
-                        maskImg = WindowManager.getCurrentImage();
-                        if (maskImg == null) {
-                            mainWindow.logError("No image is selected. (Masking)");
-                            return;
-                        }       if (maskImg.getImageStackSize() > 1) {
-                            mainWindow.logError("Current image contains more than 1 channel ("+maskImg.getImageStackSize()+"). Please split it into parts. (Masking)");
-                            maskImg = null;
-                            return;
-                        } else if (maskImg.getNSlices() > 1) {
-                            mainWindow.logError("Current image contains more than 1 slice ("+maskImg.getNSlices()+"). Please split it into parts. (Masking)");
-                            maskImg = null;
-                            return;
-                        }       maskImg.setTitle("Mask image - " + new Date().toString());
-                        new ImageConverter(maskImg).convertToGray32();
-                        setMaskImgButton.setBackground(mainWindow.greenColor);
-                        break;
-                    case "createImages":
-                        if (toMaskImg == null) {
-                            mainWindow.logError("No image to mask is set. (Masking)");
-                            return;
-                        } else if (maskImg == null) {
-                            mainWindow.logError("No mask image is set. (Masking)");
-                            return;
-                        }       ImageProcessor ipTM = toMaskImg.getProcessor();
-                        ImageProcessor ipM = maskImg.getProcessor();
-                        float[] ipTMP = (float[])ipTM.getPixels();
-                        float[] ipMP = (float[])ipM.getPixels();
-                        int width = ipTM.getWidth();
-                        int height = ipTM.getHeight();
-                        float[][] img1Points = new float[width][height];
-                        float[][] img2Points = new float[width][height];
-                        for (int i = 0; i < width; i++) {
-                            for (int j = 0; j < height; j++) {
-                                if (!Float.isNaN(ipMP[width*j+i])) {
-                                    img1Points[i][j] = ipTMP[width*j+i];
-                                    img2Points[i][j] = Float.NaN;
-                                } else {
-                                    img1Points[i][j] = Float.NaN;
-                                    img2Points[i][j] = ipTMP[width*j+i];
-                                }
+        try {
+            switch (e.getActionCommand()) {
+                case "setImageToMask":
+                    toMaskImg = WindowManager.getCurrentImage();
+                    if (toMaskImg == null) {
+                        mainWindow.logError("No image is selected. (Masking)");
+                        return;
+                    }
+                    if (toMaskImg.getImageStackSize() > 1) {
+                        mainWindow.logError("Current image contains more than 1 channel (" + toMaskImg.getImageStackSize() + "). Please split it into parts. (Masking)");
+                        toMaskImg = null;
+                        return;
+                    } else if (toMaskImg.getNSlices() > 1) {
+                        mainWindow.logError("Current image contains more than 1 slice (" + toMaskImg.getNSlices() + "). Please split it into parts. (Masking)");
+                        toMaskImg = null;
+                        return;
+                    }
+                    toMaskImg.setTitle("Image to mask - " + new Date().toString());
+                    new ImageConverter(toMaskImg).convertToGray32();
+                    setToMaskImgButton.setBackground(mainWindow.greenColor);
+                    break;
+                case "setMaskImage":
+                    maskImg = WindowManager.getCurrentImage();
+                    if (maskImg == null) {
+                        mainWindow.logError("No image is selected. (Masking)");
+                        return;
+                    }
+                    if (maskImg.getImageStackSize() > 1) {
+                        mainWindow.logError("Current image contains more than 1 channel (" + maskImg.getImageStackSize() + "). Please split it into parts. (Masking)");
+                        maskImg = null;
+                        return;
+                    } else if (maskImg.getNSlices() > 1) {
+                        mainWindow.logError("Current image contains more than 1 slice (" + maskImg.getNSlices() + "). Please split it into parts. (Masking)");
+                        maskImg = null;
+                        return;
+                    }
+                    maskImg.setTitle("Mask image - " + new Date().toString());
+                    new ImageConverter(maskImg).convertToGray32();
+                    setMaskImgButton.setBackground(mainWindow.greenColor);
+                    break;
+                case "createImages":
+                    if (toMaskImg == null) {
+                        mainWindow.logError("No image to mask is set. (Masking)");
+                        return;
+                    } else if (maskImg == null) {
+                        mainWindow.logError("No mask image is set. (Masking)");
+                        return;
+                    }
+                    ImageProcessor ipTM = toMaskImg.getProcessor();
+                    ImageProcessor ipM = maskImg.getProcessor();
+                    float[] ipTMP = (float[]) ipTM.getPixels();
+                    float[] ipMP = (float[]) ipM.getPixels();
+                    int width = ipTM.getWidth();
+                    int height = ipTM.getHeight();
+                    float[][] img1Points = new float[width][height];
+                    float[][] img2Points = new float[width][height];
+                    for (int i = 0; i < width; i++) {
+                        for (int j = 0; j < height; j++) {
+                            if (!Float.isNaN(ipMP[width * j + i])) {
+                                img1Points[i][j] = ipTMP[width * j + i];
+                                img2Points[i][j] = Float.NaN;
+                            } else {
+                                img1Points[i][j] = Float.NaN;
+                                img2Points[i][j] = ipTMP[width * j + i];
                             }
-                        }       FloatProcessor fp1 = new FloatProcessor(img1Points);
-                        FloatProcessor fp2 = new FloatProcessor(img2Points);
-                        ImagePlus img2 = new ImagePlus("Masked image 2 (pixels outside the mask)", fp2);
-                        img2.show();
-                        ImagePlus img1 = new ImagePlus("Masked image 1 (pixels in the mask)", fp1);
-                        img1.show();
-                        break;
-                    default:
-                        break;
-                }
+                        }
+                    }
+                    FloatProcessor fp1 = new FloatProcessor(img1Points);
+                    FloatProcessor fp2 = new FloatProcessor(img2Points);
+                    ImagePlus img2 = new ImagePlus("Masked image 2 (pixels outside the mask)", fp2);
+                    img2.show();
+                    ImagePlus img1 = new ImagePlus("Masked image 1 (pixels in the mask)", fp1);
+                    img1.show();
+                    break;
+                default:
+                    break;
+            }
         } catch (Throwable t) {
             mainWindow.logException(t.toString(), t);
         }
