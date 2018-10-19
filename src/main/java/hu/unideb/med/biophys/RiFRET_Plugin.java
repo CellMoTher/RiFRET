@@ -721,6 +721,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     }
 
 
+    @Override
     public void actionPerformed(ActionEvent e) {
     	try {
                 switch (e.getActionCommand()) {
@@ -2092,28 +2093,35 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     }
 
 
+    @Override
 	public void windowClosing(WindowEvent e){
 		exit();
 	}
 
 
+    @Override
 	public void windowActivated(WindowEvent e){}
 
 
+    @Override
 	public void windowClosed(WindowEvent e){}
 
 
+    @Override
 	public void windowDeactivated(WindowEvent e){}
 
 
+    @Override
 	public void windowDeiconified(WindowEvent e){
         logScrollPane.setPreferredSize(new Dimension(10,10));
     }
 
 
+    @Override
 	public void windowIconified(WindowEvent e){}
 
 
+    @Override
 	public void windowOpened(WindowEvent e){}
 
 
