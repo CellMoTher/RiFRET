@@ -883,7 +883,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             if (WindowManager.getCurrentImage() == null) {
                                 logError("No open image.");
                                 return;
-                            }               String radiusString =  (String)JOptionPane.showInputDialog(this, "Enter radius (in pixels) for Gaussian blur", "Gaussian blur", JOptionPane.QUESTION_MESSAGE);
+                            }               String radiusString =  JOptionPane.showInputDialog(this, "Enter radius (in pixels) for Gaussian blur", "Gaussian blur", JOptionPane.QUESTION_MESSAGE);
                             if (radiusString == null || radiusString.trim().equals("")) {
                                 return;
                             }               GaussianBlur gb = new GaussianBlur();
