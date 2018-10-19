@@ -43,6 +43,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -1418,7 +1419,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 double radius = 0;
                                 try {
                                     radius = Double.parseDouble(radiusFieldDD.getText().trim());
-                                } catch (Exception ex) {
+                                } catch (NumberFormatException ex) {
                                     logError("Radius has to be given for Gaussian blur.");
                                     return;
                                 }
@@ -1444,7 +1445,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 double radius = 0;
                                 try {
                                     radius = Double.parseDouble(radiusFieldDA.getText().trim());
-                                } catch (Exception ex) {
+                                } catch (NumberFormatException ex) {
                                     logError("Radius has to be given for Gaussian blur.");
                                     return;
                                 }
@@ -1470,7 +1471,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 double radius = 0;
                                 try {
                                     radius = Double.parseDouble(radiusFieldAA.getText().trim());
-                                } catch (Exception ex) {
+                                } catch (NumberFormatException ex) {
                                     logError("Radius has to be given for Gaussian blur.");
                                     return;
                                 }
@@ -1559,7 +1560,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 double s1Factor = 0;
                                 try {
                                     s1Factor = Double.parseDouble(s1Field.getText().trim());
-                                } catch (Exception ex) {
+                                } catch (NumberFormatException ex) {
                                     logError("S1 factor has to be given.");
                                     return;
                                 }
@@ -1569,7 +1570,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 double s2Factor = 0;
                                 try {
                                     s2Factor = Double.parseDouble(s2Field.getText().trim());
-                                } catch (Exception ex) {
+                                } catch (NumberFormatException ex) {
                                     logError("S2 factor has to be given.");
                                     return;
                                 }
@@ -1579,7 +1580,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 double s3Factor = 0;
                                 try {
                                     s3Factor = Double.parseDouble(s3Field.getText().trim());
-                                } catch (Exception ex) {
+                                } catch (NumberFormatException ex) {
                                     logError("S3 factor has to be given.");
                                     return;
                                 }
@@ -1589,7 +1590,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 double s4Factor = 0;
                                 try {
                                     s4Factor = Double.parseDouble(s4Field.getText().trim());
-                                } catch (Exception ex) {
+                                } catch (NumberFormatException ex) {
                                     logError("S4 factor has to be given.");
                                     return;
                                 }
@@ -1599,7 +1600,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 double alphaFactor = 0;
                                 try {
                                     alphaFactor = Double.parseDouble(alphaField.getText().trim());
-                                } catch (Exception ex) {
+                                } catch (NumberFormatException ex) {
                                     logError("Alpha factor has to be given.");
                                     return;
                                 }
@@ -1609,14 +1610,14 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 if (autoThresholdingCB.isSelected()) {
                                     try {
                                         autoThMin = Double.parseDouble(autoThresholdMin.getText().trim());
-                                    } catch (Exception ex) {
+                                    } catch (NumberFormatException ex) {
                                         logError("Auto-threshold min value has to be given.");
                                         return;
                                     }
                                     
                                     try {
                                         autoThMax = Double.parseDouble(autoThresholdMax.getText().trim());
-                                    } catch (Exception ex) {
+                                    } catch (NumberFormatException ex) {
                                         logError("Auto-threshold max value has to be given.");
                                         return;
                                     }
@@ -1890,7 +1891,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     default:
                         break;
                 }
-        } catch (Throwable t) {
+        } catch (HeadlessException | NumberFormatException t) {
             logException(t.toString(), t);
         }
     }
@@ -2134,7 +2135,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         float s1Factor = -1;
         try {
             s1Factor = Float.parseFloat(s1Field.getText().trim());
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             return -1;
         }
         return s1Factor;
@@ -2150,7 +2151,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         float s2Factor = -1;
         try {
             s2Factor = Float.parseFloat(s2Field.getText().trim());
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             return -1;
         }
         return s2Factor;
@@ -2166,7 +2167,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         float s3Factor = -1;
         try {
             s3Factor = Float.parseFloat(s3Field.getText().trim());
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             return -1;
         }
         return s3Factor;
@@ -2182,7 +2183,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         float s4Factor = -1;
         try {
             s4Factor = Float.parseFloat(s4Field.getText().trim());
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             return -1;
         }
         return s4Factor;
