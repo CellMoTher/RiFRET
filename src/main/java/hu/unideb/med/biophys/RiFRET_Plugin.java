@@ -9,6 +9,8 @@ The program is provided free of charge on an "as is" basis without warranty of a
 http://biophys.med.unideb.hu/rifret/
 */
 
+package hu.unideb.med.biophys;
+
 import ij.*;
 import ij.gui.*;
 import ij.io.*;
