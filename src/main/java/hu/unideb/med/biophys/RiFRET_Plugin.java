@@ -35,6 +35,7 @@ import ij.process.ImageProcessor;
 import ij.process.ImageStatistics;
 import ij.process.StackConverter;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -251,7 +252,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         addWindowListener(this);
         GridBagLayout gridbaglayout = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
-        Container container = getContentPane();
+        Container contentPane = getContentPane();
+        JScrollPane mainScrollPane = new JScrollPane();
+        JPanel container = new JPanel();
         container.setLayout(gridbaglayout);
 
         JPanel donorInDImageBleachingPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -714,7 +717,10 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         StyleConstants.setForeground(style, Color.black.darker());
         logScrollPane = new JScrollPane(log);
         logScrollPane.setBorder(BorderFactory.createTitledBorder("Messages"));
-        container.add(logScrollPane, gc);
+        logScrollPane.setPreferredSize(new Dimension(10, 60));
+        contentPane.add(logScrollPane, BorderLayout.SOUTH);
+        mainScrollPane.setViewportView(container);
+        contentPane.add(mainScrollPane, BorderLayout.CENTER);
     }
 
     @Override
@@ -2041,7 +2047,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         calculateAlphaButton.setBackground(originalButtonColor);
 
         nextButton.setVisible(false);
-        logScrollPane.setPreferredSize(new Dimension(10, 10));
         currentlyProcessedFile = 0;
         automaticallyProcessedFiles = null;
         currentlyProcessedFileName = null;
@@ -2161,7 +2166,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
     @Override
     public void windowDeiconified(WindowEvent e) {
-        logScrollPane.setPreferredSize(new Dimension(10, 10));
     }
 
     @Override
