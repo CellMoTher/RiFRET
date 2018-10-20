@@ -276,13 +276,29 @@ public class AlphaDialog extends JDialog implements ActionListener {
                     donorBeforeImg = null;
                     donorAfterImg = null;
                     setDonorBeforeButton.setBackground(mainWindow.originalButtonColor);
+                    setDonorBeforeButton.setOpaque(false);
+                    setDonorBeforeButton.setBorderPainted(true);
                     setDonorAfterButton.setBackground(mainWindow.originalButtonColor);
+                    setDonorAfterButton.setOpaque(false);
+                    setDonorAfterButton.setBorderPainted(true);
                     subtractDonorBButton.setBackground(mainWindow.originalButtonColor);
+                    subtractDonorBButton.setOpaque(false);
+                    subtractDonorBButton.setBorderPainted(true);
                     subtractDonorAButton.setBackground(mainWindow.originalButtonColor);
+                    subtractDonorAButton.setOpaque(false);
+                    subtractDonorAButton.setBorderPainted(true);
                     setDonorBThresholdButton.setBackground(mainWindow.originalButtonColor);
+                    setDonorBThresholdButton.setOpaque(false);
+                    setDonorBThresholdButton.setBorderPainted(true);
                     setDonorAThresholdButton.setBackground(mainWindow.originalButtonColor);
+                    setDonorAThresholdButton.setOpaque(false);
+                    setDonorAThresholdButton.setBorderPainted(true);
                     calculateButton.setBackground(mainWindow.originalButtonColor);
+                    calculateButton.setOpaque(false);
+                    calculateButton.setBorderPainted(true);
                     setButton.setBackground(mainWindow.originalButtonColor);
+                    setButton.setOpaque(false);
+                    setButton.setBorderPainted(true);
                     alphaResultLabel.setText("");
                     break;
                 case "calculateRatioEps":
@@ -332,6 +348,8 @@ public class AlphaDialog extends JDialog implements ActionListener {
                     donorBeforeImg.setTitle("Donor before bleaching (\u03B1 calc.) - " + new Date().toString());
                     new ImageConverter(donorBeforeImg).convertToGray32();
                     setDonorBeforeButton.setBackground(mainWindow.greenColor);
+                    setDonorBeforeButton.setOpaque(true);
+                    setDonorBeforeButton.setBorderPainted(false);
                     break;
                 case "setDonorAfter":
                     donorAfterImg = WindowManager.getCurrentImage();
@@ -351,6 +369,8 @@ public class AlphaDialog extends JDialog implements ActionListener {
                     donorAfterImg.setTitle("Donor after bleaching (\u03B1 calc.) - " + new Date().toString());
                     new ImageConverter(donorAfterImg).convertToGray32();
                     setDonorAfterButton.setBackground(mainWindow.greenColor);
+                    setDonorAfterButton.setOpaque(true);
+                    setDonorAfterButton.setBorderPainted(false);
                     break;
                 case "subtractAlphaDonorBefore": {
                     if (donorBeforeImg == null) {
@@ -386,6 +406,8 @@ public class AlphaDialog extends JDialog implements ActionListener {
                     donorBeforeImg.killRoi();
                     mainWindow.log("Subtracted background (" + backgroundAvgT + ") of donor before bleaching. (\u03B1 calc.)");
                     subtractDonorBButton.setBackground(mainWindow.greenColor);
+                    subtractDonorBButton.setOpaque(true);
+                    subtractDonorBButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractAlphaDonorAfter": {
@@ -422,6 +444,8 @@ public class AlphaDialog extends JDialog implements ActionListener {
                     donorAfterImg.killRoi();
                     mainWindow.log("Subtracted background (" + backgroundAvgA + ") of donor after bleaching. (\u03B1 calc.)");
                     subtractDonorAButton.setBackground(mainWindow.greenColor);
+                    subtractDonorAButton.setOpaque(true);
+                    subtractDonorAButton.setBorderPainted(false);
                     break;
                 }
                 case "setAlphaDonorBThreshold":
@@ -432,6 +456,8 @@ public class AlphaDialog extends JDialog implements ActionListener {
                     IJ.selectWindow(donorBeforeImg.getTitle());
                     IJ.run("Threshold...");
                     setDonorBThresholdButton.setBackground(mainWindow.greenColor);
+                    setDonorBThresholdButton.setOpaque(true);
+                    setDonorBThresholdButton.setBorderPainted(false);
                     break;
                 case "setAlphaDonorAThreshold":
                     if (donorAfterImg == null) {
@@ -441,6 +467,8 @@ public class AlphaDialog extends JDialog implements ActionListener {
                     IJ.selectWindow(donorAfterImg.getTitle());
                     IJ.run("Threshold...");
                     setDonorAThresholdButton.setBackground(mainWindow.greenColor);
+                    setDonorAThresholdButton.setOpaque(true);
+                    setDonorAThresholdButton.setBorderPainted(false);
                     break;
                 case "epsilonButton":
                     DecimalFormat df = new DecimalFormat("#.###");
@@ -593,6 +621,8 @@ public class AlphaDialog extends JDialog implements ActionListener {
                         float alpha = i2 * ld * bd * er / (i1 * la * ba);
                         alphaResultLabel.setText(df.format(alpha));
                         calculateButton.setBackground(mainWindow.greenColor);
+                        calculateButton.setOpaque(true);
+                        calculateButton.setBorderPainted(false);
                     }
                     break;
                 case "setfactor":
@@ -602,7 +632,11 @@ public class AlphaDialog extends JDialog implements ActionListener {
                     }
                     mainWindow.setAlphaFactor(alphaResultLabel.getText());
                     setButton.setBackground(mainWindow.greenColor);
+                    setButton.setOpaque(true);
+                    setButton.setBorderPainted(false);
                     mainWindow.calculateAlphaButton.setBackground(mainWindow.greenColor);
+                    mainWindow.calculateAlphaButton.setOpaque(true);
+                    mainWindow.calculateAlphaButton.setBorderPainted(false);
                     break;
                 default:
                     break;

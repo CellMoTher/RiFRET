@@ -1030,34 +1030,46 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     if (ip == null) {
                         logError("No image is selected.");
                         setDonorInDImageButton.setBackground(originalButtonColor);
+                        setDonorInDImageButton.setOpaque(false);
+                        setDonorInDImageButton.setBorderPainted(true);
                         return;
                     }
                     if (ip.isHyperStack()) {
                         logError("Current image is a hyperstack.");
                         donorInDImage = null;
                         setDonorInDImageButton.setBackground(originalButtonColor);
+                        setDonorInDImageButton.setOpaque(false);
+                        setDonorInDImageButton.setBorderPainted(true);
                         return;
                     }
                     if (donorInAImage != null && donorInAImage.equals(ip)) {
                         logError("This image has already been set as transfer channel.");
                         donorInDImage = null;
                         setDonorInDImageButton.setBackground(originalButtonColor);
+                        setDonorInDImageButton.setOpaque(false);
+                        setDonorInDImageButton.setBorderPainted(true);
                         return;
                     } else if (acceptorInAImage != null && acceptorInAImage.equals(ip)) {
                         logError("This image has already been set as acceptor channel.");
                         donorInDImage = null;
                         setDonorInDImageButton.setBackground(originalButtonColor);
+                        setDonorInDImageButton.setOpaque(false);
+                        setDonorInDImageButton.setBorderPainted(true);
                         return;
                     }
                     if (donorInAImage != null && ip.getImageStackSize() != donorInAImage.getImageStackSize()) {
                         logError("Transfer channel contains " + donorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
                         donorInDImage = null;
                         setDonorInDImageButton.setBackground(originalButtonColor);
+                        setDonorInDImageButton.setOpaque(false);
+                        setDonorInDImageButton.setBorderPainted(true);
                         return;
                     } else if (acceptorInAImage != null && ip.getImageStackSize() != acceptorInAImage.getImageStackSize()) {
                         logError("Acceptor channel contains " + acceptorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
                         donorInDImage = null;
                         setDonorInDImageButton.setBackground(originalButtonColor);
+                        setDonorInDImageButton.setOpaque(false);
+                        setDonorInDImageButton.setBorderPainted(true);
                         return;
                     } else if (ip.getImageStackSize() > 1) {
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
@@ -1073,6 +1085,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         currentlyProcessedFileName = null;
                     }
                     setDonorInDImageButton.setBackground(greenColor);
+                    setDonorInDImageButton.setOpaque(true);
+                    setDonorInDImageButton.setBorderPainted(false);
                     break;
                 }
                 case "setDonorInAImage": {
@@ -1080,34 +1094,46 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     if (ip == null) {
                         logError("No image is selected.");
                         setDonorInAImageButton.setBackground(originalButtonColor);
+                        setDonorInAImageButton.setOpaque(false);
+                        setDonorInAImageButton.setBorderPainted(true);
                         return;
                     }
                     if (ip.isHyperStack()) {
                         logError("Current image is a hyperstack.");
                         donorInAImage = null;
                         setDonorInAImageButton.setBackground(originalButtonColor);
+                        setDonorInAImageButton.setOpaque(false);
+                        setDonorInAImageButton.setBorderPainted(true);
                         return;
                     }
                     if (donorInDImage != null && donorInDImage.equals(ip)) {
                         logError("This image has already been set as donor channel.");
                         donorInAImage = null;
                         setDonorInAImageButton.setBackground(originalButtonColor);
+                        setDonorInAImageButton.setOpaque(false);
+                        setDonorInAImageButton.setBorderPainted(true);
                         return;
                     } else if (acceptorInAImage != null && acceptorInAImage.equals(ip)) {
                         logError("This image has already been set as acceptor channel.");
                         donorInAImage = null;
                         setDonorInAImageButton.setBackground(originalButtonColor);
+                        setDonorInAImageButton.setOpaque(false);
+                        setDonorInAImageButton.setBorderPainted(true);
                         return;
                     }
                     if (donorInDImage != null && ip.getImageStackSize() != donorInDImage.getImageStackSize()) {
                         logError("Donor channel contains " + donorInDImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
                         donorInAImage = null;
                         setDonorInAImageButton.setBackground(originalButtonColor);
+                        setDonorInAImageButton.setOpaque(false);
+                        setDonorInAImageButton.setBorderPainted(true);
                         return;
                     } else if (acceptorInAImage != null && ip.getImageStackSize() != acceptorInAImage.getImageStackSize()) {
                         logError("Acceptor channel contains " + acceptorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
                         donorInAImage = null;
                         setDonorInAImageButton.setBackground(originalButtonColor);
+                        setDonorInAImageButton.setOpaque(false);
+                        setDonorInAImageButton.setBorderPainted(true);
                         return;
                     } else if (ip.getImageStackSize() > 1) {
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
@@ -1120,6 +1146,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         new ImageConverter(donorInAImage).convertToGray32();
                     }
                     setDonorInAImageButton.setBackground(greenColor);
+                    setDonorInAImageButton.setOpaque(true);
+                    setDonorInAImageButton.setBorderPainted(false);
                     break;
                 }
                 case "setAcceptorInAImage": {
@@ -1127,34 +1155,47 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     if (ip == null) {
                         logError("No image is selected.");
                         setAcceptorInAImageButton.setBackground(originalButtonColor);
+                        setAcceptorInAImageButton.setOpaque(false);
+                        setAcceptorInAImageButton.setBorderPainted(true);
                         return;
                     }
                     if (ip.isHyperStack()) {
                         logError("Current image is a hyperstack.");
                         acceptorInAImage = null;
                         setAcceptorInAImageButton.setBackground(originalButtonColor);
+                        setAcceptorInAImageButton.setOpaque(false);
+                        setAcceptorInAImageButton.setBorderPainted(true);
                         return;
                     }
                     if (donorInDImage != null && donorInDImage.equals(ip)) {
                         logError("This image has already been set as donor channel.");
                         acceptorInAImage = null;
                         setAcceptorInAImageButton.setBackground(originalButtonColor);
+                        setAcceptorInAImageButton.setOpaque(false);
+                        setAcceptorInAImageButton.setBorderPainted(true);
+
                         return;
                     } else if (donorInAImage != null && donorInAImage.equals(ip)) {
                         logError("This image has already been set as transfer channel.");
                         acceptorInAImage = null;
                         setAcceptorInAImageButton.setBackground(originalButtonColor);
+                        setAcceptorInAImageButton.setOpaque(false);
+                        setAcceptorInAImageButton.setBorderPainted(true);
                         return;
                     }
                     if (donorInDImage != null && ip.getImageStackSize() != donorInDImage.getImageStackSize()) {
                         logError("Donor channel contains " + donorInDImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
                         acceptorInAImage = null;
                         setAcceptorInAImageButton.setBackground(originalButtonColor);
+                        setAcceptorInAImageButton.setOpaque(false);
+                        setAcceptorInAImageButton.setBorderPainted(true);
                         return;
                     } else if (donorInAImage != null && ip.getImageStackSize() != donorInAImage.getImageStackSize()) {
                         logError("Transfer channel contains " + donorInAImage.getImageStackSize() + " image(s), not " + ip.getImageStackSize() + ".");
                         acceptorInAImage = null;
                         setAcceptorInAImageButton.setBackground(originalButtonColor);
+                        setAcceptorInAImageButton.setOpaque(false);
+                        setAcceptorInAImageButton.setBorderPainted(true);
                         return;
                     } else if (ip.getImageStackSize() > 1) {
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
@@ -1167,6 +1208,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         new ImageConverter(acceptorInAImage).convertToGray32();
                     }
                     setAcceptorInAImageButton.setBackground(greenColor);
+                    setAcceptorInAImageButton.setOpaque(true);
+                    setAcceptorInAImageButton.setBorderPainted(false);
                     break;
                 }
                 case "copyRoi":
@@ -1246,6 +1289,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     donorInDImage.killRoi();
                     donorInDImageSave.setColorModel(donorInDImage.getProcessor().getColorModel());
                     subtractDonorInDImageButton.setBackground(greenColor);
+                    subtractDonorInDImageButton.setOpaque(true);
+                    subtractDonorInDImageButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractDonorInAImage": {
@@ -1304,6 +1349,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     donorInAImage.killRoi();
                     donorInAImageSave.setColorModel(donorInAImage.getProcessor().getColorModel());
                     subtractDonorInAImageButton.setBackground(greenColor);
+                    subtractDonorInAImageButton.setOpaque(true);
+                    subtractDonorInAImageButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractAcceptorInAImage": {
@@ -1362,6 +1409,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     acceptorInAImage.killRoi();
                     acceptorInAImageSave.setColorModel(acceptorInAImage.getProcessor().getColorModel());
                     subtractAcceptorInAImageButton.setBackground(greenColor);
+                    subtractAcceptorInAImageButton.setOpaque(true);
+                    subtractAcceptorInAImageButton.setBorderPainted(false);
                     break;
                 }
                 case "thresholdDonorInDImage":
@@ -1372,6 +1421,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     IJ.selectWindow(donorInDImage.getTitle());
                     IJ.run("Threshold...");
                     thresholdDonorInDImageButton.setBackground(greenColor);
+                    thresholdDonorInDImageButton.setOpaque(true);
+                    thresholdDonorInDImageButton.setBorderPainted(false);
                     break;
                 case "thresholdDonorInAImage":
                     if (donorInAImage == null) {
@@ -1381,6 +1432,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     IJ.selectWindow(donorInAImage.getTitle());
                     IJ.run("Threshold...");
                     thresholdDonorInAImageButton.setBackground(greenColor);
+                    thresholdDonorInAImageButton.setOpaque(true);
+                    thresholdDonorInAImageButton.setBorderPainted(false);
                     break;
                 case "thresholdAcceptorInAImage":
                     if (acceptorInAImage == null) {
@@ -1390,6 +1443,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     IJ.selectWindow(acceptorInAImage.getTitle());
                     IJ.run("Threshold...");
                     thresholdAcceptorInAImageButton.setBackground(greenColor);
+                    thresholdAcceptorInAImageButton.setOpaque(true);
+                    thresholdAcceptorInAImageButton.setBorderPainted(false);
                     break;
                 case "resetDD": {
                     if (donorInDImage == null) {
@@ -1411,7 +1466,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     donorInDImage.getProcessor().setColorModel(donorInDImageSave.getColorModel());
                     donorInDImage.updateAndDraw();
                     thresholdDonorInDImageButton.setBackground(originalButtonColor);
+                    thresholdDonorInDImageButton.setOpaque(false);
+                    thresholdDonorInDImageButton.setBorderPainted(true);
                     smoothDonorInDImageButton.setBackground(originalButtonColor);
+                    smoothDonorInDImageButton.setOpaque(false);
+                    smoothDonorInDImageButton.setBorderPainted(true);
                     break;
                 }
                 case "resetDA": {
@@ -1434,7 +1493,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     donorInAImage.getProcessor().setColorModel(donorInAImageSave.getColorModel());
                     donorInAImage.updateAndDraw();
                     thresholdDonorInAImageButton.setBackground(originalButtonColor);
+                    thresholdDonorInAImageButton.setOpaque(false);
+                    thresholdDonorInAImageButton.setBorderPainted(true);
                     smoothDonorInAImageButton.setBackground(originalButtonColor);
+                    smoothDonorInAImageButton.setOpaque(false);
+                    smoothDonorInAImageButton.setBorderPainted(true);
                     break;
                 }
                 case "resetAA": {
@@ -1457,7 +1520,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     acceptorInAImage.getProcessor().setColorModel(acceptorInAImageSave.getColorModel());
                     acceptorInAImage.updateAndDraw();
                     thresholdAcceptorInAImageButton.setBackground(originalButtonColor);
+                    thresholdAcceptorInAImageButton.setOpaque(false);
+                    thresholdAcceptorInAImageButton.setBorderPainted(true);
                     smoothAcceptorInAImageButton.setBackground(originalButtonColor);
+                    smoothAcceptorInAImageButton.setOpaque(false);
+                    smoothAcceptorInAImageButton.setBorderPainted(true);
                     break;
                 }
                 case "smoothDD":
@@ -1483,6 +1550,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             }
                             donorInDImage.updateAndDraw();
                             smoothDonorInDImageButton.setBackground(greenColor);
+                            smoothDonorInDImageButton.setOpaque(true);
+                            smoothDonorInDImageButton.setBorderPainted(false);
                             log("Gaussian blurred donor channel.");
                         }
                     }
@@ -1510,6 +1579,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             }
                             donorInAImage.updateAndDraw();
                             smoothDonorInAImageButton.setBackground(greenColor);
+                            smoothDonorInAImageButton.setOpaque(true);
+                            smoothDonorInAImageButton.setBorderPainted(false);
                             log("Gaussian blurred transfer channel.");
                         }
                     }
@@ -1537,6 +1608,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             }
                             acceptorInAImage.updateAndDraw();
                             smoothAcceptorInAImageButton.setBackground(greenColor);
+                            smoothAcceptorInAImageButton.setOpaque(true);
+                            smoothAcceptorInAImageButton.setBorderPainted(false);
                             log("Gaussian blurred acceptor channel.");
                         }
                     }
@@ -2031,20 +2104,50 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         acceptorInAImage = null;
         acceptorInAImageSave = null;
         setDonorInDImageButton.setBackground(originalButtonColor);
+        setDonorInDImageButton.setOpaque(false);
+        setDonorInDImageButton.setBorderPainted(true);
         setDonorInAImageButton.setBackground(originalButtonColor);
+        setDonorInAImageButton.setOpaque(false);
+        setDonorInAImageButton.setBorderPainted(true);
         setAcceptorInAImageButton.setBackground(originalButtonColor);
+        setAcceptorInAImageButton.setOpaque(false);
+        setAcceptorInAImageButton.setBorderPainted(true);
         subtractDonorInDImageButton.setBackground(originalButtonColor);
+        subtractDonorInDImageButton.setOpaque(false);
+        subtractDonorInDImageButton.setBorderPainted(true);
         subtractDonorInAImageButton.setBackground(originalButtonColor);
+        subtractDonorInAImageButton.setOpaque(false);
+        subtractDonorInAImageButton.setBorderPainted(true);
         subtractAcceptorInAImageButton.setBackground(originalButtonColor);
+        subtractAcceptorInAImageButton.setOpaque(false);
+        subtractAcceptorInAImageButton.setBorderPainted(true);
         smoothDonorInDImageButton.setBackground(originalButtonColor);
+        smoothDonorInDImageButton.setOpaque(false);
+        smoothDonorInDImageButton.setBorderPainted(true);
         smoothDonorInAImageButton.setBackground(originalButtonColor);
+        smoothDonorInAImageButton.setOpaque(false);
+        smoothDonorInAImageButton.setBorderPainted(true);
         smoothAcceptorInAImageButton.setBackground(originalButtonColor);
+        smoothAcceptorInAImageButton.setOpaque(false);
+        smoothAcceptorInAImageButton.setBorderPainted(true);
         thresholdDonorInDImageButton.setBackground(originalButtonColor);
+        thresholdDonorInDImageButton.setOpaque(false);
+        thresholdDonorInDImageButton.setBorderPainted(true);
         thresholdDonorInAImageButton.setBackground(originalButtonColor);
+        thresholdDonorInAImageButton.setOpaque(false);
+        thresholdDonorInAImageButton.setBorderPainted(true);
         thresholdAcceptorInAImageButton.setBackground(originalButtonColor);
+        thresholdAcceptorInAImageButton.setOpaque(false);
+        thresholdAcceptorInAImageButton.setBorderPainted(true);
         calculateS1S3Button.setBackground(originalButtonColor);
+        calculateS1S3Button.setOpaque(false);
+        calculateS1S3Button.setBorderPainted(true);
         calculateS2S4Button.setBackground(originalButtonColor);
+        calculateS2S4Button.setOpaque(false);
+        calculateS2S4Button.setBorderPainted(true);
         calculateAlphaButton.setBackground(originalButtonColor);
+        calculateAlphaButton.setOpaque(false);
+        calculateAlphaButton.setBorderPainted(true);
 
         nextButton.setVisible(false);
         currentlyProcessedFile = 0;
@@ -2054,20 +2157,50 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
     private void resetAllButtonColors() {
         setDonorInDImageButton.setBackground(originalButtonColor);
+        setDonorInDImageButton.setOpaque(false);
+        setDonorInDImageButton.setBorderPainted(true);
         setDonorInAImageButton.setBackground(originalButtonColor);
+        setDonorInAImageButton.setOpaque(false);
+        setDonorInAImageButton.setBorderPainted(true);
         setAcceptorInAImageButton.setBackground(originalButtonColor);
+        setAcceptorInAImageButton.setOpaque(false);
+        setAcceptorInAImageButton.setBorderPainted(true);
         subtractDonorInDImageButton.setBackground(originalButtonColor);
+        subtractDonorInDImageButton.setOpaque(false);
+        subtractDonorInDImageButton.setBorderPainted(true);
         subtractDonorInAImageButton.setBackground(originalButtonColor);
+        subtractDonorInAImageButton.setOpaque(false);
+        subtractDonorInAImageButton.setBorderPainted(true);
         subtractAcceptorInAImageButton.setBackground(originalButtonColor);
+        subtractAcceptorInAImageButton.setOpaque(false);
+        subtractAcceptorInAImageButton.setBorderPainted(true);
         smoothDonorInDImageButton.setBackground(originalButtonColor);
+        smoothDonorInDImageButton.setOpaque(false);
+        smoothDonorInDImageButton.setBorderPainted(true);
         smoothDonorInAImageButton.setBackground(originalButtonColor);
+        smoothDonorInAImageButton.setOpaque(false);
+        smoothDonorInAImageButton.setBorderPainted(true);
         smoothAcceptorInAImageButton.setBackground(originalButtonColor);
+        smoothAcceptorInAImageButton.setOpaque(false);
+        smoothAcceptorInAImageButton.setBorderPainted(true);
         thresholdDonorInDImageButton.setBackground(originalButtonColor);
+        thresholdDonorInDImageButton.setOpaque(false);
+        thresholdDonorInDImageButton.setBorderPainted(true);
         thresholdDonorInAImageButton.setBackground(originalButtonColor);
+        thresholdDonorInAImageButton.setOpaque(false);
+        thresholdDonorInAImageButton.setBorderPainted(true);
         thresholdAcceptorInAImageButton.setBackground(originalButtonColor);
+        thresholdAcceptorInAImageButton.setOpaque(false);
+        thresholdAcceptorInAImageButton.setBorderPainted(true);
         calculateS1S3Button.setBackground(originalButtonColor);
+        calculateS1S3Button.setOpaque(false);
+        calculateS1S3Button.setBorderPainted(true);
         calculateS2S4Button.setBackground(originalButtonColor);
+        calculateS2S4Button.setOpaque(false);
+        calculateS2S4Button.setBorderPainted(true);
         calculateAlphaButton.setBackground(originalButtonColor);
+        calculateAlphaButton.setOpaque(false);
+        calculateAlphaButton.setBorderPainted(true);
     }
 
     public void log(String text) {

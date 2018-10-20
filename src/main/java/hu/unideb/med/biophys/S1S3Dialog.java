@@ -194,16 +194,38 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     transferImg = null;
                     acceptorImg = null;
                     setDonorButton.setBackground(mainWindow.originalButtonColor);
+                    setDonorButton.setOpaque(false);
+                    setDonorButton.setBorderPainted(true);
                     setTransferButton.setBackground(mainWindow.originalButtonColor);
+                    setTransferButton.setOpaque(false);
+                    setTransferButton.setBorderPainted(true);
                     setAcceptorButton.setBackground(mainWindow.originalButtonColor);
+                    setAcceptorButton.setOpaque(false);
+                    setAcceptorButton.setBorderPainted(true);
                     subtractDonorButton.setBackground(mainWindow.originalButtonColor);
+                    subtractDonorButton.setOpaque(false);
+                    subtractDonorButton.setBorderPainted(true);
                     subtractTransferButton.setBackground(mainWindow.originalButtonColor);
+                    subtractTransferButton.setOpaque(false);
+                    subtractTransferButton.setBorderPainted(true);
                     subtractAcceptorButton.setBackground(mainWindow.originalButtonColor);
+                    subtractAcceptorButton.setOpaque(false);
+                    subtractAcceptorButton.setBorderPainted(true);
                     setDonorThresholdButton.setBackground(mainWindow.originalButtonColor);
+                    setDonorThresholdButton.setOpaque(false);
+                    setDonorThresholdButton.setBorderPainted(true);
                     setTransferThresholdButton.setBackground(mainWindow.originalButtonColor);
+                    setTransferThresholdButton.setOpaque(false);
+                    setTransferThresholdButton.setBorderPainted(true);
                     setAcceptorThresholdButton.setBackground(mainWindow.originalButtonColor);
+                    setAcceptorThresholdButton.setOpaque(false);
+                    setAcceptorThresholdButton.setBorderPainted(true);
                     calculateButton.setBackground(mainWindow.originalButtonColor);
+                    calculateButton.setOpaque(false);
+                    calculateButton.setBorderPainted(true);
                     setButton.setBackground(mainWindow.originalButtonColor);
+                    setButton.setOpaque(false);
+                    setButton.setBorderPainted(true);
                     s1ResultLabel.setText("");
                     s3ResultLabel.setText("");
                     break;
@@ -225,6 +247,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     donorImg.setTitle("Donor channel (S1/S3 calc.) - " + new Date().toString());
                     new ImageConverter(donorImg).convertToGray32();
                     setDonorButton.setBackground(mainWindow.greenColor);
+                    setDonorButton.setOpaque(true);
+                    setDonorButton.setBorderPainted(false);
                     break;
                 case "setS1S3Transfer":
                     transferImg = WindowManager.getCurrentImage();
@@ -244,6 +268,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     transferImg.setTitle("Transfer channel (S1/S3 calc.) - " + new Date().toString());
                     new ImageConverter(transferImg).convertToGray32();
                     setTransferButton.setBackground(mainWindow.greenColor);
+                    setTransferButton.setOpaque(true);
+                    setTransferButton.setBorderPainted(false);
                     break;
                 case "setS1S3Acceptor":
                     acceptorImg = WindowManager.getCurrentImage();
@@ -263,6 +289,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     acceptorImg.setTitle("Acceptor channel (S1/S3 calc.) - " + new Date().toString());
                     new ImageConverter(acceptorImg).convertToGray32();
                     setAcceptorButton.setBackground(mainWindow.greenColor);
+                    setAcceptorButton.setOpaque(true);
+                    setAcceptorButton.setBorderPainted(false);
                     break;
                 case "subtractS1S3Donor": {
                     if (donorImg == null) {
@@ -298,6 +326,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     donorImg.killRoi();
                     mainWindow.log("Subtracted background (" + backgroundAvgD + ") of donor channel. (S1/S3 calc.)");
                     subtractDonorButton.setBackground(mainWindow.greenColor);
+                    subtractDonorButton.setOpaque(true);
+                    subtractDonorButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractS1S3Transfer": {
@@ -334,6 +364,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     transferImg.killRoi();
                     mainWindow.log("Subtracted background (" + backgroundAvgT + ") of transfer channel. (S1/S3 calc.)");
                     subtractTransferButton.setBackground(mainWindow.greenColor);
+                    subtractTransferButton.setOpaque(true);
+                    subtractTransferButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractS1S3Acceptor": {
@@ -370,6 +402,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     acceptorImg.killRoi();
                     mainWindow.log("Subtracted background (" + backgroundAvgA + ") of acceptor channel. (S1/S3 calc.)");
                     subtractAcceptorButton.setBackground(mainWindow.greenColor);
+                    subtractAcceptorButton.setOpaque(true);
+                    subtractAcceptorButton.setBorderPainted(false);
                     break;
                 }
                 case "setS1S3DonorThreshold":
@@ -380,6 +414,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     IJ.selectWindow(donorImg.getTitle());
                     IJ.run("Threshold...");
                     setDonorThresholdButton.setBackground(mainWindow.greenColor);
+                    setDonorThresholdButton.setOpaque(true);
+                    setDonorThresholdButton.setBorderPainted(false);
                     break;
                 case "setS1S3TransferThreshold":
                     if (transferImg == null) {
@@ -389,6 +425,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     IJ.selectWindow(transferImg.getTitle());
                     IJ.run("Threshold...");
                     setTransferThresholdButton.setBackground(mainWindow.greenColor);
+                    setTransferThresholdButton.setOpaque(true);
+                    setTransferThresholdButton.setBorderPainted(false);
                     break;
                 case "setS1S3AcceptorThreshold":
                     if (acceptorImg == null) {
@@ -398,6 +436,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     IJ.selectWindow(acceptorImg.getTitle());
                     IJ.run("Threshold...");
                     setAcceptorThresholdButton.setBackground(mainWindow.greenColor);
+                    setAcceptorThresholdButton.setOpaque(true);
+                    setAcceptorThresholdButton.setBorderPainted(false);
                     break;
                 case "calculate":
                     if (donorImg == null) {
@@ -453,6 +493,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                         s1ResultLabel.setText(df.format(avgS1));
                         s3ResultLabel.setText(df.format(avgS3));
                         calculateButton.setBackground(mainWindow.greenColor);
+                        calculateButton.setOpaque(true);
+                        calculateButton.setBorderPainted(false);
                         donorImg.changes = false;
                         transferImg.changes = false;
                         acceptorImg.changes = false;
@@ -466,7 +508,11 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     mainWindow.setS1Factor(s1ResultLabel.getText());
                     mainWindow.setS3Factor(s3ResultLabel.getText());
                     setButton.setBackground(mainWindow.greenColor);
+                    setButton.setOpaque(true);
+                    setButton.setBorderPainted(false);
                     mainWindow.calculateS1S3Button.setBackground(mainWindow.greenColor);
+                    mainWindow.calculateS1S3Button.setOpaque(true);
+                    mainWindow.calculateS1S3Button.setBorderPainted(false);
                     break;
                 default:
                     break;

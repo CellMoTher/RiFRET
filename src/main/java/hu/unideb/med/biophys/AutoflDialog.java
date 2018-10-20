@@ -153,14 +153,32 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     transferImg = null;
                     acceptorImg = null;
                     setDonorButton.setBackground(mainWindow.originalButtonColor);
+                    setDonorButton.setOpaque(false);
+                    setDonorButton.setBorderPainted(true);
                     setTransferButton.setBackground(mainWindow.originalButtonColor);
+                    setTransferButton.setOpaque(false);
+                    setTransferButton.setBorderPainted(true);
                     setAcceptorButton.setBackground(mainWindow.originalButtonColor);
+                    setAcceptorButton.setOpaque(false);
+                    setAcceptorButton.setBorderPainted(true);
                     subtractDonorButton.setBackground(mainWindow.originalButtonColor);
+                    subtractDonorButton.setOpaque(false);
+                    subtractDonorButton.setBorderPainted(true);
                     subtractTransferButton.setBackground(mainWindow.originalButtonColor);
+                    subtractTransferButton.setOpaque(false);
+                    subtractTransferButton.setBorderPainted(true);
                     subtractAcceptorButton.setBackground(mainWindow.originalButtonColor);
+                    subtractAcceptorButton.setOpaque(false);
+                    subtractAcceptorButton.setBorderPainted(true);
                     calculateDonorAfButton.setBackground(mainWindow.originalButtonColor);
+                    calculateDonorAfButton.setOpaque(false);
+                    calculateDonorAfButton.setBorderPainted(true);
                     calculateTransferAfButton.setBackground(mainWindow.originalButtonColor);
+                    calculateTransferAfButton.setOpaque(false);
+                    calculateTransferAfButton.setBorderPainted(true);
                     calculateAcceptorAfButton.setBackground(mainWindow.originalButtonColor);
+                    calculateAcceptorAfButton.setOpaque(false);
+                    calculateAcceptorAfButton.setBorderPainted(true);
                     break;
                 case "setAutoFlDonor":
                     donorImg = WindowManager.getCurrentImage();
@@ -180,6 +198,8 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     donorImg.setTitle("Donor channel (Autofl.) - " + new Date().toString());
                     new ImageConverter(donorImg).convertToGray32();
                     setDonorButton.setBackground(mainWindow.greenColor);
+                    setDonorButton.setOpaque(true);
+                    setDonorButton.setBorderPainted(false);
                     break;
                 case "setAutoFlTransfer":
                     transferImg = WindowManager.getCurrentImage();
@@ -199,6 +219,8 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     transferImg.setTitle("Transfer channel (Autofl.) - " + new Date().toString());
                     new ImageConverter(transferImg).convertToGray32();
                     setTransferButton.setBackground(mainWindow.greenColor);
+                    setTransferButton.setOpaque(true);
+                    setTransferButton.setBorderPainted(false);
                     break;
                 case "setAutoFlAcceptor":
                     acceptorImg = WindowManager.getCurrentImage();
@@ -218,6 +240,8 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     acceptorImg.setTitle("Acceptor channel (Autofl.) - " + new Date().toString());
                     new ImageConverter(acceptorImg).convertToGray32();
                     setAcceptorButton.setBackground(mainWindow.greenColor);
+                    setAcceptorButton.setOpaque(true);
+                    setAcceptorButton.setBorderPainted(false);
                     break;
                 case "subtractAutoFlDonor": {
                     if (donorImg == null) {
@@ -253,6 +277,8 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     donorImg.killRoi();
                     mainWindow.log("Subtracted background (" + backgroundAvgD + ") of donor channel. (Autofl.)");
                     subtractDonorButton.setBackground(mainWindow.greenColor);
+                    subtractDonorButton.setOpaque(true);
+                    subtractDonorButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractAutoFlTransfer": {
@@ -289,6 +315,8 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     transferImg.killRoi();
                     mainWindow.log("Subtracted background (" + backgroundAvgT + ") of transfer channel. (Autofl.)");
                     subtractTransferButton.setBackground(mainWindow.greenColor);
+                    subtractTransferButton.setOpaque(true);
+                    subtractTransferButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractAutoFlAcceptor": {
@@ -325,6 +353,8 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     acceptorImg.killRoi();
                     mainWindow.log("Subtracted background (" + backgroundAvgA + ") of acceptor channel. (Autofl.)");
                     subtractAcceptorButton.setBackground(mainWindow.greenColor);
+                    subtractAcceptorButton.setOpaque(true);
+                    subtractAcceptorButton.setBorderPainted(false);
                     break;
                 }
                 case "calculateDonorAF": {
@@ -351,6 +381,8 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     float autoflAvgD = (float) (sum / count);
                     mainWindow.autoflDInDField.setText(df.format(autoflAvgD));
                     calculateDonorAfButton.setBackground(mainWindow.greenColor);
+                    calculateDonorAfButton.setOpaque(true);
+                    calculateDonorAfButton.setBorderPainted(false);
                     break;
                 }
                 case "calculateTransferAF": {
@@ -377,6 +409,8 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     float autoflAvgT = (float) (sum / count);
                     mainWindow.autoflAInDField.setText(df.format(autoflAvgT));
                     calculateTransferAfButton.setBackground(mainWindow.greenColor);
+                    calculateTransferAfButton.setOpaque(true);
+                    calculateTransferAfButton.setBorderPainted(false);
                     break;
                 }
                 case "calculateAcceptorAF": {
@@ -403,6 +437,8 @@ public class AutoflDialog extends JDialog implements ActionListener {
                     float autoflAvgA = (float) (sum / count);
                     mainWindow.autoflAInAField.setText(df.format(autoflAvgA));
                     calculateAcceptorAfButton.setBackground(mainWindow.greenColor);
+                    calculateAcceptorAfButton.setOpaque(true);
+                    calculateAcceptorAfButton.setBorderPainted(false);
                     break;
                 }
                 case "close":
