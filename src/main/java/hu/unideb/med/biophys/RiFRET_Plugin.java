@@ -1012,13 +1012,10 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         WindowManager.putBehind();
                         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "split"));
                         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setAcceptorInAImage"));
-                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "lutSpectrum"));
                         WindowManager.putBehind();
                         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInAImage"));
-                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "lutSpectrum"));
                         WindowManager.putBehind();
                         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInDImage"));
-                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "lutSpectrum"));
                     } catch (Exception ex) {
                         logError("Could not open and set the selected LSM image.");
                         logException(ex.getMessage(), ex);
