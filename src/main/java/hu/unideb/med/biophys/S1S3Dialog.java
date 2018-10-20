@@ -51,7 +51,7 @@ public class S1S3Dialog extends JDialog implements ActionListener {
     private JPanel panel;
     private JButton setDonorButton, setTransferButton, setAcceptorButton;
     private JButton setDonorThresholdButton, setTransferThresholdButton, setAcceptorThresholdButton, calculateButton, setButton;
-    private JButton subtractDonorButton, subtractTransferButton, subtractAcceptorButton;
+    private JButton subtractDonorButton, subtractTransferButton, subtractAcceptorButton, copyRoiButton;
     private JButton resetButton;
     private JCheckBox showSImagesCB;
     private JLabel s1ResultLabel, s3ResultLabel;
@@ -102,42 +102,48 @@ public class S1S3Dialog extends JDialog implements ActionListener {
         panel.add(setAcceptorButton, gc);
         gc.gridx = 0;
         gc.gridy = 4;
+        copyRoiButton = new JButton("(Optional): Copy ROI");
+        copyRoiButton.addActionListener(this);
+        copyRoiButton.setActionCommand("copyS1S3Roi");
+        panel.add(copyRoiButton, gc);
+        gc.gridx = 0;
+        gc.gridy = 5;
         subtractDonorButton = new JButton("Subtract background of donor channel");
         subtractDonorButton.addActionListener(this);
         subtractDonorButton.setActionCommand("subtractS1S3Donor");
         panel.add(subtractDonorButton, gc);
         gc.gridx = 0;
-        gc.gridy = 5;
+        gc.gridy = 6;
         subtractTransferButton = new JButton("Subtract background of transfer channel");
         subtractTransferButton.addActionListener(this);
         subtractTransferButton.setActionCommand("subtractS1S3Transfer");
         panel.add(subtractTransferButton, gc);
         gc.gridx = 0;
-        gc.gridy = 6;
+        gc.gridy = 7;
         subtractAcceptorButton = new JButton("Subtract background of acceptor channel");
         subtractAcceptorButton.addActionListener(this);
         subtractAcceptorButton.setActionCommand("subtractS1S3Acceptor");
         panel.add(subtractAcceptorButton, gc);
         gc.gridx = 0;
-        gc.gridy = 7;
+        gc.gridy = 8;
         setDonorThresholdButton = new JButton("Set threshold for donor channel");
         setDonorThresholdButton.addActionListener(this);
         setDonorThresholdButton.setActionCommand("setS1S3DonorThreshold");
         panel.add(setDonorThresholdButton, gc);
         gc.gridx = 0;
-        gc.gridy = 8;
+        gc.gridy = 9;
         setTransferThresholdButton = new JButton("Set threshold for transfer channel");
         setTransferThresholdButton.addActionListener(this);
         setTransferThresholdButton.setActionCommand("setS1S3TransferThreshold");
         panel.add(setTransferThresholdButton, gc);
         gc.gridx = 0;
-        gc.gridy = 9;
+        gc.gridy = 10;
         setAcceptorThresholdButton = new JButton("Set threshold for acceptor channel");
         setAcceptorThresholdButton.addActionListener(this);
         setAcceptorThresholdButton.setActionCommand("setS1S3AcceptorThreshold");
         panel.add(setAcceptorThresholdButton, gc);
         gc.gridx = 0;
-        gc.gridy = 10;
+        gc.gridy = 11;
         JPanel radioPanel = new JPanel();
         GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gcr = new GridBagConstraints();
@@ -159,24 +165,24 @@ public class S1S3Dialog extends JDialog implements ActionListener {
         radioPanel.add(s3ResultLabel, gcr);
         panel.add(radioPanel, gc);
         gc.gridx = 0;
-        gc.gridy = 12;
+        gc.gridy = 13;
         showSImagesCB = new JCheckBox("show S1 and S3 images (for manual calc.)");
         panel.add(showSImagesCB, gc);
         gc.gridwidth = 1;
         gc.gridx = 0;
-        gc.gridy = 13;
+        gc.gridy = 14;
         calculateButton = new JButton("Calculate");
         calculateButton.addActionListener(this);
         calculateButton.setActionCommand("calculate");
         panel.add(calculateButton, gc);
         gc.gridx = 1;
-        gc.gridy = 13;
+        gc.gridy = 14;
         setButton = new JButton("Set S1 and S3");
         setButton.addActionListener(this);
         setButton.setActionCommand("setfactor");
         panel.add(setButton, gc);
         gc.gridx = 2;
-        gc.gridy = 13;
+        gc.gridy = 14;
         resetButton = new JButton("Reset");
         resetButton.addActionListener(this);
         resetButton.setActionCommand("reset");
@@ -202,6 +208,9 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     setAcceptorButton.setBackground(mainWindow.originalButtonColor);
                     setAcceptorButton.setOpaque(false);
                     setAcceptorButton.setBorderPainted(true);
+                    copyRoiButton.setBackground(mainWindow.originalButtonColor);
+                    copyRoiButton.setOpaque(false);
+                    copyRoiButton.setBorderPainted(true);
                     subtractDonorButton.setBackground(mainWindow.originalButtonColor);
                     subtractDonorButton.setOpaque(false);
                     subtractDonorButton.setBorderPainted(true);
@@ -291,6 +300,30 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                     setAcceptorButton.setBackground(mainWindow.greenColor);
                     setAcceptorButton.setOpaque(true);
                     setAcceptorButton.setBorderPainted(false);
+                    break;
+                case "copyS1S3Roi":
+                    if (donorImg == null) {
+                        mainWindow.logError("No image is set as donor channel. (S1/S3 calc.)");
+                        return;
+                    }
+                    if (donorImg.getRoi() != null) {
+                        if (transferImg != null) {
+                            transferImg.setRoi(donorImg.getRoi());
+                        }
+                        if (acceptorImg != null) {
+                            acceptorImg.setRoi(donorImg.getRoi());
+                        }
+                        copyRoiButton.setBackground(mainWindow.greenColor);
+                        copyRoiButton.setOpaque(true);
+                        copyRoiButton.setBorderPainted(false);
+                    } else {
+                        if (transferImg != null) {
+                            transferImg.killRoi();
+                        }
+                        if (acceptorImg != null) {
+                            acceptorImg.killRoi();
+                        }
+                    }
                     break;
                 case "subtractS1S3Donor": {
                     if (donorImg == null) {
