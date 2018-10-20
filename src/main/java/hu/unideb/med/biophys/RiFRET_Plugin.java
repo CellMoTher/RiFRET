@@ -2061,13 +2061,10 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         WindowManager.putBehind();
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "split"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setAcceptorInAImage"));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "lutSpectrum"));
         WindowManager.putBehind();
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInAImage"));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "lutSpectrum"));
         WindowManager.putBehind();
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInDImage"));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "lutSpectrum"));
         donorInDImage.setRoi(new Roi(0, 0, donorInDImage.getWidth() / 6, donorInDImage.getHeight() / 6));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "copyRoi"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "subtractDonorInDImage"));
