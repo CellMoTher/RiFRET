@@ -1626,7 +1626,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         setDonorInAImageButton.setEnabled(true);
                         setAcceptorInAImageButton.setEnabled(true);
                     }
-                    logScrollPane.setPreferredSize(new Dimension(10, 10));
                     break;
                 case "calculateS1S3Button":
                     if (s1S3Dialog != null) {
@@ -1963,7 +1962,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         }
                         nextButton.setVisible(true);
                         useLsmImages.setSelected(true);
-                        logScrollPane.setPreferredSize(new Dimension(10, 10));
                         automaticallyProcessedFiles = chooser.getSelectedFile().listFiles();
                         processFile(0);
                     }
@@ -2047,7 +2045,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         if (currentFile >= automaticallyProcessedFiles.length) {
             log("Processing files has been finished.");
             nextButton.setVisible(false);
-            logScrollPane.setPreferredSize(new Dimension(10, 10));
             IJ.selectWindow("Results");
             currentlyProcessedFile = 0;
             automaticallyProcessedFiles = null;
