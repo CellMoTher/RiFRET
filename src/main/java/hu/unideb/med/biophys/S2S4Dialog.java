@@ -166,7 +166,7 @@ public class S2S4Dialog extends JDialog implements ActionListener {
         panel.add(radioPanel, gc);
         gc.gridx = 0;
         gc.gridy = 13;
-        showSImagesCB = new JCheckBox("show S2 and S4 images (for manual calc.)");
+        showSImagesCB = new JCheckBox("Show S2 and S4 images (for manual calc.)");
         panel.add(showSImagesCB, gc);
         gc.gridwidth = 1;
         gc.gridx = 0;

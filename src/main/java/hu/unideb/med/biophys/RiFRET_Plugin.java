@@ -371,7 +371,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridx = 0;
         gc.gridy = 6;
         gc.fill = GridBagConstraints.NONE;
-        useLsmImages = new JCheckBox("use LSM", false);
+        useLsmImages = new JCheckBox("Use LSM", false);
         useLsmImages.setActionCommand("useLsmImages");
         useLsmImages.addActionListener(this);
         useLsmImages.setToolTipText("<html>If this checkbox is checked, the LSM image containing donor, transfer and<BR>acceptor channel images (in this order) are set automatically after opening.<BR>Every previously opened image window will be closed. The results window<BR>can be left opened.</html>");
@@ -638,7 +638,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         container.add(thresholdAcceptorInAImageButton, gc);
         gc.gridx = 0;
         gc.gridy = 22;
-        JLabel thInfo = new JLabel("Threshold setting: set threshold, press \"Apply\", select \"Set bg pixels to NaN\", press \"Ok\" (and then \"No\" in case of stacks)");
+        JLabel thInfo = new JLabel("Threshold setting: set threshold, click Apply, then click Set to NaN");
         thInfo.setFont(new Font("Helvetica", Font.PLAIN, 10));
         container.add(thInfo, gc);
 
@@ -657,7 +657,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.insets = new Insets(2, 2, 2, 2);
         gc.fill = GridBagConstraints.NONE;
         createFretImgPanel.add(new JLabel("Step 5a: create FRET image   "));
-        autoThresholdingCB = new JCheckBox("thresholding with min: ", true);
+        autoThresholdingCB = new JCheckBox("Thresholding with min: ", true);
         autoThresholdingCB.setToolTipText("<html>If this checkbox is checked, the FRET image will be thresholded<br>with the given min and max values to exclude pixels with extreme<br>FRET efficiencies.</html>");
         autoThresholdingCB.setSelected(true);
         createFretImgPanel.add(autoThresholdingCB);
