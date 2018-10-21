@@ -43,7 +43,7 @@ import javax.swing.JPanel;
  */
 public class ApplyMaskRiDialog extends JDialog implements ActionListener {
 
-    private RiFRET_Plugin mainWindow;
+    private final RiFRET_Plugin mainWindow;
     private ImagePlus toMaskImg, maskImg;
     private JPanel panel;
     private JButton setToMaskImgButton, setMaskImgButton, createImagesButton;

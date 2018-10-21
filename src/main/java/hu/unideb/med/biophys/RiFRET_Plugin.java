@@ -86,12 +86,12 @@ import javax.swing.text.StyleContext;
 
 public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListener {
 
-    private float version = 1.83F;
-    private String lastModified = "24 May 2010";
-    private String imageJVersion = "1.42k";
-    private String javaVersion = "1.6.0_05";
-    private int windowWidth = 620;
-    private int windowHeight = 800;
+    private final float version = 1.83F;
+    private final String lastModified = "24 May 2010";
+    private final String imageJVersion = "1.42k";
+    private final String javaVersion = "1.6.0_05";
+    private final int windowWidth = 620;
+    private final int windowHeight = 800;
     private ImagePlus donorInDImage, donorInAImage, acceptorInAImage, transferImage = null;
     private ImageStack donorInDImageSave = null, donorInAImageSave = null, acceptorInAImageSave = null;
     private ResultsTable resultsTable;
@@ -125,7 +125,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     public JButton calculateS1S3Button, calculateS2S4Button, calculateAlphaButton;
     private JTextPane log;
     private JScrollPane logScrollPane;
-    private SimpleDateFormat format;
+    private final SimpleDateFormat format;
     private File[] automaticallyProcessedFiles = null;
     private int currentlyProcessedFile = 0;
     private String currentlyProcessedFileName = null;

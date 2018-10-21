@@ -40,7 +40,7 @@ import javax.swing.JPanel;
  */
 public class ShiftDialogRi extends JDialog implements ActionListener {
 
-    private RiFRET_Plugin mainWindow;
+    private final RiFRET_Plugin mainWindow;
     JPanel panel;
     JButton leftButton, rightButton, upButton, downButton;
     JButton cancelButton = new JButton("Close");

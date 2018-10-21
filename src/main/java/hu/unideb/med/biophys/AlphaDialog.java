@@ -47,7 +47,7 @@ import javax.swing.JTextField;
  */
 public class AlphaDialog extends JDialog implements ActionListener {
 
-    private RiFRET_Plugin mainWindow;
+    private final RiFRET_Plugin mainWindow;
     private ImagePlus donorBeforeImg, donorAfterImg;
     private JPanel panel;
     private JCheckBox calculateRatioEps;

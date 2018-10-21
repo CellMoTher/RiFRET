@@ -46,7 +46,7 @@ import javax.swing.JPanel;
  */
 public class S2S4Dialog extends JDialog implements ActionListener {
 
-    private RiFRET_Plugin mainWindow;
+    private final RiFRET_Plugin mainWindow;
     private ImagePlus donorImg, transferImg, acceptorImg;
     private JPanel panel;
     private JButton setDonorButton, setTransferButton, setAcceptorButton;

@@ -34,7 +34,7 @@ import javax.swing.JScrollPane;
  */
 public class RiHelpWindow extends JFrame {
 
-    private RiFRET_Plugin mainWindow;
+    private final RiFRET_Plugin mainWindow;
     private JPanel panel;
 
     public RiHelpWindow(RiFRET_Plugin mainWindow) {
