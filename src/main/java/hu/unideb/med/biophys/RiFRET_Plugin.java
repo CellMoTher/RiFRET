@@ -119,7 +119,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     public JTextField autoflDInDField, autoflAInDField, autoflAInAField;
     private JTextField radiusFieldDD, radiusFieldDA, radiusFieldAA;
     public JTextField autoThresholdMin, autoThresholdMax;
-    private JButton createButton, measureButton, nextButton, closeImagesButton;
+    private JButton createButton, saveButton, measureButton, nextButton, closeImagesButton;
     private JCheckBox useLsmImages, autoThresholdingCB;
     private JTextField s1Field, s2Field, s3Field, s4Field, alphaField;
     public JButton calculateS1S3Button, calculateS2S4Button, calculateAlphaButton;
@@ -656,7 +656,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridy = 24;
         gc.insets = new Insets(2, 2, 2, 2);
         gc.fill = GridBagConstraints.NONE;
-        createFretImgPanel.add(new JLabel("Step 5: create FRET image   "));
+        createFretImgPanel.add(new JLabel("Step 5a: create FRET image   "));
         autoThresholdingCB = new JCheckBox("thresholding with min: ", true);
         autoThresholdingCB.setToolTipText("<html>If this checkbox is checked, the FRET image will be thresholded<br>with the given min and max values to exclude pixels with extreme<br>FRET efficiencies.</html>");
         autoThresholdingCB.setSelected(true);
@@ -676,9 +676,26 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridy = 24;
         container.add(createButton, gc);
 
-        gc.gridwidth = GridBagConstraints.REMAINDER;
+        JPanel saveFretImgPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        gc.gridwidth = 10;
         gc.gridx = 0;
         gc.gridy = 25;
+        gc.insets = new Insets(2, 2, 2, 2);
+        gc.fill = GridBagConstraints.NONE;
+        saveFretImgPanel.add(new JLabel("Step 5b: save FRET image       "));
+        container.add(saveFretImgPanel, gc);
+        saveButton = new JButton("Save");
+        saveButton.addActionListener(this);
+        saveButton.setActionCommand("saveFretImage");
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 10;
+        gc.gridy = 25;
+        container.add(saveButton, gc);
+
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 0;
+        gc.gridy = 26;
         JPanel line7 = new JPanel();
         line7.setPreferredSize(new Dimension(windowWidth - 35, 1));
         line7.setBackground(Color.lightGray);
@@ -686,7 +703,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
         gc.gridwidth = 7;
         gc.gridx = 0;
-        gc.gridy = 26;
+        gc.gridy = 27;
         container.add(new JLabel("Step 6: select ROIs and make measurements"), gc);
         gc.gridx = 9;
         gc.gridwidth = 1;
@@ -703,7 +720,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         measureButton.addActionListener(this);
         measureButton.setActionCommand("measureFretImage");
         gc.gridx = 10;
-        gc.gridy = 26;
+        gc.gridy = 27;
         gc.gridwidth = 6;
         container.add(measureButton, gc);
         nextButton = new JButton("Next");
@@ -711,7 +728,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         nextButton.addActionListener(this);
         nextButton.setActionCommand("nextImage");
         gc.gridx = 16;
-        gc.gridy = 26;
+        gc.gridy = 27;
         gc.gridwidth = GridBagConstraints.REMAINDER;
         container.add(nextButton, gc);
         nextButton.setVisible(false);
@@ -1879,6 +1896,18 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     donorInAImage.changes = false;
                     acceptorInAImage.changes = false;
                     break;
+                case "saveFretImage": {
+                    if (transferImage == null) {
+                        logError("Transfer (FRET) image is required.");
+                        return;
+                    }
+                    FileSaver fs = new FileSaver(transferImage);
+                    if (fs.saveAsTiff()) {
+                        log("Transfer (FRET) image saved as Tiff.");
+                    }
+                    transferImage.updateAndDraw();
+                    break;
+                }
                 case "measureFretImage": {
                     if (transferImage == null) {
                         logError("Transfer (FRET) image is required.");
