@@ -61,7 +61,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
     private JLabel alphaResultLabel;
 
     public AlphaDialog(RiFRET_Plugin mainWindow) {
-        setTitle("Alpha factor calculation");
+        setTitle("Alpha Factor Calculation");
         this.mainWindow = mainWindow;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);

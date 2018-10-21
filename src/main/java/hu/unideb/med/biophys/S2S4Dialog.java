@@ -57,7 +57,7 @@ public class S2S4Dialog extends JDialog implements ActionListener {
     private JLabel s2ResultLabel, s4ResultLabel;
 
     public S2S4Dialog(RiFRET_Plugin mainWindow) {
-        setTitle("S2/S4 factor calculation");
+        setTitle("S2/S4 Factor Calculation");
         this.mainWindow = mainWindow;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);

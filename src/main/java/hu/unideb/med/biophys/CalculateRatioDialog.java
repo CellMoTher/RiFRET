@@ -51,7 +51,7 @@ public class CalculateRatioDialog extends JDialog implements ActionListener {
     private JCheckBox useMainWindowImages;
 
     public CalculateRatioDialog(RiFRET_Plugin mainWindow) {
-        setTitle("Calculate ratio of two images");
+        setTitle("Calculate Ratio of Two Images");
         this.mainWindow = mainWindow;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);

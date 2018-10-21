@@ -52,7 +52,7 @@ public class AutoflDialog extends JDialog implements ActionListener {
     private JButton calculateDonorAfButton, calculateTransferAfButton, calculateAcceptorAfButton;
 
     public AutoflDialog(RiFRET_Plugin mainWindow) {
-        setTitle("Autofluorescence calculation");
+        setTitle("Autofluorescence Calculation");
         this.mainWindow = mainWindow;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);

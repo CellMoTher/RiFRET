@@ -49,7 +49,7 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener {
     private JButton setToMaskImgButton, setMaskImgButton, createImagesButton;
 
     public ApplyMaskRiDialog(RiFRET_Plugin mainWindow) {
-        setTitle("Apply mask to an image");
+        setTitle("Apply Mask to an Image");
         this.mainWindow = mainWindow;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);

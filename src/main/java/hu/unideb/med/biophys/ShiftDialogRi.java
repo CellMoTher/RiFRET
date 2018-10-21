@@ -46,7 +46,7 @@ public class ShiftDialogRi extends JDialog implements ActionListener {
     JButton cancelButton = new JButton("Close");
 
     public ShiftDialogRi(RiFRET_Plugin mainWindow) {
-        setTitle("32bit image shifter");
+        setTitle("32-bit Image Shifter");
         this.mainWindow = mainWindow;
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setModal(false);

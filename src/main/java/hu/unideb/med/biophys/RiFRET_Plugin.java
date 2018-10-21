@@ -135,7 +135,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
     public RiFRET_Plugin() {
         super();
-        setTitle("RiFRET v" + version + " - intensity-based ratiometric FRET imaging");
+        setTitle("RiFRET v" + version + " - Intensity-Based Ratiometric FRET Imaging");
         IJ.versionLessThan(imageJVersion);
         Locale.setDefault(Locale.ENGLISH);
         ToolTipManager.sharedInstance().setDismissDelay(10000);

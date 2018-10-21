@@ -57,7 +57,7 @@ public class S1S3Dialog extends JDialog implements ActionListener {
     private JLabel s1ResultLabel, s3ResultLabel;
 
     public S1S3Dialog(RiFRET_Plugin mainWindow) {
-        setTitle("S1/S3 factor calculation");
+        setTitle("S1/S3 Factor Calculation");
         this.mainWindow = mainWindow;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);
