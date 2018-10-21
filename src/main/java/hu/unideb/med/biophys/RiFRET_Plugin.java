@@ -935,7 +935,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         }
                     }
                     WindowManager.getCurrentImage().updateAndDraw();
-                    log("Gaussian blurred the current image with radius " + Float.parseFloat(radiusString) + ".");
+                    log("Gaussian blurred the current image with radius " + Float.parseFloat(radiusString) + " px.");
                     break;
                 }
                 case "lutFire":
@@ -1582,7 +1582,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             smoothDonorInDImageButton.setBackground(greenColor);
                             smoothDonorInDImageButton.setOpaque(true);
                             smoothDonorInDImageButton.setBorderPainted(false);
-                            log("Gaussian blurred donor channel.");
+                            log("Gaussian blurred donor channel with radius " + Double.parseDouble(radiusFieldDD.getText().trim()) + " px.");
                         }
                     }
                     break;
@@ -1611,7 +1611,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             smoothDonorInAImageButton.setBackground(greenColor);
                             smoothDonorInAImageButton.setOpaque(true);
                             smoothDonorInAImageButton.setBorderPainted(false);
-                            log("Gaussian blurred transfer channel.");
+                            log("Gaussian blurred transfer channel with radius " + Double.parseDouble(radiusFieldDA.getText().trim()) + " px.");
                         }
                     }
                     break;
@@ -1640,7 +1640,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             smoothAcceptorInAImageButton.setBackground(greenColor);
                             smoothAcceptorInAImageButton.setOpaque(true);
                             smoothAcceptorInAImageButton.setBorderPainted(false);
-                            log("Gaussian blurred acceptor channel.");
+                            log("Gaussian blurred acceptor channel with radius " + Double.parseDouble(radiusFieldAA.getText().trim()) + " px.");
                         }
                     }
                     break;
