@@ -1839,8 +1839,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             resultsTable.incrementCounter();
                             int widthTi = transferImage.getWidth();
                             int heightTi = transferImage.getHeight();
+                            int currentRow = resultsTable.getCounter();
                             if (currentlyProcessedFileName != null) {
-                                resultsTable.addLabel("File", currentlyProcessedFileName);
+                                resultsTable.setValue("File", currentRow, currentlyProcessedFileName);
                             }
                             if (transferImage.getRoi() != null) {
                                 Roi roi = transferImage.getRoi();
@@ -1917,8 +1918,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     int currentSlice = transferImage.getCurrentSlice();
                     int width = transferImage.getWidth();
                     int height = transferImage.getHeight();
+                    int currentRow = resultsTable.getCounter();
                     if (currentlyProcessedFileName != null) {
-                        resultsTable.addLabel("File", currentlyProcessedFileName);
+                        resultsTable.setValue("File", currentRow, currentlyProcessedFileName);
                     }
                     ImageProcessor trProc = transferImage.getStack().getProcessor(currentSlice);
                     trProc.setRoi(transferImage.getRoi());
