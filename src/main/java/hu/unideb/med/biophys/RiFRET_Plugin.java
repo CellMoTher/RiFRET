@@ -923,7 +923,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logError("No open image.");
                         return;
                     }
-                    String radiusString = JOptionPane.showInputDialog(this, "Enter radius (in pixels) for Gaussian blur", "Gaussian blur", JOptionPane.QUESTION_MESSAGE);
+                    String radiusString = JOptionPane.showInputDialog(this, "Enter radius (in pixels) for Gaussian blur", "Gaussian Blur...", JOptionPane.QUESTION_MESSAGE);
                     if (radiusString == null || radiusString.trim().isEmpty()) {
                         return;
                     }
@@ -991,7 +991,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                 case "saveMessages": {
                     JFileChooser jfc = new JFileChooser(currentDirectory);
                     jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    jfc.setDialogTitle("Save messages...");
+                    jfc.setDialogTitle("Save Messages...");
                     jfc.showSaveDialog(this);
                     if (jfc.getSelectedFile() == null) {
                         return;
@@ -1021,7 +1021,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                 case "openLsmImage": {
                     JFileChooser jfc = new JFileChooser(currentDirectory);
                     jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    jfc.setDialogTitle("Open LSM image...");
+                    jfc.setDialogTitle("Open LSM Image...");
                     jfc.showOpenDialog(this);
                     if (jfc.getSelectedFile() == null) {
                         return;
@@ -1987,7 +1987,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             + "Every previously opened image and result window will be closed when you\n"
                             + "press \"Ok\".\n\n"
                             + "Press \"Ok\" to select the directory. To continue with the next "
-                            + "image, do\nnot close any windows, just press the \"Next\" button.\n", "Semi-automatic processing of images", JOptionPane.OK_CANCEL_OPTION);
+                            + "image, do\nnot close any windows, just press the \"Next\" button.\n", "Semi-Automatic Processing of Images", JOptionPane.OK_CANCEL_OPTION);
                     if (choice == JOptionPane.YES_OPTION) {
                         currentlyProcessedFile = 0;
                         automaticallyProcessedFiles = null;
@@ -1995,7 +1995,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         WindowManager.closeAllWindows();
                         JFileChooser chooser = new JFileChooser(currentDirectory);
                         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                        chooser.setDialogTitle("Select directory");
+                        chooser.setDialogTitle("Select Directory");
                         chooser.setAcceptAllFileFilterUsed(false);
                         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                             log("Processing files in directory: " + chooser.getSelectedFile());
