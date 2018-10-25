@@ -2109,6 +2109,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInAImage"));
         WindowManager.putBehind();
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInDImage"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothDD"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothDA"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothAA"));
         donorInDImage.setRoi(new Roi(0, 0, donorInDImage.getWidth() / 6, donorInDImage.getHeight() / 6));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "copyRoi"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "subtractDonorInDImage"));
@@ -2125,9 +2128,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         donorInDImage.killRoi();
         donorInAImage.killRoi();
         acceptorInAImage.killRoi();
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothDD"));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothDA"));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothAA"));
     }
 
     void registerToDonorChannel() {
