@@ -81,14 +81,14 @@ public class RiHelpWindow extends JFrame {
         JLabel label6 = new JLabel("<html>Image files can be opened with the \"Open\" button, or with the \"Open image\" item in the \"File\"<br>menu. After opening, images can be set using the \"Set image\" buttons. If multichannel images are<br>used in stacked image files, the opened image has to be split (item available from the \"Image\"<br>menu) before setting. If the \"Use LSM\" checkbox is checked, the LSM image files (up to AIM v. 4.x,<br>files with *.lsm extension) containing donor, transfer and acceptor channels (in this order) are split<BR>and set automatically after opening with the \"Open & Set LSM\" button. Every previously opened<BR>image window will be closed after pressing this button.<br>If it is necessary, the images can be registered by selecting the \"Register to donor channel\" item<br>in the \"Image\" menu.<br></html>");
         panel.add(label6, gc);
 
-        JLabel label7 = new JLabel("<html><b><br><u>Step 2: Subtraction of background of images</u></b></html>");
+        JLabel label7 = new JLabel("<html><b><br><u>Step 2: Gaussian blurring of images</u></b></html>");
         panel.add(label7, gc);
-        JLabel label8 = new JLabel("<html>To subtract background (the average of pixels in a selected ROI), the \"Subtract\" button has to<br>be pressed for each relevant image. The \"Copy\" button copies the ROI of the first image to the<br>others. This should be done after marking the ROI and before applying the subtraction. To avoid<br>incidental reusing of the ROI in further operations (such as Gaussian blurring), the ROI is<br>automatically deleted after applying the background correction.<br>If an autofluorescence value is given in the corresponding textfield, it is subtracted along with<br>the background.</html>");
+        JLabel label8 = new JLabel("<html>Images can be blurred with the given radius by pressing the corresponding \"Blur\" button.<br>Blurring (together with thresholding) can be reverted using the \"Reset\" buttons in Step 4.</html>");
         panel.add(label8, gc);
 
-        JLabel label9 = new JLabel("<html><b><br><u>Step 3: Gaussian blurring of images</u></b></html>");
+        JLabel label9 = new JLabel("<html><b><br><u>Step 3: Subtraction of background of images</u></b></html>");
         panel.add(label9, gc);
-        JLabel label10 = new JLabel("<html>Images can be blurred with the given radius by pressing the corresponding \"Blur\" button.<br>Blurring (together with thresholding) can be reverted using the \"Reset\" buttons in Step 4.</html>");
+        JLabel label10 = new JLabel("<html>To subtract background (the average of pixels in a selected ROI), the \"Subtract\" button has to<br>be pressed for each relevant image. The \"Copy\" button copies the ROI of the first image to the<br>others. This should be done after marking the ROI and before applying the subtraction. To avoid<br>incidental reusing of the ROI in further operations, the ROI is automatically deleted after applying<br>the background correction.<br>If an autofluorescence value is given in the corresponding textfield, it is subtracted along with<br>the background.</html>");
         panel.add(label10, gc);
 
         JLabel label11 = new JLabel("<html><b><br><u>Step 4: Setting thresholds for the images</u></b></html>");
