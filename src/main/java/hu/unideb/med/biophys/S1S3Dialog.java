@@ -102,7 +102,7 @@ public class S1S3Dialog extends JDialog implements ActionListener {
         panel.add(setAcceptorButton, gc);
         gc.gridx = 0;
         gc.gridy = 4;
-        copyRoiButton = new JButton("(Optional): Copy ROI");
+        copyRoiButton = new JButton("(Optional): Copy background ROI");
         copyRoiButton.addActionListener(this);
         copyRoiButton.setActionCommand("copyS1S3Roi");
         panel.add(copyRoiButton, gc);

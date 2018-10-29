@@ -501,7 +501,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 14;
-        copyRoiButton = new JButton("Copy");
+        copyRoiButton = new JButton("Copy ROI");
         copyRoiButton.setToolTipText("Sets the same ROI for the two other images.");
         copyRoiButton.setMargin(new Insets(0, 0, 0, 0));
         copyRoiButton.setFont(new Font("Helvetica", Font.BOLD, 10));
