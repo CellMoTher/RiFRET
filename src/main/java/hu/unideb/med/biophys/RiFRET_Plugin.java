@@ -135,7 +135,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
     public RiFRET_Plugin() {
         super();
-        setTitle("RiFRET v" + version + " - Intensity-Based Ratiometric FRET Imaging");
+        setTitle("RiFRET v" + version + " - Intensity-Based Three-Filter Set (Ratiometric) FRET");
         IJ.versionLessThan(imageJVersion);
         Locale.setDefault(Locale.ENGLISH);
         ToolTipManager.sharedInstance().setDismissDelay(10000);
@@ -2071,7 +2071,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     break;
                 case "about":
                     JOptionPane optionPane = new JOptionPane();
-                    optionPane.setMessage("RiFRET - an ImageJ plugin for intensity-based ratiometric FRET imaging\n"
+                    optionPane.setMessage("RiFRET - an ImageJ plugin for intensity-based three-filter set (ratiometric) FRET\n"
                             + "Homepage: http://biophys.med.unideb.hu/rifret/\n"
                             + "Written by: János Roszik (janosr@med.unideb.hu), Duarte Lisboa (duarte@med.unideb.hu),\n"
                             + "János Szöllõsi (szollo@med.unideb.hu) and György Vereb (vereb@med.unideb.hu)\n"
