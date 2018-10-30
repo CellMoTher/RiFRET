@@ -120,7 +120,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JTextField radiusFieldDD, radiusFieldDA, radiusFieldAA;
     public JTextField autoThresholdMin, autoThresholdMax;
     private JButton createButton, saveButton, measureButton, nextButton, closeImagesButton;
-    private JCheckBox useLsmImages, autoThresholdingCB;
+    private JCheckBox useImageStacks, autoThresholdingCB;
     private JTextField s1Field, s2Field, s3Field, s4Field, alphaField;
     public JButton calculateS1S3Button, calculateS2S4Button, calculateAlphaButton;
     private JTextPane log;
@@ -371,12 +371,12 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridx = 0;
         gc.gridy = 6;
         gc.fill = GridBagConstraints.NONE;
-        useLsmImages = new JCheckBox("Use LSM", false);
-        useLsmImages.setActionCommand("useLsmImages");
-        useLsmImages.addActionListener(this);
-        useLsmImages.setToolTipText("<html>If this checkbox is checked, the LSM image containing donor, transfer and<BR>acceptor channel images (in this order) are set automatically after opening.<BR>Every previously opened image window will be closed. The results window<BR>can be left opened.</html>");
+        useImageStacks = new JCheckBox("Use stack", false);
+        useImageStacks.setActionCommand("useImageStacks");
+        useImageStacks.addActionListener(this);
+        useImageStacks.setToolTipText("<html>If this checkbox is checked, the image stack containing donor, transfer and<BR>acceptor channel images (in this order) are set automatically after opening.<BR>Every previously opened image window will be closed. The results window<BR>can be left opened.</html>");
         donorInDImageBleachingPanel.add(new JLabel("Step 1a: open and set the donor channel image  "));
-        donorInDImageBleachingPanel.add(useLsmImages);
+        donorInDImageBleachingPanel.add(useImageStacks);
         setDonorInDImageButton = new JButton("Set image");
         setDonorInDImageButton.setMargin(new Insets(2, 2, 2, 2));
         setDonorInDImageButton.addActionListener(this);
@@ -1021,10 +1021,10 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                 case "clearMessages":
                     log.setText("");
                     break;
-                case "openLsmImage": {
+                case "openImageStack": {
                     JFileChooser jfc = new JFileChooser(currentDirectory);
                     jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    jfc.setDialogTitle("Open LSM Image...");
+                    jfc.setDialogTitle("Open Image Stack...");
                     jfc.showOpenDialog(this);
                     if (jfc.getSelectedFile() == null) {
                         return;
@@ -1053,7 +1053,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         WindowManager.putBehind();
                         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInDImage"));
                     } catch (Exception ex) {
-                        logError("Could not open and set the selected LSM image.");
+                        logError("Could not open and set the selected image stack.");
                         logException(ex.getMessage(), ex);
                     }
                     break;
@@ -1647,10 +1647,10 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         }
                     }
                     break;
-                case "useLsmImages":
-                    if (useLsmImages.isSelected()) {
-                        setDonorInDImageButton.setText("Open & Set LSM");
-                        setDonorInDImageButton.setActionCommand("openLsmImage");
+                case "useImageStacks":
+                    if (useImageStacks.isSelected()) {
+                        setDonorInDImageButton.setText("Open & set stack");
+                        setDonorInDImageButton.setActionCommand("openImageStack");
                         setDonorInAImageButton.setEnabled(false);
                         setAcceptorInAImageButton.setEnabled(false);
                     } else {
@@ -2008,7 +2008,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             return;
                         }
                         nextButton.setVisible(true);
-                        useLsmImages.setSelected(true);
+                        useImageStacks.setSelected(true);
                         automaticallyProcessedFiles = chooser.getSelectedFile().listFiles();
                         processFile(0);
                     }
