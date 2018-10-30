@@ -1979,8 +1979,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                 }
                 case "semiAutomaticProcessing":
                     int choice = JOptionPane.showConfirmDialog(this, "Semi-automatic processing of images\n\nOpens and processes FRET images in a given directory. It works with\n"
-                            + "Zeiss LSM images (tested with LSM 510 Version 4.0), which contain three\n"
-                            + "channels:\n"
+                            + "Zeiss CZI and LSM images (tested with LSM 880/ZEN 2.1 SP1 (black) Version 12.0.0.0),\n"
+                            + "which contain three channels:\n"
                             + "1. donor channel\n"
                             + "2. transfer channel\n"
                             + "3. acceptor channel\n\n"
@@ -2098,7 +2098,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
             currentlyProcessedFileName = null;
             return;
         }
-        if (!automaticallyProcessedFiles[currentFile].isFile() || !(automaticallyProcessedFiles[currentFile].getName().endsWith(".lsm") || automaticallyProcessedFiles[currentFile].getName().endsWith(".LSM"))) {
+        if (!automaticallyProcessedFiles[currentFile].isFile() || !(automaticallyProcessedFiles[currentFile].getName().endsWith(".lsm") || automaticallyProcessedFiles[currentFile].getName().endsWith(".LSM") || automaticallyProcessedFiles[currentFile].getName().endsWith(".czi") || automaticallyProcessedFiles[currentFile].getName().endsWith(".CZI"))) {
             processFile(++currentlyProcessedFile);
             return;
         }
