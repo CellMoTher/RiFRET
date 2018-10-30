@@ -39,6 +39,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -52,6 +53,7 @@ public class S2S4Dialog extends JDialog implements ActionListener {
     private JButton setDonorButton, setTransferButton, setAcceptorButton;
     private JButton setDonorThresholdButton, setTransferThresholdButton, setAcceptorThresholdButton, calculateButton, setButton;
     private JButton subtractDonorButton, subtractTransferButton, subtractAcceptorButton, copyRoiButton;
+    private JTextField autoflDInDField, autoflAInDField, autoflAInAField;
     private JButton resetButton;
     private JCheckBox showSImagesCB;
     private JLabel s2ResultLabel, s4ResultLabel;
@@ -106,44 +108,75 @@ public class S2S4Dialog extends JDialog implements ActionListener {
         copyRoiButton.addActionListener(this);
         copyRoiButton.setActionCommand("copyS2S4Roi");
         panel.add(copyRoiButton, gc);
+        gc.gridwidth = 2;
         gc.gridx = 0;
         gc.gridy = 5;
-        subtractDonorButton = new JButton("Subtract background of donor channel");
+        JLabel subtractionLabel = new JLabel("Subtract avg. instrument bg. (and AF):");
+        panel.add(subtractionLabel, gc);
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 2;
+        gc.gridy = 5;
+        JLabel autofluorescenceLabel = new JLabel("AF:");
+        panel.add(autofluorescenceLabel, gc);
+        gc.gridwidth = 2;
+        gc.gridx = 0;
+        gc.gridy = 6;
+        subtractDonorButton = new JButton("Subtract from donor channel");
         subtractDonorButton.addActionListener(this);
         subtractDonorButton.setActionCommand("subtractS2S4Donor");
         panel.add(subtractDonorButton, gc);
-        gc.gridx = 0;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 2;
         gc.gridy = 6;
-        subtractTransferButton = new JButton("Subtract background of transfer channel");
+        autoflDInDField = new JTextField("0", 5);
+        autoflDInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
+        panel.add(autoflDInDField, gc);
+        gc.gridwidth = 2;
+        gc.gridx = 0;
+        gc.gridy = 7;
+        subtractTransferButton = new JButton("Subtract from transfer channel");
         subtractTransferButton.addActionListener(this);
         subtractTransferButton.setActionCommand("subtractS2S4Transfer");
         panel.add(subtractTransferButton, gc);
-        gc.gridx = 0;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 2;
         gc.gridy = 7;
-        subtractAcceptorButton = new JButton("Subtract background of acceptor channel");
+        autoflAInDField = new JTextField("0", 5);
+        autoflAInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
+        panel.add(autoflAInDField, gc);
+        gc.gridwidth = 2;
+        gc.gridx = 0;
+        gc.gridy = 8;
+        subtractAcceptorButton = new JButton("Subtract from acceptor channel");
         subtractAcceptorButton.addActionListener(this);
         subtractAcceptorButton.setActionCommand("subtractS2S4Acceptor");
         panel.add(subtractAcceptorButton, gc);
-        gc.gridx = 0;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 2;
         gc.gridy = 8;
+        autoflAInAField = new JTextField("0", 5);
+        autoflAInAField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
+        panel.add(autoflAInAField, gc);
+        gc.gridx = 0;
+        gc.gridy = 9;
         setDonorThresholdButton = new JButton("Set threshold for donor channel");
         setDonorThresholdButton.addActionListener(this);
         setDonorThresholdButton.setActionCommand("setS2S4DonorThreshold");
         panel.add(setDonorThresholdButton, gc);
         gc.gridx = 0;
-        gc.gridy = 9;
+        gc.gridy = 10;
         setTransferThresholdButton = new JButton("Set threshold for transfer channel");
         setTransferThresholdButton.addActionListener(this);
         setTransferThresholdButton.setActionCommand("setS2S4TransferThreshold");
         panel.add(setTransferThresholdButton, gc);
         gc.gridx = 0;
-        gc.gridy = 10;
+        gc.gridy = 11;
         setAcceptorThresholdButton = new JButton("Set threshold for acceptor channel");
         setAcceptorThresholdButton.addActionListener(this);
         setAcceptorThresholdButton.setActionCommand("setS2S4AcceptorThreshold");
         panel.add(setAcceptorThresholdButton, gc);
         gc.gridx = 0;
-        gc.gridy = 11;
+        gc.gridy = 12;
         JPanel radioPanel = new JPanel();
         GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gcr = new GridBagConstraints();
@@ -165,24 +198,24 @@ public class S2S4Dialog extends JDialog implements ActionListener {
         radioPanel.add(s4ResultLabel, gcr);
         panel.add(radioPanel, gc);
         gc.gridx = 0;
-        gc.gridy = 13;
+        gc.gridy = 14;
         showSImagesCB = new JCheckBox("Show S2 and S4 images (for manual calc.)");
         panel.add(showSImagesCB, gc);
         gc.gridwidth = 1;
         gc.gridx = 0;
-        gc.gridy = 14;
+        gc.gridy = 15;
         calculateButton = new JButton("Calculate");
         calculateButton.addActionListener(this);
         calculateButton.setActionCommand("calculate");
         panel.add(calculateButton, gc);
         gc.gridx = 1;
-        gc.gridy = 14;
+        gc.gridy = 15;
         setButton = new JButton("Set S2 and S4");
         setButton.addActionListener(this);
         setButton.setActionCommand("setfactor");
         panel.add(setButton, gc);
         gc.gridx = 2;
-        gc.gridy = 14;
+        gc.gridy = 15;
         resetButton = new JButton("Reset");
         resetButton.addActionListener(this);
         resetButton.setActionCommand("reset");
@@ -328,115 +361,190 @@ public class S2S4Dialog extends JDialog implements ActionListener {
                 case "subtractS2S4Donor": {
                     if (donorImg == null) {
                         mainWindow.logError("No image is set as donor channel. (S2/S4 calc.)");
-                        return;
-                    } else if (donorImg.getRoi() == null) {
+                    } else if (donorImg.getRoi() == null && autoflDInDField.getText().trim().equals("0")) {
                         mainWindow.logError("No ROI is defined for donor channel. (S2/S4 calc.)");
-                        return;
-                    }
-                    ImageProcessor ipD = donorImg.getProcessor();
-                    int width = donorImg.getWidth();
-                    int height = donorImg.getHeight();
-                    double sum = 0;
-                    int count = 0;
-                    for (int i = 0; i < width; i++) {
-                        for (int j = 0; j < height; j++) {
-                            if (donorImg.getRoi().contains(i, j)) {
-                                sum += ipD.getPixelValue(i, j);
-                                count++;
+                    } else if (donorImg.getRoi() == null && !autoflDInDField.getText().trim().equals("0")) {
+                        float autofl = 0;
+                        if (!autoflDInDField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflDInDField.getText().trim());
+                        }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        ImageProcessor ipD = donorImg.getProcessor();
+                        int width = donorImg.getWidth();
+                        int height = donorImg.getHeight();
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                float value = ipD.getPixelValue(x, y);
+                                value -= autofl;
+                                ipD.putPixelValue(x, y, value);
                             }
                         }
-                    }
-                    float backgroundAvgD = (float) (sum / count);
-                    float value = 0;
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            value = ipD.getPixelValue(x, y);
-                            value = value - backgroundAvgD;
-                            ipD.putPixelValue(x, y, value);
+                        donorImg.updateAndDraw();
+                        mainWindow.log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of donor channel. (S2/S4 calc.)");
+                        subtractDonorButton.setBackground(mainWindow.greenColor);
+                        subtractDonorButton.setOpaque(true);
+                        subtractDonorButton.setBorderPainted(false);
+                    } else {
+                        float autofl = 0;
+                        if (!autoflDInDField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflDInDField.getText().trim());
                         }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        ImageProcessor ipD = donorImg.getProcessor();
+                        int width = donorImg.getWidth();
+                        int height = donorImg.getHeight();
+                        double sum = 0;
+                        int count = 0;
+                        for (int i = 0; i < width; i++) {
+                            for (int j = 0; j < height; j++) {
+                                if (donorImg.getRoi().contains(i, j)) {
+                                    sum += ipD.getPixelValue(i, j);
+                                    count++;
+                                }
+                            }
+                        }
+                        float backgroundAvgD = (float) (sum / count);
+                        backgroundAvgD += autofl;
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                float value = ipD.getPixelValue(x, y);
+                                value -= backgroundAvgD;
+                                ipD.putPixelValue(x, y, value);
+                            }
+                        }
+                        donorImg.updateAndDraw();
+                        donorImg.killRoi();
+                        mainWindow.log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvgD) + ") of donor channel. (S2/S4 calc.)");
+                        subtractDonorButton.setBackground(mainWindow.greenColor);
+                        subtractDonorButton.setOpaque(true);
+                        subtractDonorButton.setBorderPainted(false);
                     }
-                    donorImg.updateAndDraw();
-                    donorImg.killRoi();
-                    mainWindow.log("Subtracted background (" + backgroundAvgD + ") of donor channel. (S2/S4 calc.)");
-                    subtractDonorButton.setBackground(mainWindow.greenColor);
-                    subtractDonorButton.setOpaque(true);
-                    subtractDonorButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractS2S4Transfer": {
                     if (transferImg == null) {
                         mainWindow.logError("No image is set as transfer channel. (S2/S4 calc.)");
-                        return;
-                    } else if (transferImg.getRoi() == null) {
+                    } else if (transferImg.getRoi() == null && autoflAInDField.getText().trim().equals("0")) {
                         mainWindow.logError("No ROI is defined for transfer channel. (S2/S4 calc.)");
-                        return;
-                    }
-                    ImageProcessor ipT = transferImg.getProcessor();
-                    int width = transferImg.getWidth();
-                    int height = transferImg.getHeight();
-                    double sum = 0;
-                    int count = 0;
-                    for (int i = 0; i < width; i++) {
-                        for (int j = 0; j < height; j++) {
-                            if (transferImg.getRoi().contains(i, j)) {
-                                sum += ipT.getPixelValue(i, j);
-                                count++;
+                    } else if (transferImg.getRoi() == null && !autoflAInDField.getText().trim().equals("0")) {
+                        float autofl = 0;
+                        if (!autoflAInDField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAInDField.getText().trim());
+                        }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        ImageProcessor ipT = transferImg.getProcessor();
+                        int width = transferImg.getWidth();
+                        int height = transferImg.getHeight();
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                float value = ipT.getPixelValue(x, y);
+                                value -= autofl;
+                                ipT.putPixelValue(x, y, value);
                             }
                         }
-                    }
-                    float backgroundAvgT = (float) (sum / count);
-                    float value = 0;
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            value = ipT.getPixelValue(x, y);
-                            value = value - backgroundAvgT;
-                            ipT.putPixelValue(x, y, value);
+                        transferImg.updateAndDraw();
+                        mainWindow.log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of transfer channel. (S2/S4 calc.)");
+                        subtractTransferButton.setBackground(mainWindow.greenColor);
+                        subtractTransferButton.setOpaque(true);
+                        subtractTransferButton.setBorderPainted(false);
+                    } else {
+                        float autofl = 0;
+                        if (!autoflAInDField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAInDField.getText().trim());
                         }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        ImageProcessor ipT = transferImg.getProcessor();
+                        int width = transferImg.getWidth();
+                        int height = transferImg.getHeight();
+                        double sum = 0;
+                        int count = 0;
+                        for (int i = 0; i < width; i++) {
+                            for (int j = 0; j < height; j++) {
+                                if (transferImg.getRoi().contains(i, j)) {
+                                    sum += ipT.getPixelValue(i, j);
+                                    count++;
+                                }
+                            }
+                        }
+                        float backgroundAvgT = (float) (sum / count);
+                        backgroundAvgT += autofl;
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                float value = ipT.getPixelValue(x, y);
+                                value -= backgroundAvgT;
+                                ipT.putPixelValue(x, y, value);
+                            }
+                        }
+                        transferImg.updateAndDraw();
+                        transferImg.killRoi();
+                        mainWindow.log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvgT) + ") of transfer channel. (S2/S4 calc.)");
+                        subtractTransferButton.setBackground(mainWindow.greenColor);
+                        subtractTransferButton.setOpaque(true);
+                        subtractTransferButton.setBorderPainted(false);
                     }
-                    transferImg.updateAndDraw();
-                    transferImg.killRoi();
-                    mainWindow.log("Subtracted background (" + backgroundAvgT + ") of transfer channel. (S2/S4 calc.)");
-                    subtractTransferButton.setBackground(mainWindow.greenColor);
-                    subtractTransferButton.setOpaque(true);
-                    subtractTransferButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractS2S4Acceptor": {
                     if (acceptorImg == null) {
                         mainWindow.logError("No image is set as acceptor channel. (S2/S4 calc.)");
-                        return;
-                    } else if (acceptorImg.getRoi() == null) {
+                    } else if (acceptorImg.getRoi() == null && autoflAInAField.getText().trim().equals("0")) {
                         mainWindow.logError("No ROI is defined for acceptor channel. (S2/S4 calc.)");
-                        return;
-                    }
-                    ImageProcessor ipA = acceptorImg.getProcessor();
-                    int width = acceptorImg.getWidth();
-                    int height = acceptorImg.getHeight();
-                    double sum = 0;
-                    int count = 0;
-                    for (int i = 0; i < width; i++) {
-                        for (int j = 0; j < height; j++) {
-                            if (acceptorImg.getRoi().contains(i, j)) {
-                                sum += ipA.getPixelValue(i, j);
-                                count++;
+                    } else if (acceptorImg.getRoi() == null && !autoflAInAField.getText().trim().equals("0")) {
+                        float autofl = 0;
+                        if (!autoflAInAField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAInAField.getText().trim());
+                        }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        ImageProcessor ipA = acceptorImg.getProcessor();
+                        int width = acceptorImg.getWidth();
+                        int height = acceptorImg.getHeight();
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                float value = ipA.getPixelValue(x, y);
+                                value -= autofl;
+                                ipA.putPixelValue(x, y, value);
                             }
                         }
-                    }
-                    float backgroundAvgA = (float) (sum / count);
-                    float value = 0;
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            value = ipA.getPixelValue(x, y);
-                            value = value - backgroundAvgA;
-                            ipA.putPixelValue(x, y, value);
+                        acceptorImg.updateAndDraw();
+                        mainWindow.log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of acceptor channel. (S2/S4 calc.)");
+                        subtractAcceptorButton.setBackground(mainWindow.greenColor);
+                        subtractAcceptorButton.setOpaque(true);
+                        subtractAcceptorButton.setBorderPainted(false);
+                    } else {
+                        float autofl = 0;
+                        if (!autoflAInAField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAInAField.getText().trim());
                         }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        ImageProcessor ipA = acceptorImg.getProcessor();
+                        int width = acceptorImg.getWidth();
+                        int height = acceptorImg.getHeight();
+                        double sum = 0;
+                        int count = 0;
+                        for (int i = 0; i < width; i++) {
+                            for (int j = 0; j < height; j++) {
+                                if (acceptorImg.getRoi().contains(i, j)) {
+                                    sum += ipA.getPixelValue(i, j);
+                                    count++;
+                                }
+                            }
+                        }
+                        float backgroundAvgA = (float) (sum / count);
+                        backgroundAvgA += autofl;
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                float value = ipA.getPixelValue(x, y);
+                                value -= backgroundAvgA;
+                                ipA.putPixelValue(x, y, value);
+                            }
+                        }
+                        acceptorImg.updateAndDraw();
+                        acceptorImg.killRoi();
+                        mainWindow.log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvgA) + ") of acceptor channel. (S2/S4 calc.)");
+                        subtractAcceptorButton.setBackground(mainWindow.greenColor);
+                        subtractAcceptorButton.setOpaque(true);
+                        subtractAcceptorButton.setBorderPainted(false);
                     }
-                    acceptorImg.updateAndDraw();
-                    acceptorImg.killRoi();
-                    mainWindow.log("Subtracted background (" + backgroundAvgA + ") of acceptor channel. (S2/S4 calc.)");
-                    subtractAcceptorButton.setBackground(mainWindow.greenColor);
-                    subtractAcceptorButton.setOpaque(true);
-                    subtractAcceptorButton.setBorderPainted(false);
                     break;
                 }
                 case "setS2S4DonorThreshold":
