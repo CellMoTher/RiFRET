@@ -117,7 +117,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JButton openImageButton, resetDDButton, resetDAButton, resetAAButton;
     private JButton copyRoiButton;
     public JTextField autoflDInDField, autoflAInDField, autoflAInAField;
-    private JTextField radiusFieldDD, radiusFieldDA, radiusFieldAA;
+    private JTextField sigmaFieldDD, sigmaFieldDA, sigmaFieldAA;
     public JTextField autoThresholdMin, autoThresholdMax;
     private JButton createButton, saveButton, measureButton, nextButton, closeImagesButton;
     private JCheckBox useImageStacks, autoThresholdingCB;
@@ -435,13 +435,13 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 9;
         gc.gridx = 0;
         gc.gridy = 10;
-        container.add(new JLabel("Step 2a (optional): blur donor channel image, radius in pixels:"), gc);
+        container.add(new JLabel("Step 2a (optional): blur donor channel image, sigma (radius):"), gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 10;
-        radiusFieldDD = new JTextField("2", 4);
-        radiusFieldDD.setHorizontalAlignment(JTextField.RIGHT);
-        container.add(radiusFieldDD, gc);
+        sigmaFieldDD = new JTextField("0.8", 4);
+        sigmaFieldDD.setHorizontalAlignment(JTextField.RIGHT);
+        container.add(sigmaFieldDD, gc);
         smoothDonorInDImageButton = new JButton("Blur");
         smoothDonorInDImageButton.addActionListener(this);
         smoothDonorInDImageButton.setActionCommand("smoothDD");
@@ -453,13 +453,13 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 9;
         gc.gridx = 0;
         gc.gridy = 11;
-        container.add(new JLabel("Step 2b (optional): blur transfer channel image, radius in pixels:"), gc);
+        container.add(new JLabel("Step 2b (optional): blur transfer channel image, sigma (radius):"), gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 11;
-        radiusFieldDA = new JTextField("2", 4);
-        radiusFieldDA.setHorizontalAlignment(JTextField.RIGHT);
-        container.add(radiusFieldDA, gc);
+        sigmaFieldDA = new JTextField("0.8", 4);
+        sigmaFieldDA.setHorizontalAlignment(JTextField.RIGHT);
+        container.add(sigmaFieldDA, gc);
         smoothDonorInAImageButton = new JButton("Blur");
         smoothDonorInAImageButton.addActionListener(this);
         smoothDonorInAImageButton.setActionCommand("smoothDA");
@@ -471,13 +471,13 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 9;
         gc.gridx = 0;
         gc.gridy = 12;
-        container.add(new JLabel("Step 2c (optional): blur acceptor channel image, radius in pixels:"), gc);
+        container.add(new JLabel("Step 2c (optional): blur acceptor channel image, sigma (radius):"), gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 12;
-        radiusFieldAA = new JTextField("2", 4);
-        radiusFieldAA.setHorizontalAlignment(JTextField.RIGHT);
-        container.add(radiusFieldAA, gc);
+        sigmaFieldAA = new JTextField("0.8", 4);
+        sigmaFieldAA.setHorizontalAlignment(JTextField.RIGHT);
+        container.add(sigmaFieldAA, gc);
         smoothAcceptorInAImageButton = new JButton("Blur");
         smoothAcceptorInAImageButton.addActionListener(this);
         smoothAcceptorInAImageButton.setActionCommand("smoothAA");
@@ -926,19 +926,17 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logError("No open image.");
                         return;
                     }
-                    String radiusString = JOptionPane.showInputDialog(this, "Enter radius (in pixels) for Gaussian blur", "Gaussian Blur...", JOptionPane.QUESTION_MESSAGE);
-                    if (radiusString == null || radiusString.trim().isEmpty()) {
+                    String sigmaString = JOptionPane.showInputDialog(this, "Enter sigma (radius) for Gaussian blur", "Gaussian Blur...", JOptionPane.QUESTION_MESSAGE);
+                    if (sigmaString == null || sigmaString.trim().isEmpty()) {
                         return;
                     }
                     GaussianBlur gb = new GaussianBlur();
                     int nSlices = WindowManager.getCurrentImage().getImageStackSize();
                     for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                        if (!gb.blur(WindowManager.getCurrentImage().getStack().getProcessor(currentSlice), Float.parseFloat(radiusString))) {
-                            return;
-                        }
+                        gb.blurGaussian(WindowManager.getCurrentImage().getStack().getProcessor(currentSlice), Float.parseFloat(sigmaString), Float.parseFloat(sigmaString), 0.01);
                     }
                     WindowManager.getCurrentImage().updateAndDraw();
-                    log("Gaussian blurred the current image with radius " + Float.parseFloat(radiusString) + " px.");
+                    log("Gaussian blurred the current image with sigma (radius) " + Float.parseFloat(sigmaString) + " px.");
                     break;
                 }
                 case "lutFire":
@@ -1564,28 +1562,26 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     if (donorInDImage == null) {
                         logError("No image is set as donor channel.");
                     } else {
-                        if (radiusFieldDD.getText().trim().isEmpty()) {
-                            logError("Radius has to be given for Gaussian blur.");
+                        if (sigmaFieldDD.getText().trim().isEmpty()) {
+                            logError("Sigma (radius) has to be given for Gaussian blur.");
                         } else {
-                            double radius = 0;
+                            double sigma = 0;
                             try {
-                                radius = Double.parseDouble(radiusFieldDD.getText().trim());
+                                sigma = Double.parseDouble(sigmaFieldDD.getText().trim());
                             } catch (NumberFormatException ex) {
-                                logError("Radius has to be given for Gaussian blur.");
+                                logError("Sigma (radius) has to be given for Gaussian blur.");
                                 return;
                             }
                             GaussianBlur gb = new GaussianBlur();
                             int nSlices = donorInDImage.getImageStackSize();
                             for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                                if (!gb.blur(donorInDImage.getStack().getProcessor(currentSlice), radius)) {
-                                    return;
-                                }
+                                gb.blurGaussian(donorInDImage.getStack().getProcessor(currentSlice), sigma, sigma, 0.01);
                             }
                             donorInDImage.updateAndDraw();
                             smoothDonorInDImageButton.setBackground(greenColor);
                             smoothDonorInDImageButton.setOpaque(true);
                             smoothDonorInDImageButton.setBorderPainted(false);
-                            log("Gaussian blurred donor channel with radius " + Double.parseDouble(radiusFieldDD.getText().trim()) + " px.");
+                            log("Gaussian blurred donor channel with sigma (radius) " + Double.parseDouble(sigmaFieldDD.getText().trim()) + " px.");
                         }
                     }
                     break;
@@ -1593,28 +1589,26 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     if (donorInAImage == null) {
                         logError("No image is set as transfer channel.");
                     } else {
-                        if (radiusFieldDA.getText().trim().isEmpty()) {
-                            logError("Radius has to be given for Gaussian blur.");
+                        if (sigmaFieldDA.getText().trim().isEmpty()) {
+                            logError("Sigma (radius) has to be given for Gaussian blur.");
                         } else {
-                            double radius = 0;
+                            double sigma = 0;
                             try {
-                                radius = Double.parseDouble(radiusFieldDA.getText().trim());
+                                sigma = Double.parseDouble(sigmaFieldDA.getText().trim());
                             } catch (NumberFormatException ex) {
-                                logError("Radius has to be given for Gaussian blur.");
+                                logError("Sigma (radius) has to be given for Gaussian blur.");
                                 return;
                             }
                             GaussianBlur gb = new GaussianBlur();
                             int nSlices = donorInAImage.getImageStackSize();
                             for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                                if (!gb.blur(donorInAImage.getStack().getProcessor(currentSlice), radius)) {
-                                    return;
-                                }
+                                gb.blurGaussian(donorInAImage.getStack().getProcessor(currentSlice), sigma, sigma, 0.01);
                             }
                             donorInAImage.updateAndDraw();
                             smoothDonorInAImageButton.setBackground(greenColor);
                             smoothDonorInAImageButton.setOpaque(true);
                             smoothDonorInAImageButton.setBorderPainted(false);
-                            log("Gaussian blurred transfer channel with radius " + Double.parseDouble(radiusFieldDA.getText().trim()) + " px.");
+                            log("Gaussian blurred transfer channel with sigma (radius) " + Double.parseDouble(sigmaFieldDA.getText().trim()) + " px.");
                         }
                     }
                     break;
@@ -1622,28 +1616,26 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     if (acceptorInAImage == null) {
                         logError("No image is set as acceptor channel.");
                     } else {
-                        if (radiusFieldAA.getText().trim().isEmpty()) {
-                            logError("Radius has to be given for Gaussian blur.");
+                        if (sigmaFieldAA.getText().trim().isEmpty()) {
+                            logError("Sigma (radius) has to be given for Gaussian blur.");
                         } else {
-                            double radius = 0;
+                            double sigma = 0;
                             try {
-                                radius = Double.parseDouble(radiusFieldAA.getText().trim());
+                                sigma = Double.parseDouble(sigmaFieldAA.getText().trim());
                             } catch (NumberFormatException ex) {
-                                logError("Radius has to be given for Gaussian blur.");
+                                logError("Sigma (radius) has to be given for Gaussian blur.");
                                 return;
                             }
                             GaussianBlur gb = new GaussianBlur();
                             int nSlices = acceptorInAImage.getImageStackSize();
                             for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                                if (!gb.blur(acceptorInAImage.getStack().getProcessor(currentSlice), radius)) {
-                                    return;
-                                }
+                                gb.blurGaussian(acceptorInAImage.getStack().getProcessor(currentSlice), sigma, sigma, 0.01);
                             }
                             acceptorInAImage.updateAndDraw();
                             smoothAcceptorInAImageButton.setBackground(greenColor);
                             smoothAcceptorInAImageButton.setOpaque(true);
                             smoothAcceptorInAImageButton.setBorderPainted(false);
-                            log("Gaussian blurred acceptor channel with radius " + Double.parseDouble(radiusFieldAA.getText().trim()) + " px.");
+                            log("Gaussian blurred acceptor channel with sigma (radius) " + Double.parseDouble(sigmaFieldAA.getText().trim()) + " px.");
                         }
                     }
                     break;
