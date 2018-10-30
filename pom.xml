@@ -103,7 +103,7 @@
         <package-name>hu.unideb.med.biophys</package-name>
         <main-class>hu.unideb.med.biophys.RiFRET_Plugin</main-class>
         <license.licenseName>gpl_v3</license.licenseName>
-        <license.copyrightOwners>RiFRET Developers.</license.copyrightOwners>
+        <license.copyrightOwners>RiFRET developers.</license.copyrightOwners>
     </properties>
 
     <dependencies>
