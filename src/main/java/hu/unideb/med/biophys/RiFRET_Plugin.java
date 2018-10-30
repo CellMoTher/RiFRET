@@ -1985,12 +1985,14 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             + "2. transfer channel\n"
                             + "3. acceptor channel\n\n"
                             + "The upper left corner (1/6 x 1/6 of the image) is considered as background.\n"
+                            + "Values for blurring and autofluorescence correction (if desired) should\n"
+                            + "be entered in the main window before continuing.\n"
                             + "Threshold settings, creation of FRET image and measurements have to be\n"
                             + "made manually.\n\n"
                             + "Every previously opened image and result window will be closed when you\n"
-                            + "press \"Ok\".\n\n"
-                            + "Press \"Ok\" to select the directory. To continue with the next "
-                            + "image, do\nnot close any windows, just press the \"Next\" button.\n", "Semi-Automatic Processing of Images", JOptionPane.OK_CANCEL_OPTION);
+                            + "click OK.\n\n"
+                            + "Click OK to select the directory. To continue with the next "
+                            + "image, do\nnot close any windows, just click the Next button.\n", "Semi-Automatic Processing of Images", JOptionPane.OK_CANCEL_OPTION);
                     if (choice == JOptionPane.YES_OPTION) {
                         currentlyProcessedFile = 0;
                         automaticallyProcessedFiles = null;
