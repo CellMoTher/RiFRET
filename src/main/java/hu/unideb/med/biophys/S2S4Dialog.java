@@ -658,7 +658,7 @@ public class S2S4Dialog extends JDialog implements ActionListener {
                 default:
                     break;
             }
-        } catch (Throwable t) {
+        } catch (NumberFormatException t) {
             mainWindow.logException(t.toString(), t);
         }
     }
