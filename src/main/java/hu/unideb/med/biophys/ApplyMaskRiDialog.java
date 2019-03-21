@@ -16,6 +16,7 @@
  */
 package hu.unideb.med.biophys;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.process.FloatProcessor;
@@ -58,7 +59,11 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener {
         setModal(false);
         createDialogGui();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(275, 240);
+        if (IJ.isMacOSX()) {
+            setSize(290, 210);
+        } else {
+            setSize(270, 235);
+        }
         setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 

@@ -16,6 +16,7 @@
  */
 package hu.unideb.med.biophys;
 
+import ij.IJ;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -43,7 +44,11 @@ public class RiHelpWindow extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         createGui();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(600, 800);
+        if (IJ.isMacOSX()) {
+            setSize(651, 800);
+        } else {
+            setSize(601, 800);
+        }
         setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 

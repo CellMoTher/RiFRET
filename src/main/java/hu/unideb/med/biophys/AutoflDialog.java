@@ -16,6 +16,7 @@
  */
 package hu.unideb.med.biophys;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.process.ImageConverter;
@@ -66,7 +67,11 @@ public class AutoflDialog extends JDialog implements ActionListener {
         setModal(false);
         createDialogGui();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(300, 415);
+        if (IJ.isMacOSX()) {
+            setSize(310, 420);
+        } else {
+            setSize(300, 415);
+        }
         setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 

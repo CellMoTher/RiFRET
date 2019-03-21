@@ -80,7 +80,11 @@ public class AlphaDialog extends JDialog implements ActionListener {
         setModal(false);
         createDialogGui();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(300, 590);
+        if (IJ.isMacOSX()) {
+            setSize(320, 640);
+        } else {
+            setSize(295, 595);
+        }
         setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 

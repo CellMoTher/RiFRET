@@ -86,7 +86,11 @@ public class S1S3Dialog extends JDialog implements ActionListener {
         setModal(false);
         createDialogGui();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(300, 450);
+        if (IJ.isMacOSX()) {
+            setSize(350, 510);
+        } else {
+            setSize(330, 500);
+        }
         setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 
