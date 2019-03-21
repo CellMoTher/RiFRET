@@ -1016,7 +1016,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logError("No open image.");
                         return;
                     }
-                    IJ.run("Histogram");
+                    try {
+                        IJ.run("Histogram");
+                    } catch (RuntimeException rex) {
+                        logError("Histogram canceled.");
+                    }
                     break;
                 case "openImage":
                     (new Opener()).open();
