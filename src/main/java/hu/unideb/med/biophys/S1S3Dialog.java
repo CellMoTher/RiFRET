@@ -375,6 +375,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                 case "subtractS1S3Donor": {
                     if (donorImg == null) {
                         mainWindow.logError("No image is set as donor channel. (S1/S3 calc.)");
+                    } else if (autoflDInDField.getText().trim().isEmpty()) {
+                        autoflDInDField.setText("0");
                     } else if (donorImg.getRoi() == null && autoflDInDField.getText().trim().equals("0")) {
                         mainWindow.logError("No ROI is defined for donor channel. (S1/S3 calc.)");
                     } else if (donorImg.getRoi() == null && !autoflDInDField.getText().trim().equals("0")) {
@@ -398,7 +400,7 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                         subtractDonorButton.setBackground(mainWindow.greenColor);
                         subtractDonorButton.setOpaque(true);
                         subtractDonorButton.setBorderPainted(false);
-                    } else {
+                    } else if (donorImg.getRoi() != null) {
                         float autofl = 0;
                         if (!autoflDInDField.getText().trim().isEmpty()) {
                             autofl = Float.parseFloat(autoflDInDField.getText().trim());
@@ -438,6 +440,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                 case "subtractS1S3Transfer": {
                     if (transferImg == null) {
                         mainWindow.logError("No image is set as transfer channel. (S1/S3 calc.)");
+                    } else if (autoflAInDField.getText().trim().isEmpty()) {
+                        autoflAInDField.setText("0");
                     } else if (transferImg.getRoi() == null && autoflAInDField.getText().trim().equals("0")) {
                         mainWindow.logError("No ROI is defined for transfer channel. (S1/S3 calc.)");
                     } else if (transferImg.getRoi() == null && !autoflAInDField.getText().trim().equals("0")) {
@@ -461,7 +465,7 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                         subtractTransferButton.setBackground(mainWindow.greenColor);
                         subtractTransferButton.setOpaque(true);
                         subtractTransferButton.setBorderPainted(false);
-                    } else {
+                    } else if (transferImg.getRoi() != null) {
                         float autofl = 0;
                         if (!autoflAInDField.getText().trim().isEmpty()) {
                             autofl = Float.parseFloat(autoflAInDField.getText().trim());
@@ -501,6 +505,8 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                 case "subtractS1S3Acceptor": {
                     if (acceptorImg == null) {
                         mainWindow.logError("No image is set as acceptor channel. (S1/S3 calc.)");
+                    } else if (autoflAInAField.getText().trim().isEmpty()) {
+                        autoflAInAField.setText("0");
                     } else if (acceptorImg.getRoi() == null && autoflAInAField.getText().trim().equals("0")) {
                         mainWindow.logError("No ROI is defined for acceptor channel. (S1/S3 calc.)");
                     } else if (acceptorImg.getRoi() == null && !autoflAInAField.getText().trim().equals("0")) {
@@ -524,7 +530,7 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                         subtractAcceptorButton.setBackground(mainWindow.greenColor);
                         subtractAcceptorButton.setOpaque(true);
                         subtractAcceptorButton.setBorderPainted(false);
-                    } else {
+                    } else if (acceptorImg.getRoi() != null) {
                         float autofl = 0;
                         if (!autoflAInAField.getText().trim().isEmpty()) {
                             autofl = Float.parseFloat(autoflAInAField.getText().trim());
