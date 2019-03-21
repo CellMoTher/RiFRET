@@ -845,10 +845,13 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logError("No image is set as transfer channel.");
                     } else {
                         FHT fht1 = new FHT(donorInDImage.getProcessor().duplicate());
+                        fht1.setShowProgress(false);
                         fht1.transform();
                         FHT fht2 = new FHT(donorInAImage.getProcessor().duplicate());
+                        fht2.setShowProgress(false);
                         fht2.transform();
                         FHT res = fht1.conjugateMultiply(fht2);
+                        res.setShowProgress(false);
                         res.inverseTransform();
                         ImagePlus image = new ImagePlus("Result of registration", res);
                         ImageProcessor ip = image.getProcessor();
@@ -898,10 +901,13 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logError("No image is set as acceptor channel.");
                     } else {
                         FHT fht1 = new FHT(donorInDImage.getProcessor().duplicate());
+                        fht1.setShowProgress(false);
                         fht1.transform();
                         FHT fht2 = new FHT(acceptorInAImage.getProcessor().duplicate());
+                        fht2.setShowProgress(false);
                         fht2.transform();
                         FHT res = fht1.conjugateMultiply(fht2);
+                        res.setShowProgress(false);
                         res.inverseTransform();
                         ImagePlus image = new ImagePlus("Result of registration", res);
                         ImageProcessor ip = image.getProcessor();
