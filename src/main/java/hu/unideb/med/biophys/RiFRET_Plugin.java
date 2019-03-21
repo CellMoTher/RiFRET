@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2009 - 2019 RiFRET developers.
  *
  * This program is free software: you can redistribute it and/or modify
