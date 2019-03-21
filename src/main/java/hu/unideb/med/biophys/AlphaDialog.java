@@ -48,16 +48,29 @@ import javax.swing.JTextField;
 public class AlphaDialog extends JDialog implements ActionListener {
 
     private final RiFRET_Plugin mainWindow;
-    private ImagePlus donorBeforeImg, donorAfterImg;
+    private ImagePlus donorBeforeImg;
+    private ImagePlus donorAfterImg;
     private JPanel panel;
     private JCheckBox calculateRatioEps;
     private JCheckBox setEblManually;
-    private JButton setDonorBeforeButton, setDonorAfterButton;
-    private JButton setDonorBThresholdButton, setDonorAThresholdButton;
-    private JButton subtractDonorBButton, subtractDonorAButton;
-    private JButton epsilonButton, calculateButton, setButton, resetButton;
-    private JTextField i1dField, i2aField, ratioEpsilonsField, eBlField;
-    private JTextField ldField, laField, bdField, baField;
+    private JButton setDonorBeforeButton;
+    private JButton setDonorAfterButton;
+    private JButton subtractDonorBButton;
+    private JButton subtractDonorAButton;
+    private JButton setDonorBThresholdButton;
+    private JButton setDonorAThresholdButton;
+    private JButton epsilonButton;
+    private JButton calculateButton;
+    private JButton setButton;
+    private JButton resetButton;
+    private JTextField i1dField;
+    private JTextField i2aField;
+    private JTextField ldField;
+    private JTextField laField;
+    private JTextField bdField;
+    private JTextField baField;
+    private JTextField eBlField;
+    private JTextField ratioEpsilonsField;
     private JLabel alphaResultLabel;
 
     public AlphaDialog(RiFRET_Plugin mainWindow) {

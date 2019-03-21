@@ -44,9 +44,12 @@ import javax.swing.JPanel;
 public class ApplyMaskRiDialog extends JDialog implements ActionListener {
 
     private final RiFRET_Plugin mainWindow;
-    private ImagePlus toMaskImg, maskImg;
+    private ImagePlus toMaskImg;
+    private ImagePlus maskImg;
     private JPanel panel;
-    private JButton setToMaskImgButton, setMaskImgButton, createImagesButton;
+    private JButton setToMaskImgButton;
+    private JButton setMaskImgButton;
+    private JButton createImagesButton;
 
     public ApplyMaskRiDialog(RiFRET_Plugin mainWindow) {
         setTitle("Apply Mask to an Image");

@@ -45,10 +45,13 @@ import javax.swing.JPanel;
 public class CalculateRatioDialog extends JDialog implements ActionListener {
 
     private final RiFRET_Plugin mainWindow;
-    private ImagePlus firstImg, secondImg;
+    private ImagePlus firstImg;
+    private ImagePlus secondImg;
     private JPanel panel;
-    private JButton setFirstImgButton, setSecondImgButton, createRatioImageButton;
     private JCheckBox useMainWindowImages;
+    private JButton setFirstImgButton;
+    private JButton setSecondImgButton;
+    private JButton createRatioImageButton;
 
     public CalculateRatioDialog(RiFRET_Plugin mainWindow) {
         setTitle("Calculate Ratio of Two Images");

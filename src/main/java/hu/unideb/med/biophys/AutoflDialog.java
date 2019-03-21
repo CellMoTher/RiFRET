@@ -45,11 +45,19 @@ import javax.swing.JPanel;
 public class AutoflDialog extends JDialog implements ActionListener {
 
     private final RiFRET_Plugin mainWindow;
-    private ImagePlus donorImg, transferImg, acceptorImg;
+    private ImagePlus donorImg;
+    private ImagePlus transferImg;
+    private ImagePlus acceptorImg;
     private JPanel panel;
-    private JButton setDonorButton, setTransferButton, setAcceptorButton;
-    private JButton subtractDonorButton, subtractTransferButton, subtractAcceptorButton;
-    private JButton calculateDonorAfButton, calculateTransferAfButton, calculateAcceptorAfButton;
+    private JButton setDonorButton;
+    private JButton setTransferButton;
+    private JButton setAcceptorButton;
+    private JButton subtractDonorButton;
+    private JButton subtractTransferButton;
+    private JButton subtractAcceptorButton;
+    private JButton calculateDonorAfButton;
+    private JButton calculateTransferAfButton;
+    private JButton calculateAcceptorAfButton;
 
     public AutoflDialog(RiFRET_Plugin mainWindow) {
         setTitle("Autofluorescence Calculation");

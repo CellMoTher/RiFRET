@@ -48,15 +48,29 @@ import javax.swing.JTextField;
 public class S1S3Dialog extends JDialog implements ActionListener {
 
     private final RiFRET_Plugin mainWindow;
-    private ImagePlus donorImg, transferImg, acceptorImg;
+    private ImagePlus donorImg;
+    private ImagePlus transferImg;
+    private ImagePlus acceptorImg;
     private JPanel panel;
-    private JButton setDonorButton, setTransferButton, setAcceptorButton;
-    private JButton setDonorThresholdButton, setTransferThresholdButton, setAcceptorThresholdButton, calculateButton, setButton;
-    private JButton subtractDonorButton, subtractTransferButton, subtractAcceptorButton, copyRoiButton;
-    private JTextField autoflDInDField, autoflAInDField, autoflAInAField;
+    private JButton setDonorButton;
+    private JButton setTransferButton;
+    private JButton setAcceptorButton;
+    private JButton copyRoiButton;
+    private JButton subtractDonorButton;
+    private JButton subtractTransferButton;
+    private JButton subtractAcceptorButton;
+    private JButton setDonorThresholdButton;
+    private JButton setTransferThresholdButton;
+    private JButton setAcceptorThresholdButton;
+    private JButton calculateButton;
+    private JButton setButton;
     private JButton resetButton;
+    private JTextField autoflDInDField;
+    private JTextField autoflAInDField;
+    private JTextField autoflAInAField;
     private JCheckBox showSImagesCB;
-    private JLabel s1ResultLabel, s3ResultLabel;
+    private JLabel s1ResultLabel;
+    private JLabel s3ResultLabel;
 
     public S1S3Dialog(RiFRET_Plugin mainWindow) {
         setTitle("S1/S3 Factor Calculation");
