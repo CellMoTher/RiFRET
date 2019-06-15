@@ -737,7 +737,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridy = 25;
         gc.insets = new Insets(2, 2, 2, 2);
         gc.fill = GridBagConstraints.NONE;
-        saveFretImgPanel.add(new JLabel("Step 5b: save FRET image       "));
+        saveFretImgPanel.add(new JLabel("Step 5b: save FRET image as TIFF       "));
         container.add(saveFretImgPanel, gc);
         saveButton = new JButton("Save");
         saveButton.addActionListener(this);
