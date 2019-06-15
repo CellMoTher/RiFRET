@@ -1961,7 +1961,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     }
                     FileSaver fs = new FileSaver(transferImage);
                     if (fs.saveAsTiff()) {
-                        log("Transfer (FRET) image saved as Tiff.");
+                        log("Saved " + transferImage.getTitle() + ".");
                     }
                     transferImage.updateAndDraw();
                     break;
