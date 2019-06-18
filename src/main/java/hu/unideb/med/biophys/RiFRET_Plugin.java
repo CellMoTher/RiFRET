@@ -994,7 +994,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         gb.blurGaussian(WindowManager.getCurrentImage().getStack().getProcessor(currentSlice), Float.parseFloat(sigmaString), Float.parseFloat(sigmaString), 0.01);
                     }
                     WindowManager.getCurrentImage().updateAndDraw();
-                    log("Gaussian blurred the current image with sigma (radius) " + Float.parseFloat(sigmaString) + " px.");
+                    log("Gaussian blurred current image (" + WindowManager.getCurrentImage().getTitle() + ") with sigma (radius) " + Float.parseFloat(sigmaString) + " px.");
                     break;
                 }
                 case "lutFire":
