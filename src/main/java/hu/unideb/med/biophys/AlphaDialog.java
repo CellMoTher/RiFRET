@@ -155,7 +155,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridwidth = 1;
         gc.gridx = 0;
         gc.gridy = 8;
-        JLabel i1dLabel = new JLabel("I1 (donor)", JLabel.CENTER);
+        JLabel i1dLabel = new JLabel("I1 (donor)", JLabel.RIGHT);
         i1dLabel.setToolTipText("<HTML>The average of fluorescence intensities calculated from<BR>at least of 5-10 images (donor channel of donor only<BR>labeled sample).</HTML>");
         panel.add(i1dLabel, gc);
         gc.gridx = 1;
@@ -164,7 +164,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(i1dField, gc);
         gc.gridx = 0;
         gc.gridy = 9;
-        JLabel i2aLabel = new JLabel("I2 (acceptor)", JLabel.CENTER);
+        JLabel i2aLabel = new JLabel("I2 (acceptor)", JLabel.RIGHT);
         i2aLabel.setToolTipText("<HTML>The average of fluorescence intensities calculated from<BR>at least of 5-10 images (transfer channel of acceptor<BR>only labeled sample).</HTML>");
         panel.add(i2aLabel, gc);
         gc.gridx = 1;
@@ -173,7 +173,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(i2aField, gc);
         gc.gridx = 0;
         gc.gridy = 10;
-        JLabel ldLabel = new JLabel("Ld", JLabel.CENTER);
+        JLabel ldLabel = new JLabel("Ld", JLabel.RIGHT);
         ldLabel.setToolTipText("<HTML>The mean number of dye molecules attached to the<BR>donor antibody.</HTML>");
         panel.add(ldLabel, gc);
         gc.gridx = 1;
@@ -182,7 +182,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(ldField, gc);
         gc.gridx = 0;
         gc.gridy = 11;
-        JLabel laLabel = new JLabel("La", JLabel.CENTER);
+        JLabel laLabel = new JLabel("La", JLabel.RIGHT);
         laLabel.setToolTipText("<HTML>The mean number of dye molecules attached to the<BR>acceptor antibody.</HTML>");
         panel.add(laLabel, gc);
         gc.gridx = 1;
@@ -191,7 +191,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(laField, gc);
         gc.gridx = 0;
         gc.gridy = 12;
-        JLabel bdLabel = new JLabel("Bd", JLabel.CENTER);
+        JLabel bdLabel = new JLabel("Bd", JLabel.RIGHT);
         bdLabel.setToolTipText("<HTML>The mean number of receptors per cell labeled by the<BR>donor antibody.</HTML>");
         panel.add(bdLabel, gc);
         gc.gridx = 1;
@@ -200,7 +200,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(bdField, gc);
         gc.gridx = 0;
         gc.gridy = 13;
-        JLabel baLabel = new JLabel("Ba", JLabel.CENTER);
+        JLabel baLabel = new JLabel("Ba", JLabel.RIGHT);
         baLabel.setToolTipText("<HTML>The mean number of receptors per cell labeled by the<BR>acceptor antibody.</HTML>");
         panel.add(baLabel, gc);
         gc.gridx = 1;
@@ -209,7 +209,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(baField, gc);
         gc.gridx = 0;
         gc.gridy = 14;
-        JLabel lEBlvalue = new JLabel("Ebl", JLabel.CENTER);
+        JLabel lEBlvalue = new JLabel("Ebl", JLabel.RIGHT);
         lEBlvalue.setToolTipText("<HTML>FRET efficiency calculated based on the donor<br>before and after photobleaching images.</HTML>");
         panel.add(lEBlvalue, gc);
         gc.gridx = 1;
@@ -226,7 +226,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(setEblManually, gc);
         gc.gridx = 0;
         gc.gridy = 15;
-        JLabel lRatio = new JLabel("\u03B5d / \u03B5a", JLabel.CENTER);
+        JLabel lRatio = new JLabel("\u03B5d / \u03B5a", JLabel.RIGHT);
         lRatio.setToolTipText("<HTML>Ratio of molar absorption coefficients of the donor and<BR>acceptor dyes (for the wavelength of donor excitation).</HTML>");
         panel.add(lRatio, gc);
         gc.gridx = 1;
