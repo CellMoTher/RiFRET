@@ -210,7 +210,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridx = 0;
         gc.gridy = 14;
         JLabel lEBlvalue = new JLabel("Ebl", JLabel.CENTER);
-        lEBlvalue.setToolTipText("<HTML>FRET efficiency calculated based on the donor<br>before and after photobleching images.</HTML>");
+        lEBlvalue.setToolTipText("<HTML>FRET efficiency calculated based on the donor<br>before and after photobleaching images.</HTML>");
         panel.add(lEBlvalue, gc);
         gc.gridx = 1;
         gc.gridy = 14;
