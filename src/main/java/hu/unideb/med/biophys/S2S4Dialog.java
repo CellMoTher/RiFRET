@@ -129,7 +129,7 @@ public class S2S4Dialog extends JDialog implements ActionListener {
         panel.add(setAcceptorButton, gc);
         gc.gridx = 0;
         gc.gridy = 4;
-        copyRoiButton = new JButton("(Optional): Copy background ROI");
+        copyRoiButton = new JButton("(Optional:) Copy background ROI");
         copyRoiButton.addActionListener(this);
         copyRoiButton.setActionCommand("copyS2S4Roi");
         panel.add(copyRoiButton, gc);
