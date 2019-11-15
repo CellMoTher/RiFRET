@@ -570,6 +570,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         copyRoiButton.setActionCommand("copyRoi");
         container.add(copyRoiButton, gc);
         autoflDInDField = new JTextField("0", 5);
+        autoflDInDField.setHorizontalAlignment(JTextField.RIGHT);
         autoflDInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         gc.gridx = 10;
         gc.gridy = 15;
@@ -587,6 +588,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridy = 16;
         container.add(new JLabel("Step 3b: subtract from transfer channel"), gc);
         autoflAInDField = new JTextField("0", 5);
+        autoflAInDField.setHorizontalAlignment(JTextField.RIGHT);
         autoflAInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         gc.gridwidth = 1;
         gc.gridx = 10;
@@ -606,6 +608,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridy = 17;
         container.add(new JLabel("Step 3c: subtract from acceptor channel"), gc);
         autoflAInAField = new JTextField("0", 5);
+        autoflAInAField.setHorizontalAlignment(JTextField.RIGHT);
         autoflAInAField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         gc.gridwidth = 1;
         gc.gridx = 10;
@@ -717,9 +720,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         autoThresholdingCB.setSelected(true);
         createFretImgPanel.add(autoThresholdingCB);
         autoThresholdMin = new JTextField("-2", 2);
+        autoThresholdMin.setHorizontalAlignment(JTextField.RIGHT);
         createFretImgPanel.add(autoThresholdMin);
         createFretImgPanel.add(new JLabel(" and max: "));
         autoThresholdMax = new JTextField("2", 2);
+        autoThresholdMax.setHorizontalAlignment(JTextField.RIGHT);
         createFretImgPanel.add(autoThresholdMax);
         container.add(createFretImgPanel, gc);
         createButton = new JButton("Create");

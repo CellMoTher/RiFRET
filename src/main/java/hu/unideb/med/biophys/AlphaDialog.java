@@ -161,6 +161,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 8;
         i1dField = new JTextField("", 4);
+        i1dField.setHorizontalAlignment(JTextField.RIGHT);
         panel.add(i1dField, gc);
         gc.gridx = 0;
         gc.gridy = 9;
@@ -170,6 +171,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 9;
         i2aField = new JTextField("", 4);
+        i2aField.setHorizontalAlignment(JTextField.RIGHT);
         panel.add(i2aField, gc);
         gc.gridx = 0;
         gc.gridy = 10;
@@ -179,6 +181,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 10;
         ldField = new JTextField("", 4);
+        ldField.setHorizontalAlignment(JTextField.RIGHT);
         panel.add(ldField, gc);
         gc.gridx = 0;
         gc.gridy = 11;
@@ -188,6 +191,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 11;
         laField = new JTextField("", 4);
+        laField.setHorizontalAlignment(JTextField.RIGHT);
         panel.add(laField, gc);
         gc.gridx = 0;
         gc.gridy = 12;
@@ -197,6 +201,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 12;
         bdField = new JTextField("", 4);
+        bdField.setHorizontalAlignment(JTextField.RIGHT);
         panel.add(bdField, gc);
         gc.gridx = 0;
         gc.gridy = 13;
@@ -206,6 +211,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 13;
         baField = new JTextField("", 4);
+        baField.setHorizontalAlignment(JTextField.RIGHT);
         panel.add(baField, gc);
         gc.gridx = 0;
         gc.gridy = 14;
@@ -215,6 +221,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 14;
         eBlField = new JTextField("", 4);
+        eBlField.setHorizontalAlignment(JTextField.RIGHT);
         eBlField.setEditable(false);
         panel.add(eBlField, gc);
         gc.gridx = 2;
@@ -232,6 +239,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 15;
         ratioEpsilonsField = new JTextField("", 4);
+        ratioEpsilonsField.setHorizontalAlignment(JTextField.RIGHT);
         panel.add(ratioEpsilonsField, gc);
         gc.gridx = 2;
         gc.gridy = 15;
