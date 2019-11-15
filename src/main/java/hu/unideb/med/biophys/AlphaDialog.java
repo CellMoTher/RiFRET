@@ -155,7 +155,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridwidth = 1;
         gc.gridx = 0;
         gc.gridy = 8;
-        JLabel i1dLabel = new JLabel("I1(donor)", JLabel.CENTER);
+        JLabel i1dLabel = new JLabel("I1 (donor)", JLabel.CENTER);
         i1dLabel.setToolTipText("<HTML>The average of fluorescence intensities calculated from<BR>at least of 5-10 images (donor channel of donor only<BR>labeled sample).</HTML>");
         panel.add(i1dLabel, gc);
         gc.gridx = 1;
@@ -164,7 +164,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(i1dField, gc);
         gc.gridx = 0;
         gc.gridy = 9;
-        JLabel i2aLabel = new JLabel("I2(acceptor)", JLabel.CENTER);
+        JLabel i2aLabel = new JLabel("I2 (acceptor)", JLabel.CENTER);
         i2aLabel.setToolTipText("<HTML>The average of fluorescence intensities calculated from<BR>at least of 5-10 images (transfer channel of acceptor<BR>only labeled sample).</HTML>");
         panel.add(i2aLabel, gc);
         gc.gridx = 1;
@@ -613,9 +613,9 @@ public class AlphaDialog extends JDialog implements ActionListener {
                     break;
                 case "calculate":
                     if (i1dField.getText().trim().isEmpty()) {
-                        mainWindow.logError("Constant I1(donor) is not given. (\u03B1 calc.)");
+                        mainWindow.logError("Constant I1 (donor) is not given. (\u03B1 calc.)");
                     } else if (i2aField.getText().trim().isEmpty()) {
-                        mainWindow.logError("Constant I2(acceptor) is not given. (\u03B1 calc.)");
+                        mainWindow.logError("Constant I2 (acceptor) is not given. (\u03B1 calc.)");
                     } else if (ldField.getText().trim().isEmpty()) {
                         mainWindow.logError("Constant Ld is not given. (\u03B1 calc.)");
                     } else if (laField.getText().trim().isEmpty()) {
