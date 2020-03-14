@@ -32,6 +32,7 @@ import ij.measure.Measurements;
 import ij.measure.ResultsTable;
 import ij.plugin.HyperStackConverter;
 import ij.plugin.StackEditor;
+import ij.plugin.WindowOrganizer;
 import ij.plugin.filter.Analyzer;
 import ij.plugin.filter.GaussianBlur;
 import ij.process.FHT;
@@ -122,6 +123,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JMenuItem saveTiffMenuItem;
     private JMenuItem saveBmpMenuItem;
     private JMenuItem splitMenuItem;
+    private JMenuItem tileMenuItem;
     private JMenuItem applyMaskMenuItem;
     private JMenuItem registerMenuItem;
     private JMenuItem calculateRatioMenuItem;
@@ -255,6 +257,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         splitMenuItem.setActionCommand("split");
         splitMenuItem.addActionListener(this);
         imageMenu.add(splitMenuItem);
+        imageMenu.addSeparator();
+        tileMenuItem = new JMenuItem("Tile Image Windows");
+        tileMenuItem.setActionCommand("tile");
+        tileMenuItem.addActionListener(this);
+        imageMenu.add(tileMenuItem);
         imageMenu.addSeparator();
         applyMaskMenuItem = new JMenuItem("Apply Mask...");
         applyMaskMenuItem.setActionCommand("applyMask");
@@ -840,6 +847,10 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     }
                     StackEditor se = new StackEditor();
                     se.run("toimages");
+                    break;
+                case "tile":
+                    WindowOrganizer wo = new WindowOrganizer();
+                    wo.run("tile");
                     break;
                 case "applyMask":
                     if (applyMaskRiDialog != null) {
