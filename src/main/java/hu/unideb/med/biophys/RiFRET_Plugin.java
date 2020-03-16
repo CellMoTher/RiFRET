@@ -2364,7 +2364,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     }
 
     public void exit() {
-        int choice = JOptionPane.showConfirmDialog(this, "Do you really want to exit?", "Exit", JOptionPane.OK_CANCEL_OPTION);
+        int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit RiFRET?", "Quit", JOptionPane.OK_CANCEL_OPTION);
         if (choice == JOptionPane.YES_OPTION) {
             if (s1S3Dialog != null) {
                 s1S3Dialog.setVisible(false);
