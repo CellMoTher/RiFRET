@@ -97,7 +97,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private final float version = 1.83F;
     private final String lastModified = "24 May 2010";
     private final String imageJVersion = "1.52p";
-    private final String javaVersion = "1.6.0_05";
+    private final String javaVersion = "1.8.0_202";
     private final int windowWidth = 730;
     private final int windowHeight = 820;
     private ImagePlus donorInDImage;
