@@ -29,11 +29,9 @@ import ij.process.FloatProcessor;
 import ij.process.ImageConverter;
 import ij.process.ImageProcessor;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -97,13 +95,12 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);
         createDialogGui();
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         if (IJ.isMacOSX()) {
             setSize(360, 610);
         } else {
             setSize(330, 590);
         }
-        setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
+        setLocationRelativeTo(null);
     }
 
     public void createDialogGui() {
