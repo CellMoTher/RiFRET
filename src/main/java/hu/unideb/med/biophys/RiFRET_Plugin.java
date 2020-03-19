@@ -30,6 +30,7 @@ import ij.io.FileSaver;
 import ij.io.Opener;
 import ij.measure.Measurements;
 import ij.measure.ResultsTable;
+import ij.plugin.BrowserLauncher;
 import ij.plugin.HyperStackConverter;
 import ij.plugin.StackEditor;
 import ij.plugin.WindowOrganizer;
@@ -121,7 +122,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private S2S4S6Dialog s2S4S6Dialog;
     private B1B2B3Dialog b1B2B3Dialog;
     private AlphaDialog alphaDialog;
-    private RiHelpWindow helpWindow;
     private JMenuBar menuBar;
     private JMenu fileMenu;
     private JMenu imageMenu;
@@ -2818,12 +2818,12 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     resetAll();
                     break;
                 case "help":
-                    if (helpWindow != null) {
-                        helpWindow.setVisible(false);
-                        helpWindow.dispose();
+                    try {
+                        String url = "https://imagej.net/RiFRET";
+                        BrowserLauncher.openURL(url);
+                    } catch (IOException ioe) {
+                        logError("Could not open https://imagej.net/RiFRET in browser.");
                     }
-                    helpWindow = new RiHelpWindow(this);
-                    helpWindow.setVisible(true);
                     break;
                 case "about":
                     JOptionPane optionPane = new JOptionPane();
@@ -3222,10 +3222,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
             if (autoflDialog != null) {
                 autoflDialog.setVisible(false);
                 autoflDialog.dispose();
-            }
-            if (helpWindow != null) {
-                helpWindow.setVisible(false);
-                helpWindow.dispose();
             }
             setVisible(false);
             dispose();
