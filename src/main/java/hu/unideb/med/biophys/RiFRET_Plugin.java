@@ -96,6 +96,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
     private final String version = "2.0.0";
     private final String lastModified = "19 March 2020";
+    private final String fijiVersion = "2.0.0-rc-69";
     private final String imageJVersion = "1.52p";
     private final String javaVersion = "1.8.0_202";
     private final int windowWidth = 730;
@@ -2831,7 +2832,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             + "Written by: János Roszik (janosr@med.unideb.hu), Duarte Lisboa (duarte@med.unideb.hu),\n"
                             + "János Szöllősi (szollo@med.unideb.hu) and György Vereb (vereb@med.unideb.hu)\n"
                             + "Version: " + version + " (" + lastModified + ")\n"
-                            + "The plugin was tested with ImageJ version " + imageJVersion + " using Java " + javaVersion + ".\n");
+                            + "Tested with (Fiji Is Just) ImageJ " + fijiVersion + "/" + imageJVersion + ";" + " Java " + javaVersion + ".\n");
                     optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
                     JDialog dialog = optionPane.createDialog(this, "About");
                     dialog.setVisible(true);
