@@ -35,7 +35,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -58,10 +59,12 @@ public class CalculateRatioDialog extends JDialog implements ActionListener {
     private JButton setFirstImgButton;
     private JButton setSecondImgButton;
     private JButton createRatioImageButton;
+    private final DateTimeFormatter dateTimeFormat;
 
     public CalculateRatioDialog(RiFRET_Plugin mainWindow) {
         setTitle("Calculate Ratio of Two Images");
         this.mainWindow = mainWindow;
+        dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);
         createDialogGui();
@@ -136,7 +139,7 @@ public class CalculateRatioDialog extends JDialog implements ActionListener {
                         firstImg = null;
                         return;
                     }
-                    firstImg.setTitle("Image 1 - " + new Date().toString());
+                    firstImg.setTitle("Image 1 - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(firstImg).convertToGray32();
                     setFirstImgButton.setBackground(mainWindow.greenColor);
                     setFirstImgButton.setOpaque(true);
@@ -157,7 +160,7 @@ public class CalculateRatioDialog extends JDialog implements ActionListener {
                         secondImg = null;
                         return;
                     }
-                    secondImg.setTitle("Image 2 - " + new Date().toString());
+                    secondImg.setTitle("Image 2 - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(secondImg).convertToGray32();
                     setSecondImgButton.setBackground(mainWindow.greenColor);
                     setSecondImgButton.setOpaque(true);

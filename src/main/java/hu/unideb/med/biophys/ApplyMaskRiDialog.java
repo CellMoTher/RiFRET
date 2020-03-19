@@ -35,7 +35,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -56,10 +57,12 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener {
     private JButton setToMaskImgButton;
     private JButton setMaskImgButton;
     private JButton createImagesButton;
+    private final DateTimeFormatter dateTimeFormat;
 
     public ApplyMaskRiDialog(RiFRET_Plugin mainWindow) {
         setTitle("Apply Mask to an Image");
         this.mainWindow = mainWindow;
+        dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);
         createDialogGui();
@@ -127,7 +130,7 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener {
                         toMaskImg = null;
                         return;
                     }
-                    toMaskImg.setTitle("Image to mask - " + new Date().toString());
+                    toMaskImg.setTitle("Image to mask - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(toMaskImg).convertToGray32();
                     setToMaskImgButton.setBackground(mainWindow.greenColor);
                     setToMaskImgButton.setOpaque(true);
@@ -148,7 +151,7 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener {
                         maskImg = null;
                         return;
                     }
-                    maskImg.setTitle("Mask image - " + new Date().toString());
+                    maskImg.setTitle("Mask image - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(maskImg).convertToGray32();
                     setMaskImgButton.setBackground(mainWindow.greenColor);
                     setMaskImgButton.setOpaque(true);

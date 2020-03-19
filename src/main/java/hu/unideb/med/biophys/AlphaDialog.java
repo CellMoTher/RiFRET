@@ -36,7 +36,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -77,10 +78,12 @@ public class AlphaDialog extends JDialog implements ActionListener {
     private JTextField eBlField;
     private JTextField ratioEpsilonsField;
     private JLabel alphaResultLabel;
+    private final DateTimeFormatter dateTimeFormat;
 
     public AlphaDialog(RiFRET_Plugin mainWindow) {
         setTitle("Alpha Factor Calculation");
         this.mainWindow = mainWindow;
+        dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);
         createDialogGui();
@@ -375,7 +378,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
                         donorBeforeImg = null;
                         return;
                     }
-                    donorBeforeImg.setTitle("Donor before bleaching (\u03B1 calc.) - " + new Date().toString());
+                    donorBeforeImg.setTitle("Donor before bleaching (\u03B1 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorBeforeImg).convertToGray32();
                     setDonorBeforeButton.setBackground(mainWindow.greenColor);
                     setDonorBeforeButton.setOpaque(true);
@@ -396,7 +399,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
                         donorAfterImg = null;
                         return;
                     }
-                    donorAfterImg.setTitle("Donor after bleaching (\u03B1 calc.) - " + new Date().toString());
+                    donorAfterImg.setTitle("Donor after bleaching (\u03B1 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorAfterImg).convertToGray32();
                     setDonorAfterButton.setBackground(mainWindow.greenColor);
                     setDonorAfterButton.setOpaque(true);

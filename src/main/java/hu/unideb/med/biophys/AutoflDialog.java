@@ -36,7 +36,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -64,10 +65,12 @@ public class AutoflDialog extends JDialog implements ActionListener {
     private JButton calculateDonorAfButton;
     private JButton calculateTransferAfButton;
     private JButton calculateAcceptorAfButton;
+    private final DateTimeFormatter dateTimeFormat;
 
     public AutoflDialog(RiFRET_Plugin mainWindow) {
         setTitle("Autofluorescence Calculation");
         this.mainWindow = mainWindow;
+        dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);
         createDialogGui();
@@ -213,7 +216,7 @@ public class AutoflDialog extends JDialog implements ActionListener {
                         donorImg = null;
                         return;
                     }
-                    donorImg.setTitle("Donor channel (Autofl.) - " + new Date().toString());
+                    donorImg.setTitle("Donor channel (Autofl.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorImg).convertToGray32();
                     setDonorButton.setBackground(mainWindow.greenColor);
                     setDonorButton.setOpaque(true);
@@ -234,7 +237,7 @@ public class AutoflDialog extends JDialog implements ActionListener {
                         transferImg = null;
                         return;
                     }
-                    transferImg.setTitle("Transfer channel (Autofl.) - " + new Date().toString());
+                    transferImg.setTitle("Transfer channel (Autofl.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(transferImg).convertToGray32();
                     setTransferButton.setBackground(mainWindow.greenColor);
                     setTransferButton.setOpaque(true);
@@ -255,7 +258,7 @@ public class AutoflDialog extends JDialog implements ActionListener {
                         acceptorImg = null;
                         return;
                     }
-                    acceptorImg.setTitle("Acceptor channel (Autofl.) - " + new Date().toString());
+                    acceptorImg.setTitle("Acceptor channel (Autofl.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(acceptorImg).convertToGray32();
                     setAcceptorButton.setBackground(mainWindow.greenColor);
                     setAcceptorButton.setOpaque(true);

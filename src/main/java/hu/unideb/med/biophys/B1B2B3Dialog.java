@@ -37,7 +37,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -87,10 +88,12 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
     private JTextField autoflAInDField;
     private JTextField autoflAInAField;
     private JTextField autoflAFField;
+    private final DateTimeFormatter dateTimeFormat;
 
     public B1B2B3Dialog(RiFRET_Plugin mainWindow) {
         setTitle("B1/B2/B3 Factor Calculation");
         this.mainWindow = mainWindow;
+        dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);
         createDialogGui();
@@ -424,7 +427,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         donorImg = null;
                         return;
                     }
-                    donorImg.setTitle("Donor channel (B1/B2/B3 calc.) - " + new Date().toString());
+                    donorImg.setTitle("Donor channel (B1/B2/B3 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorImg).convertToGray32();
                     setDonorButton.setBackground(mainWindow.greenColor);
                     setDonorButton.setOpaque(true);
@@ -445,7 +448,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         transferImg = null;
                         return;
                     }
-                    transferImg.setTitle("Transfer channel (B1/B2/B3 calc.) - " + new Date().toString());
+                    transferImg.setTitle("Transfer channel (B1/B2/B3 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(transferImg).convertToGray32();
                     setTransferButton.setBackground(mainWindow.greenColor);
                     setTransferButton.setOpaque(true);
@@ -466,7 +469,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         acceptorImg = null;
                         return;
                     }
-                    acceptorImg.setTitle("Acceptor channel (B1/B2/B3 calc.) - " + new Date().toString());
+                    acceptorImg.setTitle("Acceptor channel (B1/B2/B3 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(acceptorImg).convertToGray32();
                     setAcceptorButton.setBackground(mainWindow.greenColor);
                     setAcceptorButton.setOpaque(true);
@@ -487,7 +490,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         autofluorescenceImg = null;
                         return;
                     }
-                    autofluorescenceImg.setTitle("Autofluorescence channel (B1/B2/B3 calc.) - " + new Date().toString());
+                    autofluorescenceImg.setTitle("Autofluorescence channel (B1/B2/B3 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(autofluorescenceImg).convertToGray32();
                     setAutofluorescenceButton.setBackground(mainWindow.greenColor);
                     setAutofluorescenceButton.setOpaque(true);

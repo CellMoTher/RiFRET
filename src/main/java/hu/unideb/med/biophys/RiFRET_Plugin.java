@@ -65,8 +65,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
@@ -217,7 +218,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     public JButton calculateAlphaButton;
     private JTextPane log;
     private JScrollPane logScrollPane;
-    private final SimpleDateFormat format;
+    private final DateTimeFormatter dateTimeFormat;
+    private final DateTimeFormatter timeFormat;
     private File[] automaticallyProcessedFiles = null;
     private int currentlyProcessedFile = 0;
     private String currentlyProcessedFileName = null;
@@ -232,7 +234,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         IJ.versionLessThan(imageJVersion);
         Locale.setDefault(Locale.ENGLISH);
         ToolTipManager.sharedInstance().setDismissDelay(10000);
-        format = new SimpleDateFormat("HH:mm:ss");
+        dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
+        timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
         createGui();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1548,7 +1551,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
                     }
                     donorInDImage = ip;
-                    donorInDImage.setTitle("Donor channel - " + new Date().toString());
+                    donorInDImage.setTitle("Donor channel - " + dateTimeFormat.format(OffsetDateTime.now()));
                     if (ip.getImageStackSize() > 1) {
                         new StackConverter(donorInDImage).convertToGray32();
                     } else {
@@ -1612,7 +1615,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
                     }
                     donorInAImage = ip;
-                    donorInAImage.setTitle("Transfer channel - " + new Date().toString());
+                    donorInAImage.setTitle("Transfer channel - " + dateTimeFormat.format(OffsetDateTime.now()));
                     if (ip.getImageStackSize() > 1) {
                         new StackConverter(donorInAImage).convertToGray32();
                     } else {
@@ -1674,7 +1677,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
                     }
                     acceptorInAImage = ip;
-                    acceptorInAImage.setTitle("Acceptor channel - " + new Date().toString());
+                    acceptorInAImage.setTitle("Acceptor channel - " + dateTimeFormat.format(OffsetDateTime.now()));
                     if (ip.getImageStackSize() > 1) {
                         new StackConverter(acceptorInAImage).convertToGray32();
                     } else {
@@ -1742,7 +1745,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
                     }
                     autofluorescenceImage = ip;
-                    autofluorescenceImage.setTitle("Autofluorescence channel - " + new Date().toString());
+                    autofluorescenceImage.setTitle("Autofluorescence channel - " + dateTimeFormat.format(OffsetDateTime.now()));
                     if (ip.getImageStackSize() > 1) {
                         new StackConverter(autofluorescenceImage).convertToGray32();
                     } else {
@@ -3141,7 +3144,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
     public void log(String text) {
         try {
-            log.getDocument().insertString(log.getDocument().getLength(), "\n" + format.format(new Date()) + " " + text, log.getStyle("BLACK"));
+            log.getDocument().insertString(log.getDocument().getLength(), "\n" + timeFormat.format(LocalTime.now()) + " " + text, log.getStyle("BLACK"));
             log.setCaretPosition(log.getDocument().getLength());
         } catch (javax.swing.text.BadLocationException e) {
         }
@@ -3149,7 +3152,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
     public void logError(String text) {
         try {
-            log.getDocument().insertString(log.getDocument().getLength(), "\n" + format.format(new Date()) + " ERROR: " + text, log.getStyle("RED"));
+            log.getDocument().insertString(log.getDocument().getLength(), "\n" + timeFormat.format(LocalTime.now()) + " ERROR: " + text, log.getStyle("RED"));
             log.setCaretPosition(log.getDocument().getLength());
         } catch (javax.swing.text.BadLocationException e) {
         }
@@ -3157,7 +3160,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
     public void logWarning(String text) {
         try {
-            log.getDocument().insertString(log.getDocument().getLength(), "\n" + format.format(new Date()) + " WARNING: " + text, log.getStyle("BLUE"));
+            log.getDocument().insertString(log.getDocument().getLength(), "\n" + timeFormat.format(LocalTime.now()) + " WARNING: " + text, log.getStyle("BLUE"));
             log.setCaretPosition(log.getDocument().getLength());
         } catch (javax.swing.text.BadLocationException e) {
         }
@@ -3170,10 +3173,10 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                 PrintWriter pw = new PrintWriter(sw);
                 t.printStackTrace(pw);
                 pw.flush();
-                log.getDocument().insertString(log.getDocument().getLength(), "\n" + format.format(new Date()) + " ERROR: " + sw.toString(), log.getStyle("RED"));
+                log.getDocument().insertString(log.getDocument().getLength(), "\n" + timeFormat.format(LocalTime.now()) + " ERROR: " + sw.toString(), log.getStyle("RED"));
                 log.setCaretPosition(log.getDocument().getLength());
             } else {
-                log.getDocument().insertString(log.getDocument().getLength(), "\n" + format.format(new Date()) + " ERROR: " + message, log.getStyle("RED"));
+                log.getDocument().insertString(log.getDocument().getLength(), "\n" + timeFormat.format(LocalTime.now()) + " ERROR: " + message, log.getStyle("RED"));
                 log.setCaretPosition(log.getDocument().getLength());
             }
         } catch (javax.swing.text.BadLocationException e) {

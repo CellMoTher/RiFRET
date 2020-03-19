@@ -37,7 +37,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -87,10 +88,12 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
     private JTextField autoflAInDField;
     private JTextField autoflAInAField;
     private JTextField autoflAFField;
+    private final DateTimeFormatter dateTimeFormat;
 
     public S2S4S6Dialog(RiFRET_Plugin mainWindow) {
         setTitle("S2/S4/S6 Factor Calculation");
         this.mainWindow = mainWindow;
+        dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setModal(false);
         createDialogGui();
@@ -424,7 +427,7 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
                         donorImg = null;
                         return;
                     }
-                    donorImg.setTitle("Donor channel (S2/S4/S6 calc.) - " + new Date().toString());
+                    donorImg.setTitle("Donor channel (S2/S4/S6 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorImg).convertToGray32();
                     setDonorButton.setBackground(mainWindow.greenColor);
                     setDonorButton.setOpaque(true);
@@ -445,7 +448,7 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
                         transferImg = null;
                         return;
                     }
-                    transferImg.setTitle("Transfer channel (S2/S4/S6 calc.) - " + new Date().toString());
+                    transferImg.setTitle("Transfer channel (S2/S4/S6 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(transferImg).convertToGray32();
                     setTransferButton.setBackground(mainWindow.greenColor);
                     setTransferButton.setOpaque(true);
@@ -466,7 +469,7 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
                         acceptorImg = null;
                         return;
                     }
-                    acceptorImg.setTitle("Acceptor channel (S2/S4/S6 calc.) - " + new Date().toString());
+                    acceptorImg.setTitle("Acceptor channel (S2/S4/S6 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(acceptorImg).convertToGray32();
                     setAcceptorButton.setBackground(mainWindow.greenColor);
                     setAcceptorButton.setOpaque(true);
@@ -487,7 +490,7 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
                         autofluorescenceImg = null;
                         return;
                     }
-                    autofluorescenceImg.setTitle("Autofluorescence channel (S2/S4/S6 calc.) - " + new Date().toString());
+                    autofluorescenceImg.setTitle("Autofluorescence channel (S2/S4/S6 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(autofluorescenceImg).convertToGray32();
                     setAutofluorescenceButton.setBackground(mainWindow.greenColor);
                     setAutofluorescenceButton.setOpaque(true);
@@ -963,47 +966,47 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
                                     currentS2 = ipTP.getPixelValue(i, j) / ipAP.getPixelValue(i, j);
                                     currentS4 = ipDP.getPixelValue(i, j) / ipAP.getPixelValue(i, j);
                                     currentS6 = ipAFP.getPixelValue(i, j) / ipAP.getPixelValue(i, j);
-                                        s2c += currentS2;
-                                        s4c += currentS4;
-                                        s6c += currentS6;
-                                        countc++;
-                                    } else {
-                                        currentS2 = Float.NaN;
-                                        currentS4 = Float.NaN;
-                                        currentS6 = Float.NaN;
-                                    }
-                                    if (showSImagesCB.isSelected()) {
-                                        imgS2Points[i][j] = currentS2;
-                                        imgS4Points[i][j] = currentS4;
-                                        imgS6Points[i][j] = currentS6;
-                                    }
+                                    s2c += currentS2;
+                                    s4c += currentS4;
+                                    s6c += currentS6;
+                                    countc++;
+                                } else {
+                                    currentS2 = Float.NaN;
+                                    currentS4 = Float.NaN;
+                                    currentS6 = Float.NaN;
+                                }
+                                if (showSImagesCB.isSelected()) {
+                                    imgS2Points[i][j] = currentS2;
+                                    imgS4Points[i][j] = currentS4;
+                                    imgS6Points[i][j] = currentS6;
                                 }
                             }
-                            if (showSImagesCB.isSelected()) {
-                                ImagePlus s2Img = new ImagePlus("S2 image", new FloatProcessor(imgS2Points));
-                                s2Img.show();
-                                ImagePlus s4Img = new ImagePlus("S4 image", new FloatProcessor(imgS4Points));
-                                s4Img.show();
-                                ImagePlus s6Img = new ImagePlus("S6 image", new FloatProcessor(imgS6Points));
-                                s6Img.show();
-                            }
-                            float avgS2 = (float) (s2c / countc);
-                            float avgS4 = (float) (s4c / countc);
-                            float avgS6 = (float) (s6c / countc);
-                            s2ResultLabel.setText(df.format(avgS2));
-                            s4ResultLabel.setText(df.format(avgS4));
-                            s6ResultLabel.setText(df.format(avgS6));
-                            calculateButton.setBackground(mainWindow.greenColor);
-                            calculateButton.setOpaque(true);
-                            calculateButton.setBorderPainted(false);
-                            donorImg.changes = false;
-                            transferImg.changes = false;
-                            acceptorImg.changes = false;
-                            autofluorescenceImg.changes = false;
                         }
-                        break;
-                    
-            case "setfactor":
+                        if (showSImagesCB.isSelected()) {
+                            ImagePlus s2Img = new ImagePlus("S2 image", new FloatProcessor(imgS2Points));
+                            s2Img.show();
+                            ImagePlus s4Img = new ImagePlus("S4 image", new FloatProcessor(imgS4Points));
+                            s4Img.show();
+                            ImagePlus s6Img = new ImagePlus("S6 image", new FloatProcessor(imgS6Points));
+                            s6Img.show();
+                        }
+                        float avgS2 = (float) (s2c / countc);
+                        float avgS4 = (float) (s4c / countc);
+                        float avgS6 = (float) (s6c / countc);
+                        s2ResultLabel.setText(df.format(avgS2));
+                        s4ResultLabel.setText(df.format(avgS4));
+                        s6ResultLabel.setText(df.format(avgS6));
+                        calculateButton.setBackground(mainWindow.greenColor);
+                        calculateButton.setOpaque(true);
+                        calculateButton.setBorderPainted(false);
+                        donorImg.changes = false;
+                        transferImg.changes = false;
+                        acceptorImg.changes = false;
+                        autofluorescenceImg.changes = false;
+                    }
+                    break;
+
+                case "setfactor":
                     if (s2ResultLabel.getText().isEmpty() || s4ResultLabel.getText().isEmpty() || s6ResultLabel.getText().isEmpty()) {
                         mainWindow.logError("S2, S4 and S6 have to be calculated before setting them. (S2/S4/S6 calc.)");
                         return;
@@ -1054,5 +1057,5 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
         } catch (NumberFormatException t) {
             mainWindow.logException(t.toString(), t);
         }
-        }
     }
+}
