@@ -95,7 +95,7 @@ import javax.swing.text.StyleContext;
 public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListener {
 
     private final String version = "2.0.0";
-    private final String lastModified = "24 May 2010";
+    private final String lastModified = "19 March 2020";
     private final String imageJVersion = "1.52p";
     private final String javaVersion = "1.8.0_202";
     private final int windowWidth = 730;
