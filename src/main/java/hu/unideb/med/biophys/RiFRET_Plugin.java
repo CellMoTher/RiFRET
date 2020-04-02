@@ -1452,6 +1452,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     try {
                         try (BufferedWriter out = new BufferedWriter(new FileWriter(jfc.getSelectedFile().getAbsolutePath()))) {
                             out.write(log.getText());
+                            log("Saved messages to: " + jfc.getSelectedFile().getAbsolutePath());
                         }
                     } catch (IOException ioe) {
                         logError("Could not save messages.");
