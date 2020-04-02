@@ -346,6 +346,7 @@ public class S2S4Dialog extends JDialog implements ActionListener {
                         donorImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + donorImg.getTitle() + " as donor channel. (S2/S4 calc.)");
                     donorImg.setTitle("Donor channel (S2/S4 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorImg).convertToGray32();
                     setDonorButton.setBackground(mainWindow.greenColor);
@@ -367,6 +368,7 @@ public class S2S4Dialog extends JDialog implements ActionListener {
                         transferImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + transferImg.getTitle() + " as transfer channel. (S2/S4 calc.)");
                     transferImg.setTitle("Transfer channel (S2/S4 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(transferImg).convertToGray32();
                     setTransferButton.setBackground(mainWindow.greenColor);
@@ -388,6 +390,7 @@ public class S2S4Dialog extends JDialog implements ActionListener {
                         acceptorImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + acceptorImg.getTitle() + " as acceptor channel. (S2/S4 calc.)");
                     acceptorImg.setTitle("Acceptor channel (S2/S4 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(acceptorImg).convertToGray32();
                     setAcceptorButton.setBackground(mainWindow.greenColor);

@@ -424,6 +424,7 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
                         donorImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + donorImg.getTitle() + " as donor channel. (S1/S3/S5 calc.)");
                     donorImg.setTitle("Donor channel (S1/S3/S5 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorImg).convertToGray32();
                     setDonorButton.setBackground(mainWindow.greenColor);
@@ -445,6 +446,7 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
                         transferImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + transferImg.getTitle() + " as transfer channel. (S1/S3/S5 calc.)");
                     transferImg.setTitle("Transfer channel (S1/S3/S5 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(transferImg).convertToGray32();
                     setTransferButton.setBackground(mainWindow.greenColor);
@@ -466,6 +468,7 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
                         acceptorImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + acceptorImg.getTitle() + " as acceptor channel. (S1/S3/S5 calc.)");
                     acceptorImg.setTitle("Acceptor channel (S1/S3/S5 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(acceptorImg).convertToGray32();
                     setAcceptorButton.setBackground(mainWindow.greenColor);
@@ -487,6 +490,7 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
                         autofluorescenceImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + autofluorescenceImg.getTitle() + " as autofluorescence channel. (S1/S3/S5 calc.)");
                     autofluorescenceImg.setTitle("Autofluorescence channel (S1/S3/S5 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(autofluorescenceImg).convertToGray32();
                     setAutofluorescenceButton.setBackground(mainWindow.greenColor);

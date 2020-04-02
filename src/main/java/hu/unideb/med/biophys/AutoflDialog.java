@@ -214,6 +214,7 @@ public class AutoflDialog extends JDialog implements ActionListener {
                         donorImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + donorImg.getTitle() + " as donor channel. (Autofl.)");
                     donorImg.setTitle("Donor channel (Autofl.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorImg).convertToGray32();
                     setDonorButton.setBackground(mainWindow.greenColor);
@@ -235,6 +236,7 @@ public class AutoflDialog extends JDialog implements ActionListener {
                         transferImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + transferImg.getTitle() + " as transfer channel. (Autofl.)");
                     transferImg.setTitle("Transfer channel (Autofl.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(transferImg).convertToGray32();
                     setTransferButton.setBackground(mainWindow.greenColor);
@@ -256,6 +258,7 @@ public class AutoflDialog extends JDialog implements ActionListener {
                         acceptorImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + acceptorImg.getTitle() + " as acceptor channel. (Autofl.)");
                     acceptorImg.setTitle("Acceptor channel (Autofl.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(acceptorImg).convertToGray32();
                     setAcceptorButton.setBackground(mainWindow.greenColor);

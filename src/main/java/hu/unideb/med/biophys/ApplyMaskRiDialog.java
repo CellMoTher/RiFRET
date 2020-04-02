@@ -127,6 +127,7 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener {
                         toMaskImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + toMaskImg.getTitle() + " as image to mask. (Masking)");
                     toMaskImg.setTitle("Image to mask - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(toMaskImg).convertToGray32();
                     setToMaskImgButton.setBackground(mainWindow.greenColor);
@@ -148,6 +149,7 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener {
                         maskImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + maskImg.getTitle() + " as mask image. (Masking)");
                     maskImg.setTitle("Mask image - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(maskImg).convertToGray32();
                     setMaskImgButton.setBackground(mainWindow.greenColor);

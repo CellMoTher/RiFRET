@@ -1553,6 +1553,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
                     }
                     donorInDImage = ip;
+                    log("Set " + donorInDImage.getTitle() + " as donor channel.");
                     donorInDImage.setTitle("Donor channel - " + dateTimeFormat.format(OffsetDateTime.now()));
                     if (ip.getImageStackSize() > 1) {
                         new StackConverter(donorInDImage).convertToGray32();
@@ -1617,6 +1618,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
                     }
                     donorInAImage = ip;
+                    log("Set " + donorInAImage.getTitle() + " as transfer channel.");
                     donorInAImage.setTitle("Transfer channel - " + dateTimeFormat.format(OffsetDateTime.now()));
                     if (ip.getImageStackSize() > 1) {
                         new StackConverter(donorInAImage).convertToGray32();
@@ -1679,6 +1681,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
                     }
                     acceptorInAImage = ip;
+                    log("Set " + acceptorInAImage.getTitle() + " as acceptor channel.");
                     acceptorInAImage.setTitle("Acceptor channel - " + dateTimeFormat.format(OffsetDateTime.now()));
                     if (ip.getImageStackSize() > 1) {
                         new StackConverter(acceptorInAImage).convertToGray32();
@@ -1747,6 +1750,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logWarning("A stack has been set. Thresholds have to be set one by one for the images in it.");
                     }
                     autofluorescenceImage = ip;
+                    log("Set " + autofluorescenceImage.getTitle() + " as autofluorescence channel.");
                     autofluorescenceImage.setTitle("Autofluorescence channel - " + dateTimeFormat.format(OffsetDateTime.now()));
                     if (ip.getImageStackSize() > 1) {
                         new StackConverter(autofluorescenceImage).convertToGray32();

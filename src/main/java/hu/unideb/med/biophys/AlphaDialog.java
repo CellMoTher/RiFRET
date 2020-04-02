@@ -375,6 +375,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
                         donorBeforeImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + donorBeforeImg.getTitle() + " as donor before bleaching. (\u03B1 calc.)");
                     donorBeforeImg.setTitle("Donor before bleaching (\u03B1 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorBeforeImg).convertToGray32();
                     setDonorBeforeButton.setBackground(mainWindow.greenColor);
@@ -396,6 +397,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
                         donorAfterImg = null;
                         return;
                     }
+                    mainWindow.log("Set " + donorAfterImg.getTitle() + " as donor after bleaching. (\u03B1 calc.)");
                     donorAfterImg.setTitle("Donor after bleaching (\u03B1 calc.) - " + dateTimeFormat.format(OffsetDateTime.now()));
                     new ImageConverter(donorAfterImg).convertToGray32();
                     setDonorAfterButton.setBackground(mainWindow.greenColor);
