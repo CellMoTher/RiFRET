@@ -2823,11 +2823,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     resetAll();
                     break;
                 case "help":
+                    String url = "https://imagej.net/RiFRET";
                     try {
-                        String url = "https://imagej.net/RiFRET";
                         BrowserLauncher.openURL(url);
                     } catch (IOException ioe) {
-                        logError("Could not open https://imagej.net/RiFRET in browser.");
+                        logError("Could not open " + url + " in browser.");
                     }
                     break;
                 case "about":
