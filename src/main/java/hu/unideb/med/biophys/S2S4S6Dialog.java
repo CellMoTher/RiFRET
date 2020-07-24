@@ -963,18 +963,14 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
                         float currentS6 = 0;
                         for (int i = 0; i < width; i++) {
                             for (int j = 0; j < height; j++) {
-                                if (ipDP.getPixelValue(i, j) > 0 && ipTP.getPixelValue(i, j) >= 0 && ipAP.getPixelValue(i, j) >= 0 && ipAFP.getPixelValue(i, j) >= 0) {
-                                    currentS2 = ipTP.getPixelValue(i, j) / ipAP.getPixelValue(i, j);
-                                    currentS4 = ipDP.getPixelValue(i, j) / ipAP.getPixelValue(i, j);
-                                    currentS6 = ipAFP.getPixelValue(i, j) / ipAP.getPixelValue(i, j);
+                                currentS2 = ipTP.getPixelValue(i, j) / ipAP.getPixelValue(i, j);
+                                currentS4 = ipDP.getPixelValue(i, j) / ipAP.getPixelValue(i, j);
+                                currentS6 = ipAFP.getPixelValue(i, j) / ipAP.getPixelValue(i, j);
+                                if (!Float.isNaN(currentS2) && !Float.isNaN(currentS4) && !Float.isNaN(currentS6)) {
                                     s2c += currentS2;
                                     s4c += currentS4;
                                     s6c += currentS6;
                                     countc++;
-                                } else {
-                                    currentS2 = Float.NaN;
-                                    currentS4 = Float.NaN;
-                                    currentS6 = Float.NaN;
                                 }
                                 if (showSImagesCB.isSelected()) {
                                     imgS2Points[i][j] = currentS2;
@@ -1006,7 +1002,6 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
                         autofluorescenceImg.changes = false;
                     }
                     break;
-
                 case "setfactor":
                     if (s2ResultLabel.getText().isEmpty() || s4ResultLabel.getText().isEmpty() || s6ResultLabel.getText().isEmpty()) {
                         mainWindow.logError("S2, S4 and S6 have to be calculated before setting them. (S2/S4/S6 calc.)");

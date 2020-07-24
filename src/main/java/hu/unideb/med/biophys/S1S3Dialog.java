@@ -769,15 +769,12 @@ public class S1S3Dialog extends JDialog implements ActionListener {
                         float currentS3 = 0;
                         for (int i = 0; i < width; i++) {
                             for (int j = 0; j < height; j++) {
-                                if (ipDP.getPixelValue(i, j) > 0 && ipTP.getPixelValue(i, j) >= 0 && ipAP.getPixelValue(i, j) >= 0) {
-                                    currentS1 = ipTP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
-                                    currentS3 = ipAP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
+                                currentS1 = ipTP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
+                                currentS3 = ipAP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
+                                if (!Float.isNaN(currentS1) && !Float.isNaN(currentS3)) {
                                     s1c += currentS1;
                                     s3c += currentS3;
                                     countc++;
-                                } else {
-                                    currentS1 = Float.NaN;
-                                    currentS3 = Float.NaN;
                                 }
                                 if (showSImagesCB.isSelected()) {
                                     imgS1Points[i][j] = currentS1;

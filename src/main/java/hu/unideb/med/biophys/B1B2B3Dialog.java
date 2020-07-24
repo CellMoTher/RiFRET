@@ -963,18 +963,14 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         float currentB3 = 0;
                         for (int i = 0; i < width; i++) {
                             for (int j = 0; j < height; j++) {
-                                if (ipDP.getPixelValue(i, j) > 0 && ipTP.getPixelValue(i, j) >= 0 && ipAP.getPixelValue(i, j) >= 0 && ipAFP.getPixelValue(i, j) >= 0) {
-                                    currentB1 = ipDP.getPixelValue(i, j) / ipAFP.getPixelValue(i, j);
-                                    currentB2 = ipTP.getPixelValue(i, j) / ipAFP.getPixelValue(i, j);
-                                    currentB3 = ipAP.getPixelValue(i, j) / ipAFP.getPixelValue(i, j);
+                                currentB1 = ipDP.getPixelValue(i, j) / ipAFP.getPixelValue(i, j);
+                                currentB2 = ipTP.getPixelValue(i, j) / ipAFP.getPixelValue(i, j);
+                                currentB3 = ipAP.getPixelValue(i, j) / ipAFP.getPixelValue(i, j);
+                                if (!Float.isNaN(currentB1) && !Float.isNaN(currentB2) && !Float.isNaN(currentB3)) {
                                     b1c += currentB1;
                                     b2c += currentB2;
                                     b3c += currentB3;
                                     countc++;
-                                } else {
-                                    currentB1 = Float.NaN;
-                                    currentB2 = Float.NaN;
-                                    currentB3 = Float.NaN;
                                 }
                                 if (showBImagesCB.isSelected()) {
                                     imgB1Points[i][j] = currentB1;

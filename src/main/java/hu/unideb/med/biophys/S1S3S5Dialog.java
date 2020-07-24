@@ -963,18 +963,14 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
                         float currentS5 = 0;
                         for (int i = 0; i < width; i++) {
                             for (int j = 0; j < height; j++) {
-                                if (ipDP.getPixelValue(i, j) > 0 && ipTP.getPixelValue(i, j) >= 0 && ipAP.getPixelValue(i, j) >= 0 && ipAFP.getPixelValue(i, j) >= 0) {
-                                    currentS1 = ipTP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
-                                    currentS3 = ipAP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
-                                    currentS5 = ipAFP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
+                                currentS1 = ipTP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
+                                currentS3 = ipAP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
+                                currentS5 = ipAFP.getPixelValue(i, j) / ipDP.getPixelValue(i, j);
+                                if (!Float.isNaN(currentS1) && !Float.isNaN(currentS3) && !Float.isNaN(currentS5)) {
                                     s1c += currentS1;
                                     s3c += currentS3;
                                     s5c += currentS5;
                                     countc++;
-                                } else {
-                                    currentS1 = Float.NaN;
-                                    currentS3 = Float.NaN;
-                                    currentS5 = Float.NaN;
                                 }
                                 if (showSImagesCB.isSelected()) {
                                     imgS1Points[i][j] = currentS1;
