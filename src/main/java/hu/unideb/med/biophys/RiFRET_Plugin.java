@@ -27,6 +27,7 @@ import ij.ImageStack;
 import ij.WindowManager;
 import ij.gui.Roi;
 import ij.io.FileSaver;
+import ij.io.OpenDialog;
 import ij.io.Opener;
 import ij.measure.Measurements;
 import ij.measure.ResultsTable;
@@ -1461,19 +1462,14 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     log.setText("");
                     break;
                 case "openImageStack": {
-                    JFileChooser jfc = new JFileChooser(currentDirectory);
-                    jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    jfc.setDialogTitle("Open Image Stack...");
-                    jfc.showOpenDialog(this);
-                    if (jfc.getSelectedFile() == null) {
+                    OpenDialog od = new OpenDialog("Open Image Stack");
+                    String directory = od.getDirectory();
+                    String name = od.getFileName();
+                    if (name == null) {
                         return;
                     }
-                    if (!jfc.getSelectedFile().exists()) {
-                        logError("Selected file does not exist.");
-                        return;
-                    }
+                    String path = directory + name;
                     try {
-                        currentDirectory = jfc.getCurrentDirectory().toString();
                         boolean close = false;
                         boolean resultsWindow = false;
                         while (WindowManager.getCurrentImage() != null) {
@@ -1482,8 +1478,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
                         resetAllButtonColors();
 
-                        File imageFile = jfc.getSelectedFile();
+                        File imageFile = new File(path);
                         (new Opener()).open(imageFile.getAbsolutePath());
+                        log("Opened: " + path);
                         WindowManager.putBehind();
                         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "split"));
                         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setAcceptorInAImage"));
