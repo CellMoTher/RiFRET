@@ -63,10 +63,15 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -94,6 +99,10 @@ import javax.swing.ToolTipManager;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 
 public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListener {
 
@@ -147,6 +156,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JMenuItem aboutMenuItem;
     private JMenuItem saveMessagesMenuItem;
     private JMenuItem clearMessagesMenuItem;
+    private JMenuItem loadParametersMenuItem;
+    private JMenuItem saveParametersMenuItem;
     private JMenuItem semiAutomaticMenuItem;
     private JMenuItem resetImagesMenuItem;
     private JCheckBoxMenuItem debugMenuItem;
@@ -288,6 +299,15 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         clearMessagesMenuItem.setActionCommand("clearMessages");
         clearMessagesMenuItem.addActionListener(this);
         fileMenu.add(clearMessagesMenuItem);
+        fileMenu.addSeparator();
+        loadParametersMenuItem = new JMenuItem("Load Parameters from CSV...");
+        loadParametersMenuItem.setActionCommand("loadParameters");
+        loadParametersMenuItem.addActionListener(this);
+        fileMenu.add(loadParametersMenuItem);
+        saveParametersMenuItem = new JMenuItem("Save Parameters to CSV...");
+        saveParametersMenuItem.setActionCommand("saveParameters");
+        saveParametersMenuItem.addActionListener(this);
+        fileMenu.add(saveParametersMenuItem);
         fileMenu.addSeparator();
         semiAutomaticMenuItem = new JMenuItem("Semi-Automatic Processing...");
         semiAutomaticMenuItem.setActionCommand("semiAutomaticProcessing");
@@ -1206,6 +1226,145 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     StackEditor se = new StackEditor();
                     se.run("toimages");
                     break;
+                case "loadParameters": {
+                    OpenDialog od = new OpenDialog("Load Parameters from CSV");
+                    String directory = od.getDirectory();
+                    String name = od.getFileName();
+                    if (name == null) {
+                        return;
+                    }
+                    String path = directory + name;
+                    try {
+                        Reader in = new FileReader(path);
+                        Iterable<CSVRecord> records = CSVFormat.DEFAULT
+                                .withIgnoreHeaderCase()
+                                .withIgnoreSurroundingSpaces()
+                                .withFirstRecordAsHeader().parse(in);
+                        for (CSVRecord record : records) {
+                            String s1 = record.get("S1");
+                            String s2 = record.get("S2");
+                            String s3 = record.get("S3");
+                            String s4 = record.get("S4");
+                            String alpha = record.get("ALPHA");
+
+                            if (autofluorescenceCorrectionMenuItem.isEnabled()) {
+                                String s5 = record.get("S5");
+                                String s6 = record.get("S6");
+                                String b1 = record.get("B1");
+                                String b2 = record.get("B2");
+                                String b3 = record.get("B3");
+                                String eRatio = record.get("EPSRAT");
+
+                                String blurAF = record.get("BLUR_AF");
+                                String ibgAF = record.get("IBG_AF");
+
+                                setS5Factor(s5);
+                                setS6Factor(s6);
+                                setB1Factor(b1);
+                                setB2Factor(b2);
+                                setB3Factor(b3);
+                                setERatio(eRatio);
+
+                                sigmaFieldAF.setText(blurAF);
+                                autoflAFField.setText(ibgAF);
+                            }
+                            String blurD = record.get("BLUR_D");
+                            String blurT = record.get("BLUR_T");
+                            String blurA = record.get("BlUR_A");
+
+                            String ibgD = record.get("IBG_D");
+                            String ibgT = record.get("IBG_T");
+                            String ibgA = record.get("IBG_A");
+
+                            String thresholdMin = record.get("THRES_MIN");
+                            String thresholdMax = record.get("THRES_MAX");
+
+                            setS1Factor(s1);
+                            setS2Factor(s2);
+                            setS3Factor(s3);
+                            setS4Factor(s4);
+                            setAlphaFactor(alpha);
+
+                            sigmaFieldDD.setText(blurD);
+                            sigmaFieldDA.setText(blurT);
+                            sigmaFieldAA.setText(blurA);
+
+                            autoflDInDField.setText(ibgD);
+                            autoflAInDField.setText(ibgT);
+                            autoflAInAField.setText(ibgA);
+
+                            autoThresholdMin.setText(thresholdMin);
+                            autoThresholdMax.setText(thresholdMax);
+                        }
+                        log("Loaded parameters from: " + path);
+                    } catch (IOException ioe) {
+                        logError("Could not load parameters from: " + path);
+                    }
+                    break;
+                }
+                case "saveParameters": {
+                    SaveDialog sd = new SaveDialog("Save Parameters to CSV", "Parameters", ".csv");
+                    String directory = sd.getDirectory();
+                    String name = sd.getFileName();
+                    if (name == null) {
+                        return;
+                    }
+                    String path = directory + name;
+                    try {
+                        Writer writer = Files.newBufferedWriter(Paths.get(path));
+                        CSVPrinter printer = CSVFormat.DEFAULT
+                                .withIgnoreSurroundingSpaces()
+                                .withHeader(
+                                        "S1",
+                                        "S2",
+                                        "S3",
+                                        "S4",
+                                        "S5",
+                                        "S6",
+                                        "B1",
+                                        "B2",
+                                        "B3",
+                                        "EPSRAT",
+                                        "ALPHA",
+                                        "BLUR_D",
+                                        "BLUR_T",
+                                        "BLUR_A",
+                                        "BLUR_AF",
+                                        "IBG_D",
+                                        "IBG_T",
+                                        "IBG_A",
+                                        "IBG_AF",
+                                        "THRES_MIN",
+                                        "THRES_MAX").print(writer);
+                        printer.printRecord(
+                                getS1Factor(),
+                                getS2Factor(),
+                                getS3Factor(),
+                                getS4Factor(),
+                                getS5Factor(),
+                                getS6Factor(),
+                                getB1Factor(),
+                                getB2Factor(),
+                                getB3Factor(),
+                                eRatioField.getText(),
+                                alphaField.getText(),
+                                sigmaFieldDD.getText(),
+                                sigmaFieldDA.getText(),
+                                sigmaFieldAA.getText(),
+                                sigmaFieldAF.getText(),
+                                autoflDInDField.getText(),
+                                autoflAInDField.getText(),
+                                autoflAInAField.getText(),
+                                autoflAFField.getText(),
+                                autoThresholdMin.getText(),
+                                autoThresholdMax.getText());
+                        printer.flush();
+                        log("Saved parameters to: " + path);
+                    } catch (IOException ioe) {
+                        logError("Could not save parameters to: " + path);
+                    }
+                    break;
+                }
                 case "tile":
                     WindowOrganizer wo = new WindowOrganizer();
                     wo.run("tile");
