@@ -256,9 +256,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         menuBar.add(imageMenu);
         correctionsMenu = new JMenu("Corrections");
         menuBar.add(correctionsMenu);
-        autofluorescenceCorrectionMenuItem = new JCheckBoxMenuItem("Pixel-By-Pixel Autofluorescence Correction");
+        autofluorescenceCorrectionMenuItem = new JCheckBoxMenuItem("Pixel-wise Autofluorescence Correction");
         autofluorescenceCorrectionMenuItem.setSelected(false);
-        autofluorescenceCorrectionMenuItem.setActionCommand("pbpAutofluorescenceCorrection");
+        autofluorescenceCorrectionMenuItem.setActionCommand("pwAutofluorescenceCorrection");
         autofluorescenceCorrectionMenuItem.addActionListener(this);
         correctionsMenu.add(autofluorescenceCorrectionMenuItem);
         helpMenu = new JMenu("Help");
@@ -2839,7 +2839,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     JDialog dialog = optionPane.createDialog(this, "About");
                     dialog.setVisible(true);
                     break;
-                case "pbpAutofluorescenceCorrection":
+                case "pwAutofluorescenceCorrection":
                     if (autofluorescenceCorrectionMenuItem.isSelected()) {
                         calculateS1S3Button.setVisible(false);
                         calculateS1S3S5Button.setVisible(true);
