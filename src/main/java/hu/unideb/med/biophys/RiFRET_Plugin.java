@@ -29,6 +29,7 @@ import ij.gui.Roi;
 import ij.io.FileSaver;
 import ij.io.OpenDialog;
 import ij.io.Opener;
+import ij.io.SaveDialog;
 import ij.measure.Measurements;
 import ij.measure.ResultsTable;
 import ij.plugin.BrowserLauncher;
@@ -1431,27 +1432,17 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     break;
                 }
                 case "saveMessages": {
-                    JFileChooser jfc = new JFileChooser(currentDirectory);
-                    jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    jfc.setDialogTitle("Save Messages...");
-                    jfc.showSaveDialog(this);
-                    if (jfc.getSelectedFile() == null) {
+                    SaveDialog svd = new SaveDialog("Save Messages", "Messages", ".txt");
+                    String directory = svd.getDirectory();
+                    String name = svd.getFileName();
+                    if (name == null) {
                         return;
                     }
-                    if (jfc.getSelectedFile().exists()) {
-                        currentDirectory = jfc.getCurrentDirectory().toString();
-                        int resp = JOptionPane.showConfirmDialog(this,
-                                "Overwrite existing file?", "Confirmation",
-                                JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.QUESTION_MESSAGE);
-                        if (resp == JOptionPane.CANCEL_OPTION) {
-                            return;
-                        }
-                    }
+                    String path = directory + name;
                     try {
-                        try (BufferedWriter out = new BufferedWriter(new FileWriter(jfc.getSelectedFile().getAbsolutePath()))) {
+                        try (BufferedWriter out = new BufferedWriter(new FileWriter(path))) {
                             out.write(log.getText());
-                            log("Saved messages to: " + jfc.getSelectedFile().getAbsolutePath());
+                            log("Saved messages to: " + path);
                         }
                     } catch (IOException ioe) {
                         logError("Could not save messages.");
