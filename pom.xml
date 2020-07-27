@@ -83,14 +83,14 @@
     </mailingLists>
 
     <scm>
-        <connection>scm:git:git://github.com/camlloyd/rifret</connection>
-        <developerConnection>scm:git:git@github.com:camlloyd/rifret</developerConnection>
+        <connection>scm:git:git://github.com/CellMoTher/rifret</connection>
+        <developerConnection>scm:git:git@github.com:CellMoTher/rifret</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/camlloyd/rifret</url>
+        <url>https://github.com/CellMoTher/rifret</url>
     </scm>
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/camlloyd/rifret/issues</url>
+        <url>https://github.com/CellMoTher/rifret/issues</url>
     </issueManagement>
     <ciManagement>
         <system>None</system>
@@ -109,7 +109,7 @@
             <groupId>net.imagej</groupId>
             <artifactId>ij</artifactId>
         </dependency>
-        
+
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
         <dependency>
             <groupId>org.apache.commons</groupId>
