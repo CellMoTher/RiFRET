@@ -1,5 +1,5 @@
 # RiFRET Changelog
-*This changelog only lists notable changes for the end user. For all changes, please see the [commit history](https://github.com/camlloyd/RiFRET/commits/master).*
+*This changelog only lists notable changes for the end user. For all changes, please see the [commit history](https://github.com/CellMoTher/RiFRET/commits/master).*
 
 ## 2.0.0-SNAPSHOT (Unreleased)
 
