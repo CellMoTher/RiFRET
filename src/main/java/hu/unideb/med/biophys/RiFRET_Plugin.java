@@ -107,7 +107,7 @@ import org.apache.commons.csv.CSVRecord;
 public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListener {
 
     private final String fijiVersion = "2.0.0-rc-69";
-    private final String imagejVersion = "1.52p";
+    private final String imagej1Version = "1.52p";
     private final String javaVersion = "1.8.0_202";
     private final int windowWidth = 730;
     private final int windowHeight = 820;
@@ -243,7 +243,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     public RiFRET_Plugin() {
         super();
         setTitle("RiFRET - Intensity-Based Three-Filter Set (Ratiometric) FRET");
-        IJ.versionLessThan(imagejVersion);
+        IJ.versionLessThan(imagej1Version);
         Locale.setDefault(Locale.ENGLISH);
         ToolTipManager.sharedInstance().setDismissDelay(10000);
         dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
@@ -2981,7 +2981,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             + "Homepage: https://imagej.net/RiFRET\n"
                             + "Written by: János Roszik (janosr@med.unideb.hu), Duarte Lisboa (duarte@med.unideb.hu),\n"
                             + "János Szöllősi (szollo@med.unideb.hu) and György Vereb (vereb@med.unideb.hu)\n"
-                            + "Tested with (Fiji Is Just) ImageJ " + fijiVersion + "/" + imagejVersion + ";" + " Java " + javaVersion + ".\n");
+                            + "Tested with (Fiji Is Just) ImageJ " + fijiVersion + "/" + imagej1Version + ";" + " Java " + javaVersion + ".\n");
                     optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
                     JDialog dialog = optionPane.createDialog(this, "About");
                     dialog.setVisible(true);
