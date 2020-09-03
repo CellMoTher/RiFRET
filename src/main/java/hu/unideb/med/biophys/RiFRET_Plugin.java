@@ -2914,26 +2914,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     }
                     break;
                 case "nextImage":
-                    if (transferImage != null) {
-                        transferImage.changes = false;
-                        transferImage.close();
-                    }
-                    if (donorInDImage != null) {
-                        donorInDImage.changes = false;
-                        donorInDImage.close();
-                    }
-                    if (donorInAImage != null) {
-                        donorInAImage.changes = false;
-                        donorInAImage.close();
-                    }
-                    if (acceptorInAImage != null) {
-                        acceptorInAImage.changes = false;
-                        acceptorInAImage.close();
-                    }
-                    if (autofluorescenceImage != null) {
-                        autofluorescenceImage.changes = false;
-                        autofluorescenceImage.close();
-                    }
+                    closeImages();
                     IJ.selectWindow("Results");
                     WindowManager.putBehind();
                     if (WindowManager.getCurrentImage() != null) {
@@ -2945,26 +2926,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     resetAll();
                     break;
                 case "closeImages":
-                    if (transferImage != null) {
-                        transferImage.changes = false;
-                        transferImage.close();
-                    }
-                    if (donorInDImage != null) {
-                        donorInDImage.changes = false;
-                        donorInDImage.close();
-                    }
-                    if (donorInAImage != null) {
-                        donorInAImage.changes = false;
-                        donorInAImage.close();
-                    }
-                    if (acceptorInAImage != null) {
-                        acceptorInAImage.changes = false;
-                        acceptorInAImage.close();
-                    }
-                    if (autofluorescenceImage != null) {
-                        autofluorescenceImage.changes = false;
-                        autofluorescenceImage.close();
-                    }
+                    closeImages();
                     resetAll();
                     break;
                 case "help":
@@ -3074,6 +3036,29 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
             }
         } catch (HeadlessException | NumberFormatException t) {
             logException(t.toString(), t);
+        }
+    }
+
+    private void closeImages() {
+        if (transferImage != null) {
+            transferImage.changes = false;
+            transferImage.close();
+        }
+        if (donorInDImage != null) {
+            donorInDImage.changes = false;
+            donorInDImage.close();
+        }
+        if (donorInAImage != null) {
+            donorInAImage.changes = false;
+            donorInAImage.close();
+        }
+        if (acceptorInAImage != null) {
+            acceptorInAImage.changes = false;
+            acceptorInAImage.close();
+        }
+        if (autofluorescenceImage != null) {
+            autofluorescenceImage.changes = false;
+            autofluorescenceImage.close();
         }
     }
 
