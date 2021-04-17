@@ -25,6 +25,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.WindowManager;
+import ij.gui.GenericDialog;
 import ij.gui.Roi;
 import ij.io.FileSaver;
 import ij.io.OpenDialog;
@@ -120,6 +121,10 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private ImageStack donorInAImageSave = null;
     private ImageStack acceptorInAImageSave = null;
     private ImageStack autofluorescenceImageSave = null;
+    private int donorInDSlice;
+    private int donorInASlice;
+    private int acceptorInASlice;
+    private int autofluorescenceSlice;
     private ResultsTable resultsTable;
     private Analyzer analyzer;
     private ApplyMaskRiDialog applyMaskRiDialog;
@@ -1626,20 +1631,44 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             WindowManager.getCurrentImage().close();
                         }
 
+                        GenericDialog gd = new GenericDialog("Set Channel Order");
+                        gd.addNumericField("Donor Channel:", donorInDSlice, 0);
+                        gd.addNumericField("Transfer Channel:", donorInASlice, 0);
+                        gd.addNumericField("Acceptor Channel:", acceptorInASlice, 0);
+                        if (autofluorescenceCorrectionMenuItem.isSelected()) {
+                            gd.addNumericField("Autofluorescence Channel:", autofluorescenceSlice, 0);
+                        }
+                        gd.showDialog();
+                        if (gd.wasCanceled()) {
+                            return;
+                        }
+                        donorInDSlice = (int) gd.getNextNumber();
+                        donorInASlice = (int) gd.getNextNumber();
+                        acceptorInASlice = (int) gd.getNextNumber();
+                        if (autofluorescenceCorrectionMenuItem.isSelected()) {
+                            autofluorescenceSlice = (int) gd.getNextNumber();
+                        }
                         resetAllButtonColors();
 
                         File imageFile = new File(path);
                         (new Opener()).open(imageFile.getAbsolutePath());
                         log("Opened: " + path);
                         WindowManager.putBehind();
-                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "split"));
-                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setAcceptorInAImage"));
-                        WindowManager.putBehind();
-                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInAImage"));
-                        WindowManager.putBehind();
-                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInDImage"));
+                        WindowManager.getCurrentImage().getImageStack().setSliceLabel("Donor", donorInDSlice);
+                        WindowManager.getCurrentImage().getImageStack().setSliceLabel("Transfer", donorInASlice);
+                        WindowManager.getCurrentImage().getImageStack().setSliceLabel("Acceptor", acceptorInASlice);
                         if (autofluorescenceCorrectionMenuItem.isSelected()) {
-                            WindowManager.putBehind();
+                            WindowManager.getCurrentImage().getImageStack().setSliceLabel("Autofluorescence", autofluorescenceSlice);
+                        }
+                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "split"));
+                        WindowManager.setTempCurrentImage(WindowManager.getImage("Donor"));
+                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInDImage"));
+                        WindowManager.setTempCurrentImage(WindowManager.getImage("Transfer"));
+                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInAImage"));
+                        WindowManager.setTempCurrentImage(WindowManager.getImage("Acceptor"));
+                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setAcceptorInAImage"));
+                        if (autofluorescenceCorrectionMenuItem.isSelected()) {
+                            WindowManager.setTempCurrentImage(WindowManager.getImage("Autofluorescence"));
                             this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setAutofluorescenceImage"));
                         }
                     } catch (Exception ex) {
