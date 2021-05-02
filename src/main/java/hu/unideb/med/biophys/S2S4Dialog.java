@@ -160,7 +160,6 @@ public class S2S4Dialog extends JDialog implements ActionListener {
         gc.gridy = 6;
         autoflDInDField = new JTextField("0", 5);
         autoflDInDField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflDInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         panel.add(autoflDInDField, gc);
         gc.gridwidth = 2;
         gc.gridx = 0;
@@ -174,7 +173,6 @@ public class S2S4Dialog extends JDialog implements ActionListener {
         gc.gridy = 7;
         autoflAInDField = new JTextField("0", 5);
         autoflAInDField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflAInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         panel.add(autoflAInDField, gc);
         gc.gridwidth = 2;
         gc.gridx = 0;
@@ -188,7 +186,6 @@ public class S2S4Dialog extends JDialog implements ActionListener {
         gc.gridy = 8;
         autoflAInAField = new JTextField("0", 5);
         autoflAInAField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflAInAField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         panel.add(autoflAInAField, gc);
         gc.gridwidth = 2;
         gc.gridx = 0;

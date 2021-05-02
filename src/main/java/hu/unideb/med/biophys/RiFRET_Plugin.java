@@ -129,7 +129,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private Analyzer analyzer;
     private ApplyMaskRiDialog applyMaskRiDialog;
     private CalculateRatioDialog calculateRatioDialog;
-    private AutoflDialog autoflDialog;
     private S1S3Dialog s1S3Dialog;
     private S1S3S5Dialog s1S3S5Dialog;
     private S2S4Dialog s2S4Dialog;
@@ -149,7 +148,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JMenuItem applyMaskMenuItem;
     private JMenuItem registerMenuItem;
     private JMenuItem calculateRatioMenuItem;
-    private JMenuItem calculateAFMenuItem;
     private JMenuItem thresholdMenuItem;
     private JMenuItem lutFireMenuItem;
     private JMenuItem lutSpectrumMenuItem;
@@ -345,10 +343,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         calculateRatioMenuItem.setActionCommand("calculateRatio");
         calculateRatioMenuItem.addActionListener(this);
         imageMenu.add(calculateRatioMenuItem);
-        calculateAFMenuItem = new JMenuItem("Calculate Autofluorescence...");
-        calculateAFMenuItem.setActionCommand("calculateAF");
-        calculateAFMenuItem.addActionListener(this);
-        imageMenu.add(calculateAFMenuItem);
         imageMenu.addSeparator();
         convertMenuItem = new JMenuItem("Convert Image to 32-bit");
         convertMenuItem.setActionCommand("convertto32bit");
@@ -895,7 +889,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         container.add(copyRoiButton, gc);
         autoflDInDField = new JTextField("0", 5);
         autoflDInDField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflDInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         gc.gridx = 10;
         gc.gridy = 23;
         container.add(autoflDInDField, gc);
@@ -914,7 +907,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         container.add(new JLabel("Step 3b: subtract from transfer channel"), gc);
         autoflAInDField = new JTextField("0", 5);
         autoflAInDField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflAInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         gc.gridwidth = 1;
         gc.gridx = 10;
         gc.gridy = 24;
@@ -935,7 +927,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         container.add(new JLabel("Step 3c: subtract from acceptor channel"), gc);
         autoflAInAField = new JTextField("0", 5);
         autoflAInAField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflAInAField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         gc.gridwidth = 1;
         gc.gridx = 10;
         gc.gridy = 25;
@@ -956,7 +947,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         container.add(subtractAutofluorescenceImageLabel, gc);
         autoflAFField = new JTextField("0", 5);
         autoflAFField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflAFField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated by<br>choosing <i>Image ▶ Calculate Autofluorescence...</i><html>");
         gc.gridwidth = 1;
         gc.gridx = 10;
         gc.gridy = 26;
@@ -1500,14 +1490,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     }
                     calculateRatioDialog = new CalculateRatioDialog(this);
                     calculateRatioDialog.setVisible(true);
-                    break;
-                case "calculateAF":
-                    if (autoflDialog != null) {
-                        autoflDialog.setVisible(false);
-                        autoflDialog.dispose();
-                    }
-                    autoflDialog = new AutoflDialog(this);
-                    autoflDialog.setVisible(true);
                     break;
                 case "threshold":
                     if (WindowManager.getCurrentImage() == null) {
@@ -3441,10 +3423,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
             if (calculateRatioDialog != null) {
                 calculateRatioDialog.setVisible(false);
                 calculateRatioDialog.dispose();
-            }
-            if (autoflDialog != null) {
-                autoflDialog.setVisible(false);
-                autoflDialog.dispose();
             }
             setVisible(false);
             dispose();

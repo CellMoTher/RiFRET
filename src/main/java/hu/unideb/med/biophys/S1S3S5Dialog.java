@@ -179,7 +179,6 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
         gc.gridy = 7;
         autoflDInDField = new JTextField("0", 5);
         autoflDInDField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflDInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated with<br>the \"Calculate autofluorescence\" item in the \"Image\" menu.<html>");
         panel.add(autoflDInDField, gc);
 
         gc.gridwidth = 2;
@@ -195,7 +194,6 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
         gc.gridy = 8;
         autoflAInDField = new JTextField("0", 5);
         autoflAInDField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflAInDField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated with<br>the \"Calculate autofluorescence\" item in the \"Image\" menu.<html>");
         panel.add(autoflAInDField, gc);
 
         gc.gridwidth = 2;
@@ -211,7 +209,6 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
         gc.gridy = 9;
         autoflAInAField = new JTextField("0", 5);
         autoflAInAField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflAInAField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated with<br>the \"Calculate autofluorescence\" item in the \"Image\" menu.<html>");
         panel.add(autoflAInAField, gc);
 
         gc.gridwidth = 2;
@@ -227,7 +224,6 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
         gc.gridy = 10;
         autoflAFField = new JTextField("0", 5);
         autoflAFField.setHorizontalAlignment(JTextField.RIGHT);
-        autoflAFField.setToolTipText("<html><b>Correction for autofluorescence</b><br>If this value is set, it will be subtracted from each pixel along with<br>the background. Average autofluorescence can be calculated with<br>the \"Calculate autofluorescence\" item in the \"Image\" menu.<html>");
         panel.add(autoflAFField, gc);
 
         gc.gridwidth = 2;
