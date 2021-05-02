@@ -71,8 +71,8 @@ public class AlphaDialog extends JDialog implements ActionListener {
     private JTextField i2aField;
     private JTextField ldField;
     private JTextField laField;
-    private JTextField bdField;
-    private JTextField baField;
+    private JTextField ndField;
+    private JTextField naField;
     private JTextField eBlField;
     private JTextField ratioEpsilonsField;
     private JLabel alphaResultLabel;
@@ -104,7 +104,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 0;
         gc.gridy = 0;
-        JLabel infoLabel = new JLabel("<html><center>Alpha is calculated based on average of images of the donor (I1) and transfer (I2) channel images of donor and acceptor only samples, respectively, as well as on the Ld, La, Bd, Ba and \u03B5d / \u03B5a constants.</center></html>");
+        JLabel infoLabel = new JLabel("<html><center>Alpha is calculated based on average of images of the donor (I1) and transfer (I2) channel images of donor and acceptor only samples, respectively, as well as on the Ld, La, Nd, Na and \u03B5d / \u03B5a constants.</center></html>");
         panel.add(infoLabel, gc);
         gc.gridx = 0;
         gc.gridy = 1;
@@ -200,24 +200,24 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(laField, gc);
         gc.gridx = 0;
         gc.gridy = 12;
-        JLabel bdLabel = new JLabel("Bd:", JLabel.RIGHT);
-        bdLabel.setToolTipText("<HTML>The mean number of receptors per cell labeled by the<BR>donor antibody.</HTML>");
-        panel.add(bdLabel, gc);
+        JLabel ndLabel = new JLabel("Nd:", JLabel.RIGHT);
+        ndLabel.setToolTipText("<HTML>The mean number of receptors per cell labeled by the<BR>donor antibody.</HTML>");
+        panel.add(ndLabel, gc);
         gc.gridx = 1;
         gc.gridy = 12;
-        bdField = new JTextField("", 4);
-        bdField.setHorizontalAlignment(JTextField.RIGHT);
-        panel.add(bdField, gc);
+        ndField = new JTextField("", 4);
+        ndField.setHorizontalAlignment(JTextField.RIGHT);
+        panel.add(ndField, gc);
         gc.gridx = 0;
         gc.gridy = 13;
-        JLabel baLabel = new JLabel("Ba:", JLabel.RIGHT);
-        baLabel.setToolTipText("<HTML>The mean number of receptors per cell labeled by the<BR>acceptor antibody.</HTML>");
-        panel.add(baLabel, gc);
+        JLabel naLabel = new JLabel("Na:", JLabel.RIGHT);
+        naLabel.setToolTipText("<HTML>The mean number of receptors per cell labeled by the<BR>acceptor antibody.</HTML>");
+        panel.add(naLabel, gc);
         gc.gridx = 1;
         gc.gridy = 13;
-        baField = new JTextField("", 4);
-        baField.setHorizontalAlignment(JTextField.RIGHT);
-        panel.add(baField, gc);
+        naField = new JTextField("", 4);
+        naField.setHorizontalAlignment(JTextField.RIGHT);
+        panel.add(naField, gc);
         gc.gridx = 0;
         gc.gridy = 14;
         JLabel lEBlvalue = new JLabel("Ebl:", JLabel.RIGHT);
@@ -635,10 +635,10 @@ public class AlphaDialog extends JDialog implements ActionListener {
                         mainWindow.logError("Constant Ld is not given. (\u03B1 calc.)");
                     } else if (laField.getText().trim().isEmpty()) {
                         mainWindow.logError("Constant La is not given. (\u03B1 calc.)");
-                    } else if (bdField.getText().trim().isEmpty()) {
-                        mainWindow.logError("Constant Bd is not given. (\u03B1 calc.)");
-                    } else if (baField.getText().trim().isEmpty()) {
-                        mainWindow.logError("Constant Ba is not given. (\u03B1 calc.)");
+                    } else if (ndField.getText().trim().isEmpty()) {
+                        mainWindow.logError("Constant Nd is not given. (\u03B1 calc.)");
+                    } else if (naField.getText().trim().isEmpty()) {
+                        mainWindow.logError("Constant Na is not given. (\u03B1 calc.)");
                     } else if (ratioEpsilonsField.getText().trim().isEmpty()) {
                         mainWindow.logError("Ratio \u03B5d / \u03B5a is not given. (\u03B1 calc.)");
                     } else {
@@ -647,10 +647,10 @@ public class AlphaDialog extends JDialog implements ActionListener {
                         float i2 = Float.parseFloat(i2aField.getText().trim());
                         float ld = Float.parseFloat(ldField.getText().trim());
                         float la = Float.parseFloat(laField.getText().trim());
-                        float bd = Float.parseFloat(bdField.getText().trim());
-                        float ba = Float.parseFloat(baField.getText().trim());
+                        float nd = Float.parseFloat(ndField.getText().trim());
+                        float na = Float.parseFloat(naField.getText().trim());
                         float er = Float.parseFloat(ratioEpsilonsField.getText().trim());
-                        float alpha = i2 * ld * bd * er / (i1 * la * ba);
+                        float alpha = i2 * ld * nd * er / (i1 * la * na);
                         alphaResultLabel.setText(df.format(alpha));
                         calculateButton.setBackground(mainWindow.greenColor);
                         calculateButton.setOpaque(true);
