@@ -873,11 +873,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 10;
         gc.gridx = 0;
         gc.gridy = 22;
-        JLabel backgroundInfo = new JLabel("Subtract average instrument background (and autofluorescence):");
+        JLabel backgroundInfo = new JLabel("Subtract background (average ROI and constant):");
         container.add(backgroundInfo, gc);
         gc.gridx = 10;
         gc.gridy = 22;
-        JLabel autofluorescenceInfo = new JLabel("Autofluor.:");
+        JLabel autofluorescenceInfo = new JLabel("Constant:");
         container.add(autofluorescenceInfo, gc);
         gc.gridwidth = 10;
         gc.gridx = 0;

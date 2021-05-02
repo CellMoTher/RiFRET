@@ -157,13 +157,13 @@ public class S1S3S5Dialog extends JDialog implements ActionListener {
         gc.gridwidth = 2;
         gc.gridx = 0;
         gc.gridy = 6;
-        JLabel subtractionLabel = new JLabel("Subtract avg. instrument bg. (and AF):");
+        JLabel subtractionLabel = new JLabel("Subtract bg. (avg. ROI and constant):");
         panel.add(subtractionLabel, gc);
 
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 2;
         gc.gridy = 6;
-        JLabel autofluorescenceLabel = new JLabel("AF:");
+        JLabel autofluorescenceLabel = new JLabel("Constant:");
         panel.add(autofluorescenceLabel, gc);
 
         gc.gridwidth = 2;
