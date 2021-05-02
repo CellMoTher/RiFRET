@@ -784,7 +784,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 17;
-        sigmaFieldDD = new JTextField("0.8", 4);
+        sigmaFieldDD = new JTextField("0", 4);
         sigmaFieldDD.setHorizontalAlignment(JTextField.RIGHT);
         container.add(sigmaFieldDD, gc);
 
@@ -805,7 +805,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 18;
-        sigmaFieldDA = new JTextField("0.8", 4);
+        sigmaFieldDA = new JTextField("0", 4);
         sigmaFieldDA.setHorizontalAlignment(JTextField.RIGHT);
         container.add(sigmaFieldDA, gc);
 
@@ -826,7 +826,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 19;
-        sigmaFieldAA = new JTextField("0.8", 4);
+        sigmaFieldAA = new JTextField("0", 4);
         sigmaFieldAA.setHorizontalAlignment(JTextField.RIGHT);
         container.add(sigmaFieldAA, gc);
 
@@ -848,7 +848,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 20;
-        sigmaFieldAF = new JTextField("0.8", 4);
+        sigmaFieldAF = new JTextField("0", 4);
         sigmaFieldAF.setHorizontalAlignment(JTextField.RIGHT);
         container.add(sigmaFieldAF, gc);
 
