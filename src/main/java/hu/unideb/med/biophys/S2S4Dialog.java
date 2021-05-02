@@ -398,26 +398,26 @@ public class S2S4Dialog extends JDialog implements ActionListener {
                     setAcceptorButton.setBorderPainted(false);
                     break;
                 case "copyS2S4Roi":
-                    if (donorImg == null) {
-                        mainWindow.logError("No image is set as donor channel. (S2/S4 calc.)");
+                    if (acceptorImg == null) {
+                        mainWindow.logError("No image is set as acceptor channel. (S2/S4 calc.)");
                         return;
                     }
-                    if (donorImg.getRoi() != null) {
-                        if (transferImg != null) {
-                            transferImg.setRoi(donorImg.getRoi());
+                    if (acceptorImg.getRoi() != null) {
+                        if (donorImg != null) {
+                            donorImg.setRoi(acceptorImg.getRoi());
                         }
-                        if (acceptorImg != null) {
-                            acceptorImg.setRoi(donorImg.getRoi());
+                        if (transferImg != null) {
+                            transferImg.setRoi(acceptorImg.getRoi());
                         }
                         copyRoiButton.setBackground(mainWindow.greenColor);
                         copyRoiButton.setOpaque(true);
                         copyRoiButton.setBorderPainted(false);
                     } else {
+                        if (donorImg != null) {
+                            donorImg.killRoi();
+                        }
                         if (transferImg != null) {
                             transferImg.killRoi();
-                        }
-                        if (acceptorImg != null) {
-                            acceptorImg.killRoi();
                         }
                     }
                     break;
