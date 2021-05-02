@@ -1986,9 +1986,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 for (int y = 0; y < height; y++) {
                                     i = donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
                                     i = i - autofl;
-                                    if (i < 0) {
-                                        i = 0;
-                                    }
                                     donorInDImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
@@ -2036,9 +2033,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 for (int y = 0; y < height; y++) {
                                     i = donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
                                     i = i - backgroundAvg;
-                                    if (i < 0) {
-                                        i = 0;
-                                    }
                                     donorInDImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
@@ -2083,9 +2077,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 for (int y = 0; y < height; y++) {
                                     i = donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
                                     i = i - autofl;
-                                    if (i < 0) {
-                                        i = 0;
-                                    }
                                     donorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
@@ -2134,9 +2125,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 for (int y = 0; y < height; y++) {
                                     i = donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
                                     i = i - backgroundAvg;
-                                    if (i < 0) {
-                                        i = 0;
-                                    }
                                     donorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
@@ -2181,9 +2169,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 for (int y = 0; y < height; y++) {
                                     i = acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
                                     i = i - autofl;
-                                    if (i < 0) {
-                                        i = 0;
-                                    }
                                     acceptorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
@@ -2231,9 +2216,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 for (int y = 0; y < height; y++) {
                                     i = acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
                                     i = i - backgroundAvg;
-                                    if (i < 0) {
-                                        i = 0;
-                                    }
                                     acceptorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
@@ -2278,9 +2260,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 for (int y = 0; y < height; y++) {
                                     i = autofluorescenceImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
                                     i = i - autofl;
-                                    if (i < 0) {
-                                        i = 0;
-                                    }
                                     autofluorescenceImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
@@ -2328,9 +2307,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 for (int y = 0; y < height; y++) {
                                     i = autofluorescenceImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
                                     i = i - backgroundAvg;
-                                    if (i < 0) {
-                                        i = 0;
-                                    }
                                     autofluorescenceImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
