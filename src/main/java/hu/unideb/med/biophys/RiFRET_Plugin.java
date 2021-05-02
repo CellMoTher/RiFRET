@@ -1966,241 +1966,390 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                 case "subtractDonorInDImage": {
                     if (donorInDImage == null) {
                         logError("No image is set as donor channel.");
-                        return;
-                    } else if (donorInDImage.getRoi() == null) {
+                    } else if (autoflDInDField.getText().trim().isEmpty()) {
+                        autoflDInDField.setText("0");
+                    } else if (donorInDImage.getRoi() == null && autoflDInDField.getText().trim().equals("0")) {
                         logError("No ROI is defined for donor channel.");
-                        return;
-                    }
-                    float autofl = 0;
-                    if (!autoflDInDField.getText().trim().isEmpty()) {
-                        autofl = Float.parseFloat(autoflDInDField.getText().trim());
-                    }
-                    DecimalFormat df = new DecimalFormat("#.#");
-                    int width = donorInDImage.getWidth();
-                    int height = donorInDImage.getHeight();
-                    int nSlices = donorInDImage.getImageStackSize();
-                    donorInDImageSave = new ImageStack(donorInDImage.getProcessor().getWidth(), donorInDImage.getProcessor().getHeight());
-                    for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                        double sum = 0;
-                        int count = 0;
-                        for (int i = 0; i < width; i++) {
-                            for (int j = 0; j < height; j++) {
-                                if (donorInDImage.getRoi().contains(i, j)) {
-                                    sum += donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(i, j);
-                                    count++;
+                    } else if (donorInDImage.getRoi() == null && !autoflDInDField.getText().trim().equals("0")) {
+                        float autofl = 0;
+                        if (!autoflDInDField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflDInDField.getText().trim());
+                        }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        int width = donorInDImage.getWidth();
+                        int height = donorInDImage.getHeight();
+                        int nSlices = donorInDImage.getImageStackSize();
+                        donorInDImageSave = new ImageStack(donorInDImage.getProcessor().getWidth(), donorInDImage.getProcessor().getHeight());
+                        for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                            float i = 0;
+                            for (int x = 0; x < width; x++) {
+                                for (int y = 0; y < height; y++) {
+                                    i = donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
+                                    i = i - autofl;
+                                    if (i < 0) {
+                                        i = 0;
+                                    }
+                                    donorInDImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
-                        }
-                        float backgroundAvg = (float) (sum / count);
-
-                        backgroundAvg = backgroundAvg + autofl;
-
-                        float i = 0;
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                i = donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
-                                i = i - backgroundAvg;
-                                if (i < 0) {
-                                    i = 0;
-                                }
-                                donorInDImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                            FloatProcessor flp = new FloatProcessor(donorInDImage.getStack().getProcessor(currentSlice).getWidth(), donorInDImage.getStack().getProcessor(currentSlice).getHeight());
+                            flp.setPixels(currentSlice, (FloatProcessor) donorInDImage.getStack().getProcessor(currentSlice).duplicate());
+                            donorInDImageSave.addSlice("" + currentSlice, flp);
+                            if (nSlices == 1) {
+                                log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of donor channel.");
+                            } else {
+                                log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of slice " + currentSlice + " of donor channel.");
                             }
                         }
-                        FloatProcessor flp = new FloatProcessor(donorInDImage.getStack().getProcessor(currentSlice).getWidth(), donorInDImage.getStack().getProcessor(currentSlice).getHeight());
-                        flp.setPixels(currentSlice, (FloatProcessor) donorInDImage.getStack().getProcessor(currentSlice).duplicate());
-                        donorInDImageSave.addSlice("" + currentSlice, flp);
-                        if (nSlices == 1) {
-                            log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of donor channel.");
-                        } else {
-                            log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of donor channel.");
+                        donorInDImage.updateAndDraw();
+                        donorInDImageSave.setColorModel(donorInDImage.getProcessor().getColorModel());
+                        subtractDonorInDImageButton.setBackground(greenColor);
+                        subtractDonorInDImageButton.setOpaque(true);
+                        subtractDonorInDImageButton.setBorderPainted(false);
+                    } else if (donorInDImage.getRoi() != null) {
+                        float autofl = 0;
+                        if (!autoflDInDField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflDInDField.getText().trim());
                         }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        int width = donorInDImage.getWidth();
+                        int height = donorInDImage.getHeight();
+                        int nSlices = donorInDImage.getImageStackSize();
+                        donorInDImageSave = new ImageStack(donorInDImage.getProcessor().getWidth(), donorInDImage.getProcessor().getHeight());
+                        for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                            double sum = 0;
+                            int count = 0;
+                            for (int i = 0; i < width; i++) {
+                                for (int j = 0; j < height; j++) {
+                                    if (donorInDImage.getRoi().contains(i, j)) {
+                                        sum += donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(i, j);
+                                        count++;
+                                    }
+                                }
+                            }
+                            float backgroundAvg = (float) (sum / count);
+
+                            backgroundAvg = backgroundAvg + autofl;
+
+                            float i = 0;
+                            for (int x = 0; x < width; x++) {
+                                for (int y = 0; y < height; y++) {
+                                    i = donorInDImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
+                                    i = i - backgroundAvg;
+                                    if (i < 0) {
+                                        i = 0;
+                                    }
+                                    donorInDImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                                }
+                            }
+                            FloatProcessor flp = new FloatProcessor(donorInDImage.getStack().getProcessor(currentSlice).getWidth(), donorInDImage.getStack().getProcessor(currentSlice).getHeight());
+                            flp.setPixels(currentSlice, (FloatProcessor) donorInDImage.getStack().getProcessor(currentSlice).duplicate());
+                            donorInDImageSave.addSlice("" + currentSlice, flp);
+                            if (nSlices == 1) {
+                                log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of donor channel.");
+                            } else {
+                                log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of donor channel.");
+                            }
+                        }
+                        donorInDImage.updateAndDraw();
+                        donorInDImage.killRoi();
+                        donorInDImageSave.setColorModel(donorInDImage.getProcessor().getColorModel());
+                        subtractDonorInDImageButton.setBackground(greenColor);
+                        subtractDonorInDImageButton.setOpaque(true);
+                        subtractDonorInDImageButton.setBorderPainted(false);
                     }
-                    donorInDImage.updateAndDraw();
-                    donorInDImage.killRoi();
-                    donorInDImageSave.setColorModel(donorInDImage.getProcessor().getColorModel());
-                    subtractDonorInDImageButton.setBackground(greenColor);
-                    subtractDonorInDImageButton.setOpaque(true);
-                    subtractDonorInDImageButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractDonorInAImage": {
                     if (donorInAImage == null) {
                         logError("No image is set as transfer channel.");
-                        return;
-                    } else if (donorInAImage.getRoi() == null) {
+                    } else if (autoflAInDField.getText().trim().isEmpty()) {
+                        autoflAInDField.setText("0");
+                    } else if (donorInAImage.getRoi() == null && autoflAInDField.getText().trim().equals("0")) {
                         logError("No ROI is defined for transfer channel.");
-                        return;
-                    }
-                    float autofl = 0;
-                    if (!autoflAInDField.getText().trim().isEmpty()) {
-                        autofl = Float.parseFloat(autoflAInDField.getText().trim());
-                    }
-                    DecimalFormat df = new DecimalFormat("#.#");
-                    int width = donorInAImage.getWidth();
-                    int height = donorInAImage.getHeight();
-                    int nSlices = donorInAImage.getImageStackSize();
-                    donorInAImageSave = new ImageStack(donorInAImage.getProcessor().getWidth(), donorInAImage.getProcessor().getHeight());
-                    for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                        double sum = 0;
-                        int count = 0;
-                        for (int i = 0; i < width; i++) {
-                            for (int j = 0; j < height; j++) {
-                                if (donorInAImage.getRoi().contains(i, j)) {
-                                    sum += donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(i, j);
-                                    count++;
+                    } else if (donorInAImage.getRoi() == null && !autoflAInDField.getText().trim().equals("0")) {
+                        float autofl = 0;
+                        if (!autoflAInDField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAInDField.getText().trim());
+                        }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        int width = donorInAImage.getWidth();
+                        int height = donorInAImage.getHeight();
+                        int nSlices = donorInAImage.getImageStackSize();
+                        donorInAImageSave = new ImageStack(donorInAImage.getProcessor().getWidth(), donorInAImage.getProcessor().getHeight());
+                        for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                            float i = 0;
+                            for (int x = 0; x < width; x++) {
+                                for (int y = 0; y < height; y++) {
+                                    i = donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
+                                    i = i - autofl;
+                                    if (i < 0) {
+                                        i = 0;
+                                    }
+                                    donorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
-                        }
-                        float backgroundAvg = (float) (sum / count);
-
-                        backgroundAvg = backgroundAvg + autofl;
-
-                        float i = 0;
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                i = donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
-                                i = i - backgroundAvg;
-                                if (i < 0) {
-                                    i = 0;
-                                }
-                                donorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                            FloatProcessor flp = new FloatProcessor(donorInAImage.getStack().getProcessor(currentSlice).getWidth(), donorInAImage.getStack().getProcessor(currentSlice).getHeight());
+                            flp.setPixels(currentSlice, (FloatProcessor) donorInAImage.getStack().getProcessor(currentSlice).duplicate());
+                            donorInAImageSave.addSlice("" + currentSlice, flp);
+                            if (nSlices == 1) {
+                                log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of transfer channel.");
+                            } else {
+                                log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of slice " + currentSlice + " of transfer channel.");
                             }
                         }
-                        FloatProcessor flp = new FloatProcessor(donorInAImage.getStack().getProcessor(currentSlice).getWidth(), donorInAImage.getStack().getProcessor(currentSlice).getHeight());
-                        flp.setPixels(currentSlice, (FloatProcessor) donorInAImage.getStack().getProcessor(currentSlice).duplicate());
-                        donorInAImageSave.addSlice("" + currentSlice, flp);
-                        if (nSlices == 1) {
-                            log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of transfer channel.");
-                        } else {
-                            log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of transfer channel.");
+                        donorInAImage.updateAndDraw();
+                        donorInAImageSave.setColorModel(donorInAImage.getProcessor().getColorModel());
+                        subtractDonorInAImageButton.setBackground(greenColor);
+                        subtractDonorInAImageButton.setOpaque(true);
+                        subtractDonorInAImageButton.setBorderPainted(false);
+                    } else if (donorInAImage.getRoi() != null) {
+
+                        float autofl = 0;
+                        if (!autoflAInDField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAInDField.getText().trim());
                         }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        int width = donorInAImage.getWidth();
+                        int height = donorInAImage.getHeight();
+                        int nSlices = donorInAImage.getImageStackSize();
+                        donorInAImageSave = new ImageStack(donorInAImage.getProcessor().getWidth(), donorInAImage.getProcessor().getHeight());
+                        for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                            double sum = 0;
+                            int count = 0;
+                            for (int i = 0; i < width; i++) {
+                                for (int j = 0; j < height; j++) {
+                                    if (donorInAImage.getRoi().contains(i, j)) {
+                                        sum += donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(i, j);
+                                        count++;
+                                    }
+                                }
+                            }
+                            float backgroundAvg = (float) (sum / count);
+
+                            backgroundAvg = backgroundAvg + autofl;
+
+                            float i = 0;
+                            for (int x = 0; x < width; x++) {
+                                for (int y = 0; y < height; y++) {
+                                    i = donorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
+                                    i = i - backgroundAvg;
+                                    if (i < 0) {
+                                        i = 0;
+                                    }
+                                    donorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                                }
+                            }
+                            FloatProcessor flp = new FloatProcessor(donorInAImage.getStack().getProcessor(currentSlice).getWidth(), donorInAImage.getStack().getProcessor(currentSlice).getHeight());
+                            flp.setPixels(currentSlice, (FloatProcessor) donorInAImage.getStack().getProcessor(currentSlice).duplicate());
+                            donorInAImageSave.addSlice("" + currentSlice, flp);
+                            if (nSlices == 1) {
+                                log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of transfer channel.");
+                            } else {
+                                log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of transfer channel.");
+                            }
+                        }
+                        donorInAImage.updateAndDraw();
+                        donorInAImage.killRoi();
+                        donorInAImageSave.setColorModel(donorInAImage.getProcessor().getColorModel());
+                        subtractDonorInAImageButton.setBackground(greenColor);
+                        subtractDonorInAImageButton.setOpaque(true);
+                        subtractDonorInAImageButton.setBorderPainted(false);
                     }
-                    donorInAImage.updateAndDraw();
-                    donorInAImage.killRoi();
-                    donorInAImageSave.setColorModel(donorInAImage.getProcessor().getColorModel());
-                    subtractDonorInAImageButton.setBackground(greenColor);
-                    subtractDonorInAImageButton.setOpaque(true);
-                    subtractDonorInAImageButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractAcceptorInAImage": {
                     if (acceptorInAImage == null) {
                         logError("No image is set as acceptor channel.");
-                        return;
-                    } else if (acceptorInAImage.getRoi() == null) {
+                    } else if (autoflAInAField.getText().trim().isEmpty()) {
+                        autoflAInAField.setText("0");
+                    } else if (acceptorInAImage.getRoi() == null && autoflAInAField.getText().trim().equals("0")) {
                         logError("No ROI is defined for acceptor channel.");
-                        return;
-                    }
-                    float autofl = 0;
-                    if (!autoflAInAField.getText().trim().isEmpty()) {
-                        autofl = Float.parseFloat(autoflAInAField.getText().trim());
-                    }
-                    DecimalFormat df = new DecimalFormat("#.#");
-                    int width = acceptorInAImage.getWidth();
-                    int height = acceptorInAImage.getHeight();
-                    int nSlices = acceptorInAImage.getImageStackSize();
-                    acceptorInAImageSave = new ImageStack(acceptorInAImage.getProcessor().getWidth(), acceptorInAImage.getProcessor().getHeight());
-                    for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                        double sum = 0;
-                        int count = 0;
-                        for (int i = 0; i < width; i++) {
-                            for (int j = 0; j < height; j++) {
-                                if (acceptorInAImage.getRoi().contains(i, j)) {
-                                    sum += acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(i, j);
-                                    count++;
+                    } else if (acceptorInAImage.getRoi() == null && !autoflAInAField.getText().trim().equals("0")) {
+                        float autofl = 0;
+                        if (!autoflAInAField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAInAField.getText().trim());
+                        }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        int width = acceptorInAImage.getWidth();
+                        int height = acceptorInAImage.getHeight();
+                        int nSlices = acceptorInAImage.getImageStackSize();
+                        acceptorInAImageSave = new ImageStack(acceptorInAImage.getProcessor().getWidth(), acceptorInAImage.getProcessor().getHeight());
+                        for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                            float i = 0;
+                            for (int x = 0; x < width; x++) {
+                                for (int y = 0; y < height; y++) {
+                                    i = acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
+                                    i = i - autofl;
+                                    if (i < 0) {
+                                        i = 0;
+                                    }
+                                    acceptorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
-                        }
-                        float backgroundAvg = (float) (sum / count);
-
-                        backgroundAvg = backgroundAvg + autofl;
-
-                        float i = 0;
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                i = acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
-                                i = i - backgroundAvg;
-                                if (i < 0) {
-                                    i = 0;
-                                }
-                                acceptorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                            FloatProcessor flp = new FloatProcessor(acceptorInAImage.getStack().getProcessor(currentSlice).getWidth(), acceptorInAImage.getStack().getProcessor(currentSlice).getHeight());
+                            flp.setPixels(currentSlice, (FloatProcessor) acceptorInAImage.getStack().getProcessor(currentSlice).duplicate());
+                            acceptorInAImageSave.addSlice("" + currentSlice, flp);
+                            if (nSlices == 1) {
+                                log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of acceptor channel.");
+                            } else {
+                                log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of slice " + currentSlice + " of acceptor channel.");
                             }
                         }
-                        FloatProcessor flp = new FloatProcessor(acceptorInAImage.getStack().getProcessor(currentSlice).getWidth(), acceptorInAImage.getStack().getProcessor(currentSlice).getHeight());
-                        flp.setPixels(currentSlice, (FloatProcessor) acceptorInAImage.getStack().getProcessor(currentSlice).duplicate());
-                        acceptorInAImageSave.addSlice("" + currentSlice, flp);
-                        if (nSlices == 1) {
-                            log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of acceptor channel.");
-                        } else {
-                            log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of acceptor channel.");
+                        acceptorInAImage.updateAndDraw();
+                        acceptorInAImageSave.setColorModel(acceptorInAImage.getProcessor().getColorModel());
+                        subtractAcceptorInAImageButton.setBackground(greenColor);
+                        subtractAcceptorInAImageButton.setOpaque(true);
+                        subtractAcceptorInAImageButton.setBorderPainted(false);
+                    } else if (acceptorInAImage.getRoi() != null) {
+                        float autofl = 0;
+                        if (!autoflAInAField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAInAField.getText().trim());
                         }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        int width = acceptorInAImage.getWidth();
+                        int height = acceptorInAImage.getHeight();
+                        int nSlices = acceptorInAImage.getImageStackSize();
+                        acceptorInAImageSave = new ImageStack(acceptorInAImage.getProcessor().getWidth(), acceptorInAImage.getProcessor().getHeight());
+                        for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                            double sum = 0;
+                            int count = 0;
+                            for (int i = 0; i < width; i++) {
+                                for (int j = 0; j < height; j++) {
+                                    if (acceptorInAImage.getRoi().contains(i, j)) {
+                                        sum += acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(i, j);
+                                        count++;
+                                    }
+                                }
+                            }
+                            float backgroundAvg = (float) (sum / count);
+
+                            backgroundAvg = backgroundAvg + autofl;
+
+                            float i = 0;
+                            for (int x = 0; x < width; x++) {
+                                for (int y = 0; y < height; y++) {
+                                    i = acceptorInAImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
+                                    i = i - backgroundAvg;
+                                    if (i < 0) {
+                                        i = 0;
+                                    }
+                                    acceptorInAImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                                }
+                            }
+                            FloatProcessor flp = new FloatProcessor(acceptorInAImage.getStack().getProcessor(currentSlice).getWidth(), acceptorInAImage.getStack().getProcessor(currentSlice).getHeight());
+                            flp.setPixels(currentSlice, (FloatProcessor) acceptorInAImage.getStack().getProcessor(currentSlice).duplicate());
+                            acceptorInAImageSave.addSlice("" + currentSlice, flp);
+                            if (nSlices == 1) {
+                                log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of acceptor channel.");
+                            } else {
+                                log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of acceptor channel.");
+                            }
+                        }
+                        acceptorInAImage.updateAndDraw();
+                        acceptorInAImage.killRoi();
+                        acceptorInAImageSave.setColorModel(acceptorInAImage.getProcessor().getColorModel());
+                        subtractAcceptorInAImageButton.setBackground(greenColor);
+                        subtractAcceptorInAImageButton.setOpaque(true);
+                        subtractAcceptorInAImageButton.setBorderPainted(false);
                     }
-                    acceptorInAImage.updateAndDraw();
-                    acceptorInAImage.killRoi();
-                    acceptorInAImageSave.setColorModel(acceptorInAImage.getProcessor().getColorModel());
-                    subtractAcceptorInAImageButton.setBackground(greenColor);
-                    subtractAcceptorInAImageButton.setOpaque(true);
-                    subtractAcceptorInAImageButton.setBorderPainted(false);
                     break;
                 }
                 case "subtractAutofluorescenceImage": {
                     if (autofluorescenceImage == null) {
                         logError("No image is set as autofluorescence channel.");
-                        return;
-                    } else if (autofluorescenceImage.getRoi() == null) {
+                    } else if (autoflAFField.getText().trim().isEmpty()) {
+                        autoflAFField.setText("0");
+                    } else if (autofluorescenceImage.getRoi() == null && autoflAFField.getText().trim().equals("0")) {
                         logError("No ROI is defined for autofluorescence channel.");
-                        return;
-                    }
-                    float autofl = 0;
-                    if (!autoflAFField.getText().trim().isEmpty()) {
-                        autofl = Float.parseFloat(autoflAFField.getText().trim());
-                    }
-                    DecimalFormat df = new DecimalFormat("#.#");
-                    int width = autofluorescenceImage.getWidth();
-                    int height = autofluorescenceImage.getHeight();
-                    int nSlices = autofluorescenceImage.getImageStackSize();
-                    autofluorescenceImageSave = new ImageStack(autofluorescenceImage.getProcessor().getWidth(), autofluorescenceImage.getProcessor().getHeight());
-                    for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
-                        double sum = 0;
-                        int count = 0;
-                        for (int i = 0; i < width; i++) {
-                            for (int j = 0; j < height; j++) {
-                                if (autofluorescenceImage.getRoi().contains(i, j)) {
-                                    sum += autofluorescenceImage.getStack().getProcessor(currentSlice).getPixelValue(i, j);
-                                    count++;
+                    } else if (autofluorescenceImage.getRoi() == null && !autoflAFField.getText().trim().equals("0")) {
+                        float autofl = 0;
+                        if (!autoflAFField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAFField.getText().trim());
+                        }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        int width = autofluorescenceImage.getWidth();
+                        int height = autofluorescenceImage.getHeight();
+                        int nSlices = autofluorescenceImage.getImageStackSize();
+                        autofluorescenceImageSave = new ImageStack(autofluorescenceImage.getProcessor().getWidth(), autofluorescenceImage.getProcessor().getHeight());
+                        for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                            float i = 0;
+                            for (int x = 0; x < width; x++) {
+                                for (int y = 0; y < height; y++) {
+                                    i = autofluorescenceImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
+                                    i = i - autofl;
+                                    if (i < 0) {
+                                        i = 0;
+                                    }
+                                    autofluorescenceImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
                                 }
                             }
-                        }
-                        float backgroundAvg = (float) (sum / count);
-
-                        backgroundAvg += autofl;
-
-                        float i = 0;
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                i = autofluorescenceImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
-                                i = i - backgroundAvg;
-                                if (i < 0) {
-                                    i = 0;
-                                }
-                                autofluorescenceImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                            FloatProcessor flp = new FloatProcessor(autofluorescenceImage.getStack().getProcessor(currentSlice).getWidth(), autofluorescenceImage.getStack().getProcessor(currentSlice).getHeight());
+                            flp.setPixels(currentSlice, (FloatProcessor) autofluorescenceImage.getStack().getProcessor(currentSlice).duplicate());
+                            autofluorescenceImageSave.addSlice("" + currentSlice, flp);
+                            if (nSlices == 1) {
+                                log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of autofluorescence channel.");
+                            } else {
+                                log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of slice " + currentSlice + " of autofluorescence channel.");
                             }
                         }
-                        FloatProcessor flp = new FloatProcessor(autofluorescenceImage.getStack().getProcessor(currentSlice).getWidth(), autofluorescenceImage.getStack().getProcessor(currentSlice).getHeight());
-                        flp.setPixels(currentSlice, (FloatProcessor) autofluorescenceImage.getStack().getProcessor(currentSlice).duplicate());
-                        autofluorescenceImageSave.addSlice("" + currentSlice, flp);
-                        if (nSlices == 1) {
-                            log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of autofluorescence channel.");
-                        } else {
-                            log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of autofluorescence channel.");
+                        autofluorescenceImage.updateAndDraw();
+                        autofluorescenceImageSave.setColorModel(autofluorescenceImage.getProcessor().getColorModel());
+                        subtractAutofluorescenceImageButton.setBackground(greenColor);
+                        subtractAutofluorescenceImageButton.setOpaque(true);
+                        subtractAutofluorescenceImageButton.setBorderPainted(false);
+                    } else if (autofluorescenceImage.getRoi() != null) {
+                        float autofl = 0;
+                        if (!autoflAFField.getText().trim().isEmpty()) {
+                            autofl = Float.parseFloat(autoflAFField.getText().trim());
                         }
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        int width = autofluorescenceImage.getWidth();
+                        int height = autofluorescenceImage.getHeight();
+                        int nSlices = autofluorescenceImage.getImageStackSize();
+                        autofluorescenceImageSave = new ImageStack(autofluorescenceImage.getProcessor().getWidth(), autofluorescenceImage.getProcessor().getHeight());
+                        for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                            double sum = 0;
+                            int count = 0;
+                            for (int i = 0; i < width; i++) {
+                                for (int j = 0; j < height; j++) {
+                                    if (autofluorescenceImage.getRoi().contains(i, j)) {
+                                        sum += autofluorescenceImage.getStack().getProcessor(currentSlice).getPixelValue(i, j);
+                                        count++;
+                                    }
+                                }
+                            }
+                            float backgroundAvg = (float) (sum / count);
+
+                            backgroundAvg += autofl;
+
+                            float i = 0;
+                            for (int x = 0; x < width; x++) {
+                                for (int y = 0; y < height; y++) {
+                                    i = autofluorescenceImage.getStack().getProcessor(currentSlice).getPixelValue(x, y);
+                                    i = i - backgroundAvg;
+                                    if (i < 0) {
+                                        i = 0;
+                                    }
+                                    autofluorescenceImage.getStack().getProcessor(currentSlice).putPixelValue(x, y, i);
+                                }
+                            }
+                            FloatProcessor flp = new FloatProcessor(autofluorescenceImage.getStack().getProcessor(currentSlice).getWidth(), autofluorescenceImage.getStack().getProcessor(currentSlice).getHeight());
+                            flp.setPixels(currentSlice, (FloatProcessor) autofluorescenceImage.getStack().getProcessor(currentSlice).duplicate());
+                            autofluorescenceImageSave.addSlice("" + currentSlice, flp);
+                            if (nSlices == 1) {
+                                log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of autofluorescence channel.");
+                            } else {
+                                log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvg) + ") of slice " + currentSlice + " of autofluorescence channel.");
+                            }
+                        }
+                        autofluorescenceImage.updateAndDraw();
+                        autofluorescenceImage.killRoi();
+                        autofluorescenceImageSave.setColorModel(autofluorescenceImage.getProcessor().getColorModel());
+                        subtractAutofluorescenceImageButton.setBackground(greenColor);
+                        subtractAutofluorescenceImageButton.setOpaque(true);
+                        subtractAutofluorescenceImageButton.setBorderPainted(false);
                     }
-                    autofluorescenceImage.updateAndDraw();
-                    autofluorescenceImage.killRoi();
-                    autofluorescenceImageSave.setColorModel(autofluorescenceImage.getProcessor().getColorModel());
-                    subtractAutofluorescenceImageButton.setBackground(greenColor);
-                    subtractAutofluorescenceImageButton.setOpaque(true);
-                    subtractAutofluorescenceImageButton.setBorderPainted(false);
                     break;
                 }
                 case "thresholdDonorInDImage":
