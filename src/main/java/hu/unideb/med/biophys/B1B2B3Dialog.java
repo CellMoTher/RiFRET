@@ -503,7 +503,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                     } else if (autoflDInDField.getText().trim().isEmpty()) {
                         autoflDInDField.setText("0");
                     } else if (donorImg.getRoi() == null && autoflDInDField.getText().trim().equals("0")) {
-                        mainWindow.logError("No ROI is defined for donor channel. (B1/B2/B3 calc.)");
+                        mainWindow.logError("No ROI or constant is defined for donor channel. (B1/B2/B3 calc.)");
                         // if autofluorescence value other than zero is entered, and no ROI is selected
                     } else if (donorImg.getRoi() == null && !autoflDInDField.getText().trim().equals("0")) {
                         float autofl = 0;
@@ -527,7 +527,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         donorImgSave.addSlice("" + 1, flp);
                         donorImg.updateAndDraw();
                         donorImgSave.setColorModel(ipD.getColorModel());
-                        mainWindow.log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of donor channel. (B1/B2/B3 calc.)");
+                        mainWindow.log("Subtracted background (constant: " + df.format(autofl) + ") of donor channel. (B1/B2/B3 calc.)");
                         subtractDonorButton.setBackground(mainWindow.greenColor);
                         subtractDonorButton.setOpaque(true);
                         subtractDonorButton.setBorderPainted(false);
@@ -566,7 +566,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         donorImg.updateAndDraw();
                         donorImg.killRoi();
                         donorImgSave.setColorModel(ipD.getColorModel());
-                        mainWindow.log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvgD) + ") of donor channel. (B1/B2/B3 calc.)");
+                        mainWindow.log("Subtracted background (avg. ROI" + (autofl > 0 ? " and constant" : "") + ": " + df.format(backgroundAvgD) + ") of donor channel. (B1/B2/B3 calc.)");
                         subtractDonorButton.setBackground(mainWindow.greenColor);
                         subtractDonorButton.setOpaque(true);
                         subtractDonorButton.setBorderPainted(false);
@@ -579,7 +579,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                     } else if (autoflAInDField.getText().trim().isEmpty()) {
                         autoflAInDField.setText("0");
                     } else if (transferImg.getRoi() == null && autoflAInDField.getText().trim().equals("0")) {
-                        mainWindow.logError("No ROI is defined for transfer channel. (B1/B2/B3 calc.)");
+                        mainWindow.logError("No ROI or constant is defined for transfer channel. (B1/B2/B3 calc.)");
                         // if autofluorescence value other than zero is entered, and no ROI is selected
                     } else if (transferImg.getRoi() == null && !autoflAInDField.getText().trim().equals("0")) {
                         float autofl = 0;
@@ -603,7 +603,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         transferImgSave.addSlice("" + 1, flp);
                         transferImg.updateAndDraw();
                         transferImgSave.setColorModel(ipT.getColorModel());
-                        mainWindow.log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of transfer channel. (B1/B2/B3 calc.)");
+                        mainWindow.log("Subtracted background (constant: " + df.format(autofl) + ") of transfer channel. (B1/B2/B3 calc.)");
                         subtractTransferButton.setBackground(mainWindow.greenColor);
                         subtractTransferButton.setOpaque(true);
                         subtractTransferButton.setBorderPainted(false);
@@ -642,7 +642,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         transferImg.updateAndDraw();
                         transferImg.killRoi();
                         transferImgSave.setColorModel(ipT.getColorModel());
-                        mainWindow.log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvgT) + ") of transfer channel. (B1/B2/B3 calc.)");
+                        mainWindow.log("Subtracted background (avg. ROI" + (autofl > 0 ? " and constant" : "") + ": " + df.format(backgroundAvgT) + ") of transfer channel. (B1/B2/B3 calc.)");
                         subtractTransferButton.setBackground(mainWindow.greenColor);
                         subtractTransferButton.setOpaque(true);
                         subtractTransferButton.setBorderPainted(false);
@@ -655,7 +655,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                     } else if (autoflAInAField.getText().trim().isEmpty()) {
                         autoflAInAField.setText("0");
                     } else if (acceptorImg.getRoi() == null && autoflAInAField.getText().trim().equals("0")) {
-                        mainWindow.logError("No ROI is defined for acceptor channel. (B1/B2/B3 calc.)");
+                        mainWindow.logError("No ROI or constant is defined for acceptor channel. (B1/B2/B3 calc.)");
                         // if autofluorescence value other than zero is entered, and no ROI is selected
                     } else if (acceptorImg.getRoi() == null && !autoflAInAField.getText().trim().equals("0")) {
                         float autofl = 0;
@@ -679,7 +679,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         acceptorImgSave.addSlice("" + 1, flp);
                         acceptorImg.updateAndDraw();
                         acceptorImgSave.setColorModel(ipA.getColorModel());
-                        mainWindow.log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of acceptor channel. (B1/B2/B3 calc.)");
+                        mainWindow.log("Subtracted background (constant: " + df.format(autofl) + ") of acceptor channel. (B1/B2/B3 calc.)");
                         subtractAcceptorButton.setBackground(mainWindow.greenColor);
                         subtractAcceptorButton.setOpaque(true);
                         subtractAcceptorButton.setBorderPainted(false);
@@ -718,7 +718,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         acceptorImg.updateAndDraw();
                         acceptorImg.killRoi();
                         acceptorImgSave.setColorModel(ipA.getColorModel());
-                        mainWindow.log("Subtracted background " + (autofl > 0 ? "and autofluorescence " : "") + "(" + df.format(backgroundAvgA) + ") of acceptor channel. (B1/B2/B3 calc.)");
+                        mainWindow.log("Subtracted background (avg. ROI" + (autofl > 0 ? " and constant" : "") + ": " + df.format(backgroundAvgA) + ") of acceptor channel. (B1/B2/B3 calc.)");
                         subtractAcceptorButton.setBackground(mainWindow.greenColor);
                         subtractAcceptorButton.setOpaque(true);
                         subtractAcceptorButton.setBorderPainted(false);
@@ -731,7 +731,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                     } else if (autoflAFField.getText().trim().isEmpty()) {
                         autoflAFField.setText("0");
                     } else if (autofluorescenceImg.getRoi() == null && autoflAFField.getText().trim().equals("0")) {
-                        mainWindow.logError("No ROI is defined for autofluorescence channel. (B1/B2/B3 calc.)");
+                        mainWindow.logError("No ROI or constant is defined for autofluorescence channel. (B1/B2/B3 calc.)");
                         // if autofluorescence value other than zero is entered, and no ROI is selected
                     } else if (autofluorescenceImg.getRoi() == null && !autoflAFField.getText().trim().equals("0")) {
                         float autofl = 0;
@@ -755,7 +755,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         autofluorescenceImgSave.addSlice("" + 1, flp);
                         autofluorescenceImg.updateAndDraw();
                         autofluorescenceImgSave.setColorModel(ipAF.getColorModel());
-                        mainWindow.log("Subtracted autofluorescence " + "(" + df.format(autofl) + ") of autofluorescence channel. (B1/B2/B3 calc.)");
+                        mainWindow.log("Subtracted background (constant: " + df.format(autofl) + ") of autofluorescence channel. (B1/B2/B3 calc.)");
                         subtractAutofluorescenceButton.setBackground(mainWindow.greenColor);
                         subtractAutofluorescenceButton.setOpaque(true);
                         subtractAutofluorescenceButton.setBorderPainted(false);
@@ -794,7 +794,7 @@ public class B1B2B3Dialog extends JDialog implements ActionListener {
                         autofluorescenceImg.updateAndDraw();
                         autofluorescenceImg.killRoi();
                         autofluorescenceImgSave.setColorModel(ipAF.getColorModel());
-                        mainWindow.log("Subtracted background " + (autofl > 0 ? "and AF " : "") + "(" + df.format(backgroundAvgAF) + ") of autofluorescence channel. (B1/B2/B3 calc.)");
+                        mainWindow.log("Subtracted background (avg. ROI" + (autofl > 0 ? " and constant" : "") + ": " + df.format(backgroundAvgAF) + ") of autofluorescence channel. (B1/B2/B3 calc.)");
                         subtractAutofluorescenceButton.setBackground(mainWindow.greenColor);
                         subtractAutofluorescenceButton.setOpaque(true);
                         subtractAutofluorescenceButton.setBorderPainted(false);
