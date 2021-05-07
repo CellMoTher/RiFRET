@@ -104,7 +104,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 0;
         gc.gridy = 0;
-        JLabel infoLabel = new JLabel("<html><center>Alpha is calculated based on average of images of the donor (I1) and transfer (I2) channel images of donor and acceptor only samples, respectively, as well as on the Ld, La, Nd, Na and \u03B5d / \u03B5a constants.</center></html>");
+        JLabel infoLabel = new JLabel("<html><center>Alpha is calculated based on average of the donor (I1) and transfer (I2) channel images of donor and acceptor only samples, respectively, as well as on the Ld, La, Nd, Na and \u03B5d / \u03B5a constants.</center></html>");
         panel.add(infoLabel, gc);
         gc.gridx = 0;
         gc.gridy = 1;
