@@ -3066,7 +3066,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     resetAll();
                     break;
                 case "help":
-                    String url = "https://imagej.net/RiFRET";
+                    String url = "https://imagej.net/plugins/rifret";
                     try {
                         BrowserLauncher.openURL(url);
                     } catch (IOException ioe) {
@@ -3076,7 +3076,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                 case "about":
                     JOptionPane optionPane = new JOptionPane();
                     optionPane.setMessage("RiFRET - an ImageJ plugin for intensity-based three-filter set (ratiometric) FRET\n"
-                            + "Homepage: https://imagej.net/RiFRET\n"
+                            + "Homepage: https://imagej.net/plugins/rifret\n"
                             + "Written by: János Roszik (janosr@med.unideb.hu), Duarte Lisboa (duarte@med.unideb.hu),\n"
                             + "János Szöllősi (szollo@med.unideb.hu) and György Vereb (vereb@med.unideb.hu)\n"
                             + "Tested with: (Fiji Is Just) ImageJ " + imagej2Version + "/" + imagejVersion + ";" + " Java " + javaVersion + ".\n");
