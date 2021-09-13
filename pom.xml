@@ -19,7 +19,7 @@
     <inceptionYear>2009</inceptionYear>
     <organization>
         <name>Department of Biophysics and Cell Biology, Faculty of Medicine, University of Debrecen</name>
-        <url>https://image.net/RiFRET</url>
+        <url>https://imagej.net/plugins/rifret</url>
     </organization>
     <licenses>
         <license>
@@ -33,7 +33,7 @@
         <developer>
             <id>camlloyd</id>
             <name>Cameron Lloyd</name>
-            <url>https://imagej.net/User:Camlloyd</url>
+            <url>https://imagej.net/people/camlloyd</url>
             <roles>
                 <role>lead</role>
                 <role>developer</role>
