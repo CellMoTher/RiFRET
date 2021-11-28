@@ -27,6 +27,7 @@ import ij.ImageStack;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
 import ij.gui.Roi;
+import ij.io.DirectoryChooser;
 import ij.io.FileSaver;
 import ij.io.OpenDialog;
 import ij.io.Opener;
@@ -250,6 +251,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private int currentlyProcessedFile = 0;
     private String currentlyProcessedFileName = null;
     private String currentDirectory = null;
+    private String outputPath = null;
     public Color originalButtonColor = null;
     public Color greenColor = new Color(142, 207, 125);
     public JCheckBoxMenuItem autofluorescenceCorrectionMenuItem;
@@ -323,7 +325,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         saveParametersMenuItem.addActionListener(this);
         fileMenu.add(saveParametersMenuItem);
         fileMenu.addSeparator();
-        semiAutomaticMenuItem = new JMenuItem("Semi-Automatic Processing...");
+        semiAutomaticMenuItem = new JMenuItem("Batch Processing...");
         semiAutomaticMenuItem.setActionCommand("semiAutomaticProcessing");
         semiAutomaticMenuItem.addActionListener(this);
         fileMenu.add(semiAutomaticMenuItem);
@@ -3160,9 +3162,16 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logError("FRET image is required.");
                         return;
                     }
-                    FileSaver fs = new FileSaver(transferImage);
-                    if (fs.saveAsTiff()) {
-                        log("Saved " + transferImage.getTitle() + ".");
+                    if (outputPath == null) {
+                        FileSaver fs = new FileSaver(transferImage);
+                        if (fs.saveAsTiff()) {
+                            log("Saved " + transferImage.getTitle() + ".");
+                        }
+                    } else {
+                        FileSaver fs = new FileSaver(transferImage);
+                        if (fs.saveAsTiff(outputPath + currentlyProcessedFileName + " " + transferImage.getTitle() + ".tif")) {
+                            log("Saved " + transferImage.getTitle() + " to " + outputPath + currentlyProcessedFileName + " " + transferImage.getTitle() + ".tif" + ".");
+                        }
                     }
                     transferImage.updateAndDraw();
                     break;
@@ -3233,41 +3242,58 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     break;
                 }
                 case "semiAutomaticProcessing":
-                    int choice = JOptionPane.showConfirmDialog(this, "Semi-automatic processing of images\n\nOpens and processes FRET images in a given directory. It works with\n"
+                    int choice = JOptionPane.showConfirmDialog(this, "Batch processing of images\n\nOpens and processes FRET images in a given directory. It works with\n"
                             + "Zeiss CZI and LSM images (tested with LSM 880/ZEN 2.1 SP1 (black) Version 12.0.0.0),\n"
                             + "which contain the following channels:\n"
-                            + "1. autofluorescence channel (optional)\n"
-                            + "2. donor channel\n"
-                            + "3. transfer channel\n"
-                            + "4. acceptor channel\n\n"
-                            + "The upper left corner (1/6 x 1/6 of the image) is considered as background.\n"
-                            + "Values for blurring and autofluorescence correction (if desired) should\n"
-                            + "be entered in the main window before continuing.\n"
-                            + "Threshold settings, creation of FRET image and measurements have to be\n"
-                            + "made manually.\n\n"
+                            + "1. donor channel\n"
+                            + "2. transfer channel\n"
+                            + "3. acceptor channel\n"
+                            + "4. autofluorescence channel (optional)\n\n"
+                            + "Values for blurring and background subtraction (if desired)\n"
+                            + "should be entered in the main window before continuing.\n"
                             + "Every previously opened image and result window will be closed when you\n"
                             + "click OK.\n\n"
-                            + "Click OK to select the directory. To continue with the next "
-                            + "image, do\nnot close any windows, just click the Next button.\n", "Semi-Automatic Processing of Images", JOptionPane.OK_CANCEL_OPTION);
+                            + "Click OK to select the directory and CSV file containing parameters\n", "Batch Processing of Images", JOptionPane.OK_CANCEL_OPTION);
                     if (choice == JOptionPane.YES_OPTION) {
                         currentlyProcessedFile = 0;
                         automaticallyProcessedFiles = null;
                         currentlyProcessedFileName = null;
                         WindowManager.closeAllWindows();
-                        JFileChooser chooser = new JFileChooser(currentDirectory);
-                        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                        chooser.setDialogTitle("Select Directory");
-                        chooser.setAcceptAllFileFilterUsed(false);
-                        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                            log("Processing files in directory: " + chooser.getSelectedFile());
-                            currentDirectory = chooser.getSelectedFile().toString();
-                        } else {
-                            log("Semi-automatic processing: no directory is selected.");
+                        log("Please select an input directory...");
+                        DirectoryChooser chooser = new DirectoryChooser("Select Input Directory");
+                        currentDirectory = chooser.getDirectory();
+                        File dir = new File(currentDirectory);
+                        log("Please select a CSV to load parameters...");
+                        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "loadParameters"));
+                        outputPath = currentDirectory + "Output/";
+                        File output = new File(outputPath);
+                        if (!output.exists()) {
+                            output.mkdir();
+                        }
+                        if (outputPath == null) {
                             return;
                         }
                         nextButton.setVisible(true);
                         useImageStacks.setSelected(true);
-                        automaticallyProcessedFiles = chooser.getSelectedFile().listFiles();
+                        automaticallyProcessedFiles = dir.listFiles();
+                        log("Please set the channel order...");
+                        GenericDialog gd = new GenericDialog("Set Channel Order");
+                        gd.addNumericField("Donor Channel:", donorInDSlice, 0);
+                        gd.addNumericField("Transfer Channel:", donorInASlice, 0);
+                        gd.addNumericField("Acceptor Channel:", acceptorInASlice, 0);
+                        if (autofluorescenceCorrectionMenuItem.isSelected()) {
+                            gd.addNumericField("Autofluorescence Channel:", autofluorescenceSlice, 0);
+                        }
+                        gd.showDialog();
+                        if (gd.wasCanceled()) {
+                            return;
+                        }
+                        donorInDSlice = (int) gd.getNextNumber();
+                        donorInASlice = (int) gd.getNextNumber();
+                        acceptorInASlice = (int) gd.getNextNumber();
+                        if (autofluorescenceCorrectionMenuItem.isSelected()) {
+                            autofluorescenceSlice = (int) gd.getNextNumber();
+                        }
                         processFile(0);
                     }
                     break;
@@ -3430,6 +3456,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
             log("Processing files has been finished.");
             nextButton.setVisible(false);
             IJ.selectWindow("Results");
+            IJ.saveAs("Results", outputPath + "Results.csv");
+            log("Saved results to: " + outputPath + "Results.csv.");
             currentlyProcessedFile = 0;
             automaticallyProcessedFiles = null;
             currentlyProcessedFileName = null;
@@ -3443,48 +3471,51 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         currentlyProcessedFileName = automaticallyProcessedFiles[currentFile].getName();
         (new Opener()).open(automaticallyProcessedFiles[currentFile].getAbsolutePath());
         WindowManager.putBehind();
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "split"));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setAcceptorInAImage"));
-        WindowManager.putBehind();
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInAImage"));
-        WindowManager.putBehind();
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInDImage"));
+        WindowManager.getCurrentImage().getImageStack().setSliceLabel("Donor", donorInDSlice);
+        WindowManager.getCurrentImage().getImageStack().setSliceLabel("Transfer", donorInASlice);
+        WindowManager.getCurrentImage().getImageStack().setSliceLabel("Acceptor", acceptorInASlice);
         if (autofluorescenceCorrectionMenuItem.isSelected()) {
-            WindowManager.putBehind();
+            WindowManager.getCurrentImage().getImageStack().setSliceLabel("Autofluorescence", autofluorescenceSlice);
+        }
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "split"));
+        WindowManager.setTempCurrentImage(WindowManager.getImage("Donor"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInDImage"));
+        WindowManager.setTempCurrentImage(WindowManager.getImage("Transfer"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setDonorInAImage"));
+        WindowManager.setTempCurrentImage(WindowManager.getImage("Acceptor"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setAcceptorInAImage"));
+        if (autofluorescenceCorrectionMenuItem.isSelected()) {
+            WindowManager.setTempCurrentImage(WindowManager.getImage("Autofluorescence"));
             this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "setAutofluorescenceImage"));
         }
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothDD"));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothDA"));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothAA"));
-        if (autofluorescenceCorrectionMenuItem.isSelected()) {
+        if (Double.parseDouble(sigmaFieldDD.getText().trim()) > 0) {
+            this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothDD"));
+        }
+        if (Double.parseDouble(sigmaFieldDA.getText().trim()) > 0) {
+            this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothDA"));
+        }
+        if (Double.parseDouble(sigmaFieldAA.getText().trim()) > 0) {
+            this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothAA"));
+        }
+        if (autofluorescenceCorrectionMenuItem.isSelected() && Double.parseDouble(sigmaFieldAF.getText().trim()) > 0) {
             this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "smoothAF"));
         }
-        donorInDImage.setRoi(new Roi(0, 0, donorInDImage.getWidth() / 6, donorInDImage.getHeight() / 6));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "copyRoi"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "subtractDonorInDImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "subtractDonorInAImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "subtractAcceptorInAImage"));
         if (autofluorescenceCorrectionMenuItem.isSelected()) {
             this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "subtractAutofluorescenceImage"));
         }
-        donorInDImage.setRoi(new Roi(0, 0, donorInDImage.getWidth() / 6, donorInDImage.getHeight() / 6));
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "copyRoi"));
-        donorInDImage.getProcessor().setValue(0);
-        donorInDImage.getProcessor().fill();
-        donorInAImage.getProcessor().setValue(0);
-        donorInAImage.getProcessor().fill();
-        acceptorInAImage.getProcessor().setValue(0);
-        acceptorInAImage.getProcessor().fill();
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "createFretImage"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdDonorInDImage"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdDonorInAImage"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdAcceptorInAImage"));
         if (autofluorescenceCorrectionMenuItem.isSelected()) {
-            autofluorescenceImage.getProcessor().setValue(0);
-            autofluorescenceImage.getProcessor().fill();
+            this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdAutofluorescenceImage"));
         }
-        donorInDImage.killRoi();
-        donorInAImage.killRoi();
-        acceptorInAImage.killRoi();
-        if (autofluorescenceCorrectionMenuItem.isSelected()) {
-            autofluorescenceImage.killRoi();
-        }
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdFretImage"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "saveFretImage"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "nextImage"));
     }
 
     void registerToDonorChannel() {
