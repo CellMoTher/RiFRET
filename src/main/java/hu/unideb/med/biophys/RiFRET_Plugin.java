@@ -121,6 +121,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private ImageStack donorInAImageSave = null;
     private ImageStack acceptorInAImageSave = null;
     private ImageStack autofluorescenceImageSave = null;
+    private ImageStack transferImageSave = null;
     private int donorInDSlice;
     private int donorInASlice;
     private int acceptorInASlice;
@@ -176,6 +177,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JButton thresholdDonorInAImageButton;
     private JButton thresholdAcceptorInAImageButton;
     private JButton thresholdAutofluorescenceImageButton;
+    private JButton thresholdFretImageButton;
     private JButton smoothDonorInDImageButton;
     private JButton smoothDonorInAImageButton;
     private JButton smoothAcceptorInAImageButton;
@@ -185,6 +187,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JButton resetDAButton;
     private JButton resetAAButton;
     private JButton resetAFButton;
+    private JButton resetFretButton;
     private JButton copyRoiButton;
     private JLabel s5Label;
     private JLabel s6Label;
@@ -200,12 +203,20 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     public JTextField autoflDInDField;
     public JTextField autoflAInDField;
     public JTextField autoflAInAField;
+    private JTextField thresholdDonorMinField;
+    private JTextField thresholdDonorMaxField;
+    private JTextField thresholdTransferMinField;
+    private JTextField thresholdTransferMaxField;
+    private JTextField thresholdAcceptorMinField;
+    private JTextField thresholdAcceptorMaxField;
+    private JTextField thresholdAFMinField;
+    private JTextField thresholdAFMaxField;
+    public JTextField thresholdFretMinField;
+    public JTextField thresholdFretMaxField;
     private JTextField sigmaFieldDD;
     private JTextField sigmaFieldDA;
     private JTextField sigmaFieldAA;
     private JTextField sigmaFieldAF;
-    public JTextField autoThresholdMin;
-    public JTextField autoThresholdMax;
     private JButton createButton;
     private JButton saveButton;
     private JButton measureButton;
@@ -974,22 +985,68 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         line4.setBackground(Color.lightGray);
         container.add(line4, gc);
 
-        // Threshold information label */
+        // Create FRET image panel
+        JPanel createFretImgPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         gc.gridwidth = 10;
         gc.gridx = 0;
         gc.gridy = 28;
-        JLabel thInfo = new JLabel("Threshold setting: set threshold, click Apply, then click Set to NaN");
-        container.add(thInfo, gc);
+        gc.insets = new Insets(2, 2, 2, 2);
+        gc.fill = GridBagConstraints.NONE;
+        createFretImgPanel.add(new JLabel("Step 4: create FRET image   "));
+//        autoThresholdingCB = new JCheckBox("Thresholding with min: ", true);
+//        autoThresholdingCB.setToolTipText("<html>If this checkbox is checked, the FRET image will be thresholded<br>with the given min and max values to exclude pixels with extreme<br>FRET efficiencies.</html>");
+//        autoThresholdingCB.setSelected(true);
+//        createFretImgPanel.add(autoThresholdingCB);
+//        autoThresholdMin = new JTextField("-2", 2);
+//        autoThresholdMin.setHorizontalAlignment(JTextField.RIGHT);
+//        createFretImgPanel.add(autoThresholdMin);
+//        createFretImgPanel.add(new JLabel(" and max: "));
+//        autoThresholdMax = new JTextField("2", 2);
+//        autoThresholdMax.setHorizontalAlignment(JTextField.RIGHT);
+//        createFretImgPanel.add(autoThresholdMax);
+        container.add(createFretImgPanel, gc);
+        createButton = new JButton("Create");
+        createButton.addActionListener(this);
+        createButton.setActionCommand("createFretImage");
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 10;
+        gc.gridy = 28;
+        container.add(createButton, gc);
 
-        // Step 4a: Threshold donor channel
-        gc.gridwidth = 10;
+        // Separator panel 5
+        gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 0;
         gc.gridy = 29;
-        container.add(new JLabel("Step 4a: set threshold for donor channel image"), gc);
+        JPanel line5 = new JPanel();
+        line5.setPreferredSize(new Dimension(windowWidth - 35, 1));
+        line5.setBackground(Color.lightGray);
+        container.add(line5, gc);
+
+        // Threshold information label */
+        gc.gridwidth = 10;
+        gc.gridx = 0;
+        gc.gridy = 30;
+        JLabel thInfo = new JLabel("Threshold setting: set threshold, click Apply, then click Set to NaN");
+        container.add(thInfo, gc);
+        gc.gridx = 10;
+        gc.gridy = 30;
+        JLabel thresholdMinLabel = new JLabel("Min:");
+        container.add(thresholdMinLabel, gc);
+        gc.gridx = 11;
+        gc.gridy = 30;
+        JLabel thresholdMaxLabel = new JLabel("Max:");
+        container.add(thresholdMaxLabel, gc);
+
+        // Step 5a: Threshold donor channel
+        gc.gridwidth = 10;
+        gc.gridx = 0;
+        gc.gridy = 31;
+        container.add(new JLabel("Step 5a: set threshold for donor channel image"), gc);
 
         gc.gridwidth = 1;
         gc.gridx = 9;
-        gc.gridy = 29;
+        gc.gridy = 31;
         resetDDButton = new JButton("Reset");
         resetDDButton.setToolTipText("Resets blur and threshold settings");
         resetDDButton.setMargin(new Insets(0, 0, 0, 0));
@@ -998,22 +1055,36 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         resetDDButton.setActionCommand("resetDD");
         container.add(resetDDButton, gc);
 
-        thresholdDonorInDImageButton = new JButton("Set threshold");
+        thresholdDonorMinField = new JTextField("0", 5);
+        thresholdDonorMinField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
+        gc.gridx = 10;
+        gc.gridy = 31;
+        container.add(thresholdDonorMinField, gc);
+
+        thresholdDonorMaxField = new JTextField("65535", 5);
+        thresholdDonorMaxField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
+        gc.gridx = 11;
+        gc.gridy = 31;
+        container.add(thresholdDonorMaxField, gc);
+
+        thresholdDonorInDImageButton = new JButton("Apply");
         thresholdDonorInDImageButton.addActionListener(this);
         thresholdDonorInDImageButton.setActionCommand("thresholdDonorInDImage");
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.gridx = 10;
-        gc.gridy = 29;
+        gc.gridx = 13;
+        gc.gridy = 31;
         container.add(thresholdDonorInDImageButton, gc);
 
-        // Step 4b: Threshold transfer channel
+        // Step 5b: Threshold transfer channel
         gc.gridwidth = 10;
         gc.gridx = 0;
-        gc.gridy = 30;
-        container.add(new JLabel("Step 4b: set threshold for transfer channel image"), gc);
+        gc.gridy = 32;
+        container.add(new JLabel("Step 5b: set threshold for transfer channel image"), gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
-        gc.gridy = 30;
+        gc.gridy = 32;
         resetDAButton = new JButton("Reset");
         resetDAButton.setToolTipText("Resets blur and threshold settings");
         resetDAButton.setMargin(new Insets(0, 0, 0, 0));
@@ -1021,22 +1092,37 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         resetDAButton.addActionListener(this);
         resetDAButton.setActionCommand("resetDA");
         container.add(resetDAButton, gc);
-        thresholdDonorInAImageButton = new JButton("Set threshold");
+
+        thresholdTransferMinField = new JTextField("0", 5);
+        thresholdTransferMinField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
+        gc.gridx = 10;
+        gc.gridy = 32;
+        container.add(thresholdTransferMinField, gc);
+
+        thresholdTransferMaxField = new JTextField("65535", 5);
+        thresholdTransferMaxField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
+        gc.gridx = 11;
+        gc.gridy = 32;
+        container.add(thresholdTransferMaxField, gc);
+
+        thresholdDonorInAImageButton = new JButton("Apply");
         thresholdDonorInAImageButton.addActionListener(this);
         thresholdDonorInAImageButton.setActionCommand("thresholdDonorInAImage");
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.gridx = 10;
-        gc.gridy = 30;
+        gc.gridx = 13;
+        gc.gridy = 32;
         container.add(thresholdDonorInAImageButton, gc);
 
-        // Step 4c: Threshold acceptor channel
+        // Step 5c: Threshold acceptor channel
         gc.gridwidth = 10;
         gc.gridx = 0;
-        gc.gridy = 31;
-        container.add(new JLabel("Step 4c: set threshold for acceptor channel image"), gc);
+        gc.gridy = 33;
+        container.add(new JLabel("Step 5c: set threshold for acceptor channel image"), gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
-        gc.gridy = 31;
+        gc.gridy = 33;
         resetAAButton = new JButton("Reset");
         resetAAButton.setToolTipText("Resets blur and threshold settings");
         resetAAButton.setMargin(new Insets(0, 0, 0, 0));
@@ -1044,23 +1130,38 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         resetAAButton.addActionListener(this);
         resetAAButton.setActionCommand("resetAA");
         container.add(resetAAButton, gc);
-        thresholdAcceptorInAImageButton = new JButton("Set threshold");
+
+        thresholdAcceptorMinField = new JTextField("0", 5);
+        thresholdAcceptorMinField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
+        gc.gridx = 10;
+        gc.gridy = 33;
+        container.add(thresholdAcceptorMinField, gc);
+
+        thresholdAcceptorMaxField = new JTextField("65535", 5);
+        thresholdAcceptorMaxField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
+        gc.gridx = 11;
+        gc.gridy = 33;
+        container.add(thresholdAcceptorMaxField, gc);
+
+        thresholdAcceptorInAImageButton = new JButton("Apply");
         thresholdAcceptorInAImageButton.addActionListener(this);
         thresholdAcceptorInAImageButton.setActionCommand("thresholdAcceptorInAImage");
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.gridx = 10;
-        gc.gridy = 31;
+        gc.gridx = 13;
+        gc.gridy = 33;
         container.add(thresholdAcceptorInAImageButton, gc);
 
-        // Step 4d: Threshold autofluorescence channel
+        // Step 5d: Threshold autofluorescence channel
         gc.gridwidth = 10;
         gc.gridx = 0;
-        gc.gridy = 32;
-        thresholdAutofluorescenceImageLabel = new JLabel("Step 4d: set threshold for autofluorescence channel image");
+        gc.gridy = 34;
+        thresholdAutofluorescenceImageLabel = new JLabel("Step 5d: set threshold for autofluorescence channel image");
         container.add(thresholdAutofluorescenceImageLabel, gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
-        gc.gridy = 32;
+        gc.gridy = 34;
         resetAFButton = new JButton("Reset");
         resetAFButton.setToolTipText("Resets blur and threshold settings");
         resetAFButton.setMargin(new Insets(0, 0, 0, 0));
@@ -1068,64 +1169,90 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         resetAFButton.addActionListener(this);
         resetAFButton.setActionCommand("resetAF");
         container.add(resetAFButton, gc);
-        thresholdAutofluorescenceImageButton = new JButton("Set threshold");
+
+        thresholdAFMinField = new JTextField("0", 5);
+        thresholdAFMinField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
+        gc.gridx = 10;
+        gc.gridy = 34;
+        container.add(thresholdAFMinField, gc);
+
+        thresholdAFMaxField = new JTextField("65535", 5);
+        thresholdAFMaxField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
+        gc.gridx = 11;
+        gc.gridy = 34;
+        container.add(thresholdAFMaxField, gc);
+
+        thresholdAutofluorescenceImageButton = new JButton("Apply");
         thresholdAutofluorescenceImageButton.addActionListener(this);
         thresholdAutofluorescenceImageButton.setActionCommand("thresholdAutofluorescenceImage");
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.gridx = 10;
-        gc.gridy = 32;
+        gc.gridx = 13;
+        gc.gridy = 34;
         container.add(thresholdAutofluorescenceImageButton, gc);
         if (!autofluorescenceCorrectionMenuItem.isSelected()) {
             thresholdAutofluorescenceImageLabel.setVisible(false);
             resetAFButton.setVisible(false);
+            thresholdAFMinField.setVisible(false);
+            thresholdAFMaxField.setVisible(false);
             thresholdAutofluorescenceImageButton.setVisible(false);
         }
 
-        gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.gridx = 0;
-        gc.gridy = 33;
-        JPanel line5 = new JPanel();
-        line5.setPreferredSize(new Dimension(windowWidth - 35, 1));
-        line5.setBackground(Color.lightGray);
-        container.add(line5, gc);
-
-        // Create FRET image panel
-        JPanel createFretImgPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        // Step 5b: Threshold FRET channel
         gc.gridwidth = 10;
         gc.gridx = 0;
-        gc.gridy = 34;
-        gc.insets = new Insets(2, 2, 2, 2);
-        gc.fill = GridBagConstraints.NONE;
-        createFretImgPanel.add(new JLabel("Step 5a: create FRET image   "));
-        autoThresholdingCB = new JCheckBox("Thresholding with min: ", true);
-        autoThresholdingCB.setToolTipText("<html>If this checkbox is checked, the FRET image will be thresholded<br>with the given min and max values to exclude pixels with extreme<br>FRET efficiencies.</html>");
-        autoThresholdingCB.setSelected(true);
-        createFretImgPanel.add(autoThresholdingCB);
-        autoThresholdMin = new JTextField("-2", 2);
-        autoThresholdMin.setHorizontalAlignment(JTextField.RIGHT);
-        createFretImgPanel.add(autoThresholdMin);
-        createFretImgPanel.add(new JLabel(" and max: "));
-        autoThresholdMax = new JTextField("2", 2);
-        autoThresholdMax.setHorizontalAlignment(JTextField.RIGHT);
-        createFretImgPanel.add(autoThresholdMax);
-        container.add(createFretImgPanel, gc);
-        createButton = new JButton("Create");
-        createButton.addActionListener(this);
-        createButton.setActionCommand("createFretImage");
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridy = 35;
+        container.add(new JLabel("Step 5e: set threshold for FRET image"), gc);
+        gc.gridwidth = 1;
+        gc.gridx = 9;
+        gc.gridy = 35;
+        resetFretButton = new JButton("Reset");
+        resetFretButton.setToolTipText("Resets threshold settings");
+        resetFretButton.setMargin(new Insets(0, 0, 0, 0));
+        resetFretButton.setFont(new Font("Helvetica", Font.BOLD, 10));
+        resetFretButton.addActionListener(this);
+        resetFretButton.setActionCommand("resetFret");
+        container.add(resetFretButton, gc);
+
+        thresholdFretMinField = new JTextField("-2", 5);
+        thresholdFretMinField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
         gc.gridx = 10;
-        gc.gridy = 34;
-        container.add(createButton, gc);
+        gc.gridy = 35;
+        container.add(thresholdFretMinField, gc);
+
+        thresholdFretMaxField = new JTextField("2", 5);
+        thresholdFretMaxField.setHorizontalAlignment(JTextField.RIGHT);
+        gc.gridwidth = 1;
+        gc.gridx = 11;
+        gc.gridy = 35;
+        container.add(thresholdFretMaxField, gc);
+
+        thresholdFretImageButton = new JButton("Apply");
+        thresholdFretImageButton.addActionListener(this);
+        thresholdFretImageButton.setActionCommand("thresholdFretImage");
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 13;
+        gc.gridy = 35;
+        container.add(thresholdFretImageButton, gc);
+
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 0;
+        gc.gridy = 36;
+        JPanel line6 = new JPanel();
+        line6.setPreferredSize(new Dimension(windowWidth - 35, 1));
+        line6.setBackground(Color.lightGray);
+        container.add(line6, gc);
 
         // Save FRET image panel
         JPanel saveFretImgPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         gc.gridwidth = 10;
         gc.gridx = 0;
-        gc.gridy = 35;
+        gc.gridy = 37;
         gc.insets = new Insets(2, 2, 2, 2);
         gc.fill = GridBagConstraints.NONE;
-        saveFretImgPanel.add(new JLabel("Step 5b: save FRET image as TIFF       "));
+        saveFretImgPanel.add(new JLabel("Step 6: save FRET image as TIFF       "));
         container.add(saveFretImgPanel, gc);
         saveButton = new JButton("Save");
         saveButton.addActionListener(this);
@@ -1133,12 +1260,12 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 10;
-        gc.gridy = 35;
+        gc.gridy = 37;
         container.add(saveButton, gc);
 
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 0;
-        gc.gridy = 36;
+        gc.gridy = 38;
         JPanel line7 = new JPanel();
         line7.setPreferredSize(new Dimension(windowWidth - 35, 1));
         line7.setBackground(Color.lightGray);
@@ -1146,8 +1273,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
         gc.gridwidth = 7;
         gc.gridx = 0;
-        gc.gridy = 37;
-        container.add(new JLabel("Step 6: select ROIs and make measurements"), gc);
+        gc.gridy = 39;
+        container.add(new JLabel("Step 7: select ROIs and make measurements"), gc);
         gc.gridx = 9;
         gc.gridwidth = 1;
         closeImagesButton = new JButton("Close images");
@@ -1163,7 +1290,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         measureButton.addActionListener(this);
         measureButton.setActionCommand("measureFretImage");
         gc.gridx = 10;
-        gc.gridy = 37;
+        gc.gridy = 39;
         gc.gridwidth = 6;
         container.add(measureButton, gc);
         nextButton = new JButton("Next");
@@ -1171,7 +1298,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         nextButton.addActionListener(this);
         nextButton.setActionCommand("nextImage");
         gc.gridx = 16;
-        gc.gridy = 37;
+        gc.gridy = 39;
         gc.gridwidth = GridBagConstraints.REMAINDER;
         container.add(nextButton, gc);
         nextButton.setVisible(false);
@@ -1288,8 +1415,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             autoflAInDField.setText(ibgT);
                             autoflAInAField.setText(ibgA);
 
-                            autoThresholdMin.setText(thresholdMin);
-                            autoThresholdMax.setText(thresholdMax);
+                            thresholdFretMinField.setText(thresholdMin);
+                            thresholdFretMaxField.setText(thresholdMax);
                         }
                         log("Loaded parameters from: " + path);
                     } catch (IOException ioe) {
@@ -1351,8 +1478,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 autoflAInDField.getText(),
                                 autoflAInAField.getText(),
                                 autoflAFField.getText(),
-                                autoThresholdMin.getText(),
-                                autoThresholdMax.getText());
+                                thresholdFretMinField.getText(),
+                                thresholdFretMaxField.getText());
                         printer.flush();
                         log("Saved parameters to: " + path);
                     } catch (IOException ioe) {
@@ -2310,50 +2437,126 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     }
                     break;
                 }
-                case "thresholdDonorInDImage":
+                case "thresholdDonorInDImage": {
                     if (donorInDImage == null) {
                         logError("No image is set as donor channel.");
                         return;
                     }
+                    double thresholdMin = 0;
+                    if (!thresholdDonorMinField.getText().trim().isEmpty()) {
+                        thresholdMin = Double.parseDouble(thresholdDonorMinField.getText().trim());
+                    }
+                    double thresholdMax = 0;
+                    if (!thresholdDonorMaxField.getText().trim().isEmpty()) {
+                        thresholdMax = Double.parseDouble(thresholdDonorMaxField.getText().trim());
+                    }
+                    ImageProcessor ip = donorInDImage.getProcessor();
+                    ip.setThreshold(thresholdMin, thresholdMax, ImageProcessor.NO_LUT_UPDATE);
+                    log("Thresholded donor channel with min: " + thresholdMin + " and max: " + thresholdMax + ".");
                     IJ.selectWindow(donorInDImage.getTitle());
-                    IJ.run("Threshold...");
+                    IJ.run("NaN Background");
+                    log("Donor channel background pixels set to NaN.");
                     thresholdDonorInDImageButton.setBackground(greenColor);
                     thresholdDonorInDImageButton.setOpaque(true);
                     thresholdDonorInDImageButton.setBorderPainted(false);
                     break;
-                case "thresholdDonorInAImage":
+                }
+                case "thresholdDonorInAImage": {
                     if (donorInAImage == null) {
                         logError("No image is set as transfer channel.");
                         return;
                     }
+                    double thresholdMin = 0;
+                    if (!thresholdTransferMinField.getText().trim().isEmpty()) {
+                        thresholdMin = Double.parseDouble(thresholdTransferMinField.getText().trim());
+                    }
+                    double thresholdMax = 0;
+                    if (!thresholdTransferMaxField.getText().trim().isEmpty()) {
+                        thresholdMax = Double.parseDouble(thresholdTransferMaxField.getText().trim());
+                    }
+                    ImageProcessor ip = donorInAImage.getProcessor();
+                    ip.setThreshold(thresholdMin, thresholdMax, ImageProcessor.NO_LUT_UPDATE);
+                    log("Thresholded transfer channel with min: " + thresholdMin + " and max: " + thresholdMax + ".");
                     IJ.selectWindow(donorInAImage.getTitle());
-                    IJ.run("Threshold...");
+                    IJ.run("NaN Background");
+                    log("Transfer channel background pixels set to NaN.");
                     thresholdDonorInAImageButton.setBackground(greenColor);
                     thresholdDonorInAImageButton.setOpaque(true);
                     thresholdDonorInAImageButton.setBorderPainted(false);
                     break;
-                case "thresholdAcceptorInAImage":
+                }
+                case "thresholdAcceptorInAImage": {
                     if (acceptorInAImage == null) {
                         logError("No image is set as acceptor channel.");
                         return;
                     }
+                    double thresholdMin = 0;
+                    if (!thresholdAcceptorMinField.getText().trim().isEmpty()) {
+                        thresholdMin = Double.parseDouble(thresholdAcceptorMinField.getText().trim());
+                    }
+                    double thresholdMax = 0;
+                    if (!thresholdAcceptorMaxField.getText().trim().isEmpty()) {
+                        thresholdMax = Double.parseDouble(thresholdAcceptorMaxField.getText().trim());
+                    }
+                    ImageProcessor ip = acceptorInAImage.getProcessor();
+                    ip.setThreshold(thresholdMin, thresholdMax, ImageProcessor.NO_LUT_UPDATE);
+                    log("Thresholded acceptor channel with min: " + thresholdMin + " and max: " + thresholdMax + ".");
                     IJ.selectWindow(acceptorInAImage.getTitle());
-                    IJ.run("Threshold...");
+                    IJ.run("NaN Background");
+                    log("Acceptor channel background pixels set to NaN.");
                     thresholdAcceptorInAImageButton.setBackground(greenColor);
                     thresholdAcceptorInAImageButton.setOpaque(true);
                     thresholdAcceptorInAImageButton.setBorderPainted(false);
                     break;
-                case "thresholdAutofluorescenceImage":
+                }
+                case "thresholdAutofluorescenceImage": {
                     if (autofluorescenceImage == null) {
                         logError("No image is set as autofluorescence channel.");
                         return;
                     }
+                    double thresholdMin = 0;
+                    if (!thresholdAFMinField.getText().trim().isEmpty()) {
+                        thresholdMin = Double.parseDouble(thresholdAFMinField.getText().trim());
+                    }
+                    double thresholdMax = 0;
+                    if (!thresholdAFMaxField.getText().trim().isEmpty()) {
+                        thresholdMax = Double.parseDouble(thresholdAFMaxField.getText().trim());
+                    }
+                    ImageProcessor ip = autofluorescenceImage.getProcessor();
+                    ip.setThreshold(thresholdMin, thresholdMax, ImageProcessor.NO_LUT_UPDATE);
+                    log("Thresholded autofluorescence channel with min: " + thresholdMin + " and max: " + thresholdMax + ".");
                     IJ.selectWindow(autofluorescenceImage.getTitle());
-                    IJ.run("Threshold...");
+                    IJ.run("NaN Background");
+                    log("Autofluorescence channel background pixels set to NaN.");
                     thresholdAutofluorescenceImageButton.setBackground(greenColor);
                     thresholdAutofluorescenceImageButton.setOpaque(true);
                     thresholdAutofluorescenceImageButton.setBorderPainted(false);
                     break;
+                }
+                case "thresholdFretImage": {
+                    if (transferImage == null) {
+                        logError("FRET image is required.");
+                        return;
+                    }
+                    double thresholdMin = 0;
+                    if (!thresholdFretMinField.getText().trim().isEmpty()) {
+                        thresholdMin = Double.parseDouble(thresholdFretMinField.getText().trim());
+                    }
+                    double thresholdMax = 0;
+                    if (!thresholdFretMaxField.getText().trim().isEmpty()) {
+                        thresholdMax = Double.parseDouble(thresholdFretMaxField.getText().trim());
+                    }
+                    ImageProcessor fip = transferImage.getProcessor();
+                    fip.setThreshold(thresholdMin, thresholdMax, ImageProcessor.NO_LUT_UPDATE);
+                    log("Thresholded FRET image with min: " + thresholdMin + " and max: " + thresholdMax + ".");
+                    IJ.selectWindow(transferImage.getTitle());
+                    IJ.run("NaN Background");
+                    log("FRET image background pixels set to NaN.");
+                    thresholdFretImageButton.setBackground(greenColor);
+                    thresholdFretImageButton.setOpaque(true);
+                    thresholdFretImageButton.setBorderPainted(false);
+                    break;
+                }
                 case "resetDD": {
                     if (donorInDImage == null) {
                         logError("No image is set as donor channel.");
@@ -2373,6 +2576,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     donorInDImage.setStack(donorInDImage.getTitle(), newStack);
                     donorInDImage.getProcessor().setColorModel(donorInDImageSave.getColorModel());
                     donorInDImage.updateAndDraw();
+                    log("Donor channel threshold has been reset.");
                     thresholdDonorInDImageButton.setBackground(originalButtonColor);
                     thresholdDonorInDImageButton.setOpaque(false);
                     thresholdDonorInDImageButton.setBorderPainted(true);
@@ -2460,6 +2664,30 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     smoothAutofluorescenceImageButton.setBackground(originalButtonColor);
                     smoothAutofluorescenceImageButton.setOpaque(false);
                     smoothAutofluorescenceImageButton.setBorderPainted(true);
+                    break;
+                }
+                case "resetFret": {
+                    if (transferImage == null) {
+                        logError("FRET image is required.");
+                        return;
+                    }
+                    if (transferImageSave == null) {
+                        logError("No saved image.");
+                        return;
+                    }
+                    int nSlices = transferImage.getImageStackSize();
+                    ImageStack newStack = new ImageStack(transferImageSave.getWidth(), transferImageSave.getHeight());
+                    for (int currentSlice = 1; currentSlice <= nSlices; currentSlice++) {
+                        FloatProcessor flp = new FloatProcessor(transferImageSave.getProcessor(currentSlice).getWidth(), transferImageSave.getProcessor(currentSlice).getHeight());
+                        flp.setPixels(currentSlice, (FloatProcessor) transferImageSave.getProcessor(currentSlice).duplicate());
+                        newStack.addSlice("" + currentSlice, flp);
+                    }
+                    transferImage.setStack(transferImage.getTitle(), newStack);
+                    transferImage.getProcessor().setColorModel(transferImageSave.getColorModel());
+                    transferImage.updateAndDraw();
+                    thresholdFretImageButton.setBackground(originalButtonColor);
+                    thresholdFretImageButton.setOpaque(false);
+                    thresholdFretImageButton.setBorderPainted(true);
                     break;
                 }
                 case "smoothDD":
@@ -2651,14 +2879,12 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logError("No image is set as acceptor channel.");
                         return;
                     } else {
-                        if (autoThresholdingCB.isSelected()) {
-                            if (autoThresholdMin.getText().trim().isEmpty()) {
-                                logError("Auto-threshold min value has to be given.");
-                                return;
-                            } else if (autoThresholdMax.getText().trim().isEmpty()) {
-                                logError("Auto-threshold max value has to be given.");
-                                return;
-                            }
+                        if (thresholdFretMinField.getText().trim().isEmpty()) {
+                            logError("Auto-threshold min value has to be given.");
+                            return;
+                        } else if (thresholdFretMaxField.getText().trim().isEmpty()) {
+                            logError("Auto-threshold max value has to be given.");
+                            return;
                         }
                         if (s1Field.getText().trim().isEmpty()) {
                             logError("S1 factor has to be given.");
@@ -2726,20 +2952,18 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
                             double autoThMin = 0;
                             double autoThMax = 0;
-                            if (autoThresholdingCB.isSelected()) {
-                                try {
-                                    autoThMin = Double.parseDouble(autoThresholdMin.getText().trim());
-                                } catch (NumberFormatException ex) {
-                                    logError("Auto-threshold min value has to be given.");
-                                    return;
-                                }
+                            try {
+                                autoThMin = Double.parseDouble(thresholdFretMinField.getText().trim());
+                            } catch (NumberFormatException ex) {
+                                logError("Auto-threshold min value has to be given.");
+                                return;
+                            }
 
-                                try {
-                                    autoThMax = Double.parseDouble(autoThresholdMax.getText().trim());
-                                } catch (NumberFormatException ex) {
-                                    logError("Auto-threshold max value has to be given.");
-                                    return;
-                                }
+                            try {
+                                autoThMax = Double.parseDouble(thresholdFretMaxField.getText().trim());
+                            } catch (NumberFormatException ex) {
+                                logError("Auto-threshold max value has to be given.");
+                                return;
                             }
 
                             int nSlices = donorInDImage.getImageStackSize();
@@ -2844,15 +3068,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 float[][] tiPoints = new float[width][height];
                                 for (int i = 0; i < width; i++) {
                                     for (int j = 0; j < height; j++) {
-                                        if (autoThresholdingCB.isSelected()) {
-                                            if (ipDDP[width * j + i] >= autoThMin && ipDDP[width * j + i] <= autoThMax) {
-                                                tiPoints[i][j] = ipDDP[width * j + i];
-                                            } else {
-                                                tiPoints[i][j] = Float.NaN;
-                                            }
-                                        } else {
-                                            tiPoints[i][j] = ipDDP[width * j + i];
-                                        }
+                                        tiPoints[i][j] = ipDDP[width * j + i];
+
                                     }
                                 }
 
@@ -2862,7 +3079,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             if (transferImage != null) {
                                 transferImage.close();
                             }
-                            transferImage = new ImagePlus("Transfer (FRET) image", transferStack);
+                            transferImage = new ImagePlus("FRET image - " + dateTimeFormat.format(OffsetDateTime.now()), transferStack);
                             transferImage.setCalibration(donorInDImage.getCalibration());
                             transferImage.show();
 
@@ -2932,10 +3149,15 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     if (autofluorescenceCorrectionMenuItem.isSelected()) {
                         autofluorescenceImage.changes = false;
                     }
+                    transferImageSave = new ImageStack(transferImage.getProcessor().getWidth(), transferImage.getProcessor().getHeight());
+                    int currentSlice = transferImage.getCurrentSlice();
+                    FloatProcessor flp = new FloatProcessor(transferImage.getStack().getProcessor(currentSlice).getWidth(), transferImage.getStack().getProcessor(currentSlice).getHeight());
+                    flp.setPixels(currentSlice, (FloatProcessor) transferImage.getStack().getProcessor(currentSlice).duplicate());
+                    transferImageSave.addSlice("" + currentSlice, flp);
                     break;
                 case "saveFretImage": {
                     if (transferImage == null) {
-                        logError("Transfer (FRET) image is required.");
+                        logError("FRET image is required.");
                         return;
                     }
                     FileSaver fs = new FileSaver(transferImage);
@@ -2947,11 +3169,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                 }
                 case "measureFretImage": {
                     if (transferImage == null) {
-                        logError("Transfer (FRET) image is required.");
+                        logError("FRET image is required.");
                         return;
                     }
                     resultsTable.incrementCounter();
-                    int currentSlice = transferImage.getCurrentSlice();
+                    currentSlice = transferImage.getCurrentSlice();
                     int width = transferImage.getWidth();
                     int height = transferImage.getHeight();
                     int currentRow = resultsTable.getCounter();
@@ -3114,6 +3336,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         smoothAutofluorescenceImageButton.setVisible(true);
                         thresholdAutofluorescenceImageLabel.setVisible(true);
                         resetAFButton.setVisible(true);
+                        thresholdAFMinField.setVisible(true);
+                        thresholdAFMaxField.setVisible(true);
                         thresholdAutofluorescenceImageButton.setVisible(true);
                         if (s1S3Dialog != null) {
                             s1S3Dialog.setVisible(false);
@@ -3152,6 +3376,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         smoothAutofluorescenceImageButton.setVisible(false);
                         thresholdAutofluorescenceImageLabel.setVisible(false);
                         resetAFButton.setVisible(false);
+                        thresholdAFMinField.setVisible(false);
+                        thresholdAFMaxField.setVisible(false);
                         thresholdAutofluorescenceImageButton.setVisible(false);
                         if (s1S3S5Dialog != null) {
                             s1S3S5Dialog.setVisible(false);
