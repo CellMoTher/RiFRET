@@ -109,7 +109,7 @@ import org.apache.commons.csv.CSVRecord;
 public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListener {
 
     private final String imagej2Version = "2.0.0-rc-69";
-    private final String imagejVersion = "1.52p";
+    private final String imagejVersion = "1.53f";
     private final String javaVersion = "1.8.0_202";
     private final int windowWidth = 730;
     private final int windowHeight = 820;
