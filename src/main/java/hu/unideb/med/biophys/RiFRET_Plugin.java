@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -118,6 +118,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private ImagePlus acceptorInAImage;
     private ImagePlus autofluorescenceImage;
     private ImagePlus transferImage = null;
+    private ImagePlus donorCorrImage = null;
+    private ImagePlus acceptorCorrImage = null;
     private ImageStack donorInDImageSave = null;
     private ImageStack donorInAImageSave = null;
     private ImageStack acceptorInAImageSave = null;
@@ -224,7 +226,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JButton nextButton;
     private JButton closeImagesButton;
     private JCheckBox useImageStacks;
-    private JCheckBox autoThresholdingCB;
+    private JCheckBox correctedImagesCB;
+    private JCheckBox saveStackCB;
     private JCheckBox eRatioCheckbox;
     private JTextField s1Field;
     private JTextField s2Field;
@@ -995,17 +998,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.insets = new Insets(2, 2, 2, 2);
         gc.fill = GridBagConstraints.NONE;
         createFretImgPanel.add(new JLabel("Step 4: create FRET image   "));
-//        autoThresholdingCB = new JCheckBox("Thresholding with min: ", true);
-//        autoThresholdingCB.setToolTipText("<html>If this checkbox is checked, the FRET image will be thresholded<br>with the given min and max values to exclude pixels with extreme<br>FRET efficiencies.</html>");
-//        autoThresholdingCB.setSelected(true);
-//        createFretImgPanel.add(autoThresholdingCB);
-//        autoThresholdMin = new JTextField("-2", 2);
-//        autoThresholdMin.setHorizontalAlignment(JTextField.RIGHT);
-//        createFretImgPanel.add(autoThresholdMin);
-//        createFretImgPanel.add(new JLabel(" and max: "));
-//        autoThresholdMax = new JTextField("2", 2);
-//        autoThresholdMax.setHorizontalAlignment(JTextField.RIGHT);
-//        createFretImgPanel.add(autoThresholdMax);
+        correctedImagesCB = new JCheckBox("Show corrected donor and acceptor images", false);
+        correctedImagesCB.setSelected(false);
+        createFretImgPanel.add(correctedImagesCB);
         container.add(createFretImgPanel, gc);
         createButton = new JButton("Create");
         createButton.addActionListener(this);
@@ -2978,6 +2973,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 float[] ipDDP = (float[]) ipDD.getPixels();
                                 float[] ipDAP = (float[]) ipDA.getPixels();
                                 float[] ipAAP = (float[]) ipAA.getPixels();
+                                float[] ipDMP = (float[]) ipDD.getPixelsCopy();
 
                                 if (autofluorescenceCorrectionMenuItem.isSelected()) {
                                     ImageProcessor ipAF = autofluorescenceImage.getStack().getProcessor(currentSlice).duplicate();
@@ -3051,6 +3047,44 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                             ipDDP[i] = Float.NaN;
                                         }
                                     }
+                                    int width = ipDD.getWidth();
+                                    int height = ipDD.getHeight();
+                                    float[][] tiPoints = new float[width][height];
+                                    for (int i = 0; i < width; i++) {
+                                        for (int j = 0; j < height; j++) {
+                                            tiPoints[i][j] = ipDDP[width * j + i];
+
+                                        }
+                                    }
+                                    FloatProcessor tiFp = new FloatProcessor(tiPoints);
+                                    transferStack.addSlice("" + currentSlice, tiFp);
+
+                                    if (correctedImagesCB.isSelected()) {
+                                        for (int i = 0; i < ipDDP.length; i++) {
+                                            ipDDP[i] = (float) (1 / (1 - ipDDP[i]) * ((ipAFP[i] * b1Factor - ipDMP[i]) / (b1Factor * s5Factor - 1)));
+                                            ipAAP[i] = (float) ((ipAFP[i] * b3Factor - ipDMP[i] * b3Factor * s5Factor + ipAAP[i] * (b1Factor * s5Factor - 1)) / (b1Factor * s5Factor - 1));
+                                        }
+                                        float[][] dcPoints = new float[width][height];
+                                        float[][] acPoints = new float[width][height];
+                                        for (int i = 0; i < width; i++) {
+                                            for (int j = 0; j < height; j++) {
+                                                dcPoints[i][j] = ipDDP[width * j + i];
+                                                acPoints[i][j] = ipAAP[width * j + i];
+
+                                            }
+                                        }
+                                        if (donorCorrImage != null) {
+                                            donorCorrImage.close();
+                                        }
+                                        donorCorrImage = new ImagePlus("Corrected Donor Channel - " + dateTimeFormat.format(OffsetDateTime.now()), new FloatProcessor(dcPoints));
+                                        donorCorrImage.show();
+
+                                        if (acceptorCorrImage != null) {
+                                            acceptorCorrImage.close();
+                                        }
+                                        acceptorCorrImage = new ImagePlus("Corrected Acceptor Channel - " + dateTimeFormat.format(OffsetDateTime.now()), new FloatProcessor(acPoints));
+                                        acceptorCorrImage.show();
+                                    }
                                 } else {
                                     for (int i = 0; i < ipDDP.length; i++) {
                                         if (!Float.isNaN(ipDDP[i]) && !Float.isNaN(ipDAP[i]) && !Float.isNaN(ipAAP[i])) {
@@ -3063,20 +3097,20 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                     for (int i = 0; i < ipDDP.length; i++) {
                                         ipDDP[i] = ipDDP[i] / ((float) 1 + ipDDP[i]);
                                     }
-                                }
+                                    
+                                    int width = ipDD.getWidth();
+                                    int height = ipDD.getHeight();
+                                    float[][] tiPoints = new float[width][height];
+                                    for (int i = 0; i < width; i++) {
+                                        for (int j = 0; j < height; j++) {
+                                            tiPoints[i][j] = ipDDP[width * j + i];
 
-                                int width = ipDD.getWidth();
-                                int height = ipDD.getHeight();
-                                float[][] tiPoints = new float[width][height];
-                                for (int i = 0; i < width; i++) {
-                                    for (int j = 0; j < height; j++) {
-                                        tiPoints[i][j] = ipDDP[width * j + i];
-
+                                        }
                                     }
-                                }
 
-                                FloatProcessor tiFp = new FloatProcessor(tiPoints);
-                                transferStack.addSlice("" + currentSlice, tiFp);
+                                    FloatProcessor tiFp = new FloatProcessor(tiPoints);
+                                    transferStack.addSlice("" + currentSlice, tiFp);
+                                }
                             }
                             if (transferImage != null) {
                                 transferImage.close();
@@ -3161,6 +3195,14 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     if (transferImage == null) {
                         logError("FRET image is required.");
                         return;
+                    }
+                    if (correctedImagesCB.isSelected()) {
+                        ImageStack correctedStack = new ImageStack(donorInDImage.getProcessor().getWidth(), donorInDImage.getProcessor().getHeight());
+                        correctedStack.addSlice("FRET image", transferImage.getProcessor());
+                            correctedStack.addSlice("Corrected Donor Image", donorCorrImage.getProcessor());
+                            correctedStack.addSlice("Corrected Acceptor Image", acceptorCorrImage.getProcessor());
+                        transferImage.setStack(correctedStack);
+                        transferImage.updateAndDraw();
                     }
                     if (outputPath == null) {
                         FileSaver fs = new FileSaver(transferImage);
@@ -3448,6 +3490,14 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
             autofluorescenceImage.changes = false;
             autofluorescenceImage.close();
         }
+        if (donorCorrImage != null) {
+            donorCorrImage.changes = false;
+            donorCorrImage.close();
+        }
+        if (acceptorCorrImage != null) {
+            acceptorCorrImage.changes = false;
+            acceptorCorrImage.close();
+        }
     }
 
     private void processFile(int currentFile) {
@@ -3523,6 +3573,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     }
 
     private void resetAll() {
+        transferImage = null;
+        transferImageSave = null;
         donorInDImage = null;
         donorInDImageSave = null;
         donorInAImage = null;
