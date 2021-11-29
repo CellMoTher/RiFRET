@@ -83,14 +83,14 @@
     </mailingLists>
 
     <scm>
-        <connection>scm:git:https://github.com/CellMoTher/rifret</connection>
-        <developerConnection>scm:git:git@github.com:CellMoTher/rifret</developerConnection>
+        <connection>scm:git:https://github.com/CellMoTher/RiFRET</connection>
+        <developerConnection>scm:git:git@github.com:CellMoTher/RiFRET</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/CellMoTher/rifret</url>
+        <url>https://github.com/CellMoTher/RiFRET</url>
     </scm>
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/CellMoTher/rifret/issues</url>
+        <url>https://github.com/CellMoTher/RiFRET/issues</url>
     </issueManagement>
     <ciManagement>
         <system>None</system>
