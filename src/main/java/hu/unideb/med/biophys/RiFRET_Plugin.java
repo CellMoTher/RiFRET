@@ -3199,8 +3199,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     if (correctedImagesCB.isSelected()) {
                         ImageStack correctedStack = new ImageStack(donorInDImage.getProcessor().getWidth(), donorInDImage.getProcessor().getHeight());
                         correctedStack.addSlice("FRET image", transferImage.getProcessor());
-                            correctedStack.addSlice("Corrected Donor Image", donorCorrImage.getProcessor());
-                            correctedStack.addSlice("Corrected Acceptor Image", acceptorCorrImage.getProcessor());
+                        correctedStack.addSlice("Corrected Donor Image", donorCorrImage.getProcessor());
+                        correctedStack.addSlice("Corrected Acceptor Image", acceptorCorrImage.getProcessor());
                         transferImage.setStack(correctedStack);
                         transferImage.updateAndDraw();
                     }
@@ -3638,6 +3638,12 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         thresholdAcceptorInAImageButton.setBackground(originalButtonColor);
         thresholdAcceptorInAImageButton.setOpaque(false);
         thresholdAcceptorInAImageButton.setBorderPainted(true);
+        thresholdAutofluorescenceImageButton.setBackground(originalButtonColor);
+        thresholdAutofluorescenceImageButton.setOpaque(false);
+        thresholdAutofluorescenceImageButton.setBorderPainted(true);
+        thresholdFretImageButton.setBackground(originalButtonColor);
+        thresholdFretImageButton.setOpaque(false);
+        thresholdFretImageButton.setBorderPainted(true);
         calculateS1S3Button.setBackground(originalButtonColor);
         calculateS1S3Button.setOpaque(false);
         calculateS1S3Button.setBorderPainted(true);
