@@ -248,6 +248,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JTextPane log;
     private JScrollPane logScrollPane;
     private final DateTimeFormatter dateTimeFormat;
+    private final DateTimeFormatter timeStampFormat;
     private final DateTimeFormatter timeFormat;
     private File[] automaticallyProcessedFiles = null;
     private int currentlyProcessedFile = 0;
@@ -265,6 +266,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         Locale.setDefault(Locale.ENGLISH);
         ToolTipManager.sharedInstance().setDismissDelay(10000);
         dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
+        timeStampFormat = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
         createGui();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -3114,7 +3116,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             if (transferImage != null) {
                                 transferImage.close();
                             }
-                            transferImage = new ImagePlus("FRET image - " + dateTimeFormat.format(OffsetDateTime.now()), transferStack);
+                            transferImage = new ImagePlus("FRET image - " + timeStampFormat.format(OffsetDateTime.now()), transferStack);
                             transferImage.setCalibration(donorInDImage.getCalibration());
                             transferImage.show();
 
