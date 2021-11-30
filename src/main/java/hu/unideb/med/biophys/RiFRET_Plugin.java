@@ -3306,7 +3306,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         File dir = new File(currentDirectory);
                         log("Please select a CSV to load parameters...");
                         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "loadParameters"));
-                        outputPath = currentDirectory + "Output/";
+                        outputPath = currentDirectory + "Output" + File.separator;
                         File output = new File(outputPath);
                         if (!output.exists()) {
                             output.mkdir();
