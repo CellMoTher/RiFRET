@@ -3290,11 +3290,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             + "2. transfer channel\n"
                             + "3. acceptor channel\n"
                             + "4. autofluorescence channel (optional)\n\n"
-                            + "Values for blurring and background subtraction (if desired)\n"
+                            + "Values for blurring, background subtraction and thresholding (if desired)\n"
                             + "should be entered in the main window before continuing.\n"
                             + "Every previously opened image and result window will be closed when you\n"
                             + "click OK.\n\n"
-                            + "Click OK to select the directory and CSV file containing parameters\n", "Batch Processing of Images", JOptionPane.OK_CANCEL_OPTION);
+                            + "Click OK to select the directory, CSV file containing parameters and channel order.\n", "Batch Processing of Images", JOptionPane.OK_CANCEL_OPTION);
                     if (choice == JOptionPane.YES_OPTION) {
                         currentlyProcessedFile = 0;
                         automaticallyProcessedFiles = null;
