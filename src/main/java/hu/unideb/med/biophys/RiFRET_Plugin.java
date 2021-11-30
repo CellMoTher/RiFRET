@@ -227,7 +227,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
     private JButton closeImagesButton;
     private JCheckBox useImageStacks;
     private JCheckBox correctedImagesCB;
-    private JCheckBox saveStackCB;
     private JCheckBox eRatioCheckbox;
     private JTextField s1Field;
     private JTextField s2Field;
