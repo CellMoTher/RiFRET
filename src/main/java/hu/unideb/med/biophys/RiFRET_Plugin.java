@@ -1377,6 +1377,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
                                 String blurAF = record.get("BLUR_AF");
                                 String ibgAF = record.get("IBG_AF");
+                                String thresholdAFMin = record.get("THRES_AF_MIN");
+                                String thresholdAFMax = record.get("THRES_AF_MAX");
 
                                 setS5Factor(s5);
                                 setS6Factor(s6);
@@ -1387,6 +1389,8 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
 
                                 sigmaFieldAF.setText(blurAF);
                                 autoflAFField.setText(ibgAF);
+                                thresholdAFMinField.setText(thresholdAFMin);
+                                thresholdAFMaxField.setText(thresholdAFMax);
                             }
                             String blurD = record.get("BLUR_D");
                             String blurT = record.get("BLUR_T");
@@ -1396,8 +1400,14 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             String ibgT = record.get("IBG_T");
                             String ibgA = record.get("IBG_A");
 
-                            String thresholdMin = record.get("THRES_MIN");
-                            String thresholdMax = record.get("THRES_MAX");
+                            String thresholdDonorMin = record.get("THRES_D_MIN");
+                            String thresholdDonorMax = record.get("THRES_D_MAX");
+                            String thresholdTransferMin = record.get("THRES_T_MIN");
+                            String thresholdTransferMax = record.get("THRES_T_MAX");
+                            String thresholdAcceptorMin = record.get("THRES_A_MIN");
+                            String thresholdAcceptorMax = record.get("THRES_A_MAX");
+                            String thresholdFretMin = record.get("THRES_FRET_MIN");
+                            String thresholdFretMax = record.get("THRES_FRET_MAX");
 
                             setS1Factor(s1);
                             setS2Factor(s2);
@@ -1413,8 +1423,14 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             autoflAInDField.setText(ibgT);
                             autoflAInAField.setText(ibgA);
 
-                            thresholdFretMinField.setText(thresholdMin);
-                            thresholdFretMaxField.setText(thresholdMax);
+                            thresholdDonorMinField.setText(thresholdDonorMin);
+                            thresholdDonorMaxField.setText(thresholdDonorMax);
+                            thresholdTransferMinField.setText(thresholdTransferMin);
+                            thresholdTransferMaxField.setText(thresholdTransferMax);
+                            thresholdAcceptorMinField.setText(thresholdAcceptorMin);
+                            thresholdAcceptorMaxField.setText(thresholdAcceptorMax);
+                            thresholdFretMinField.setText(thresholdFretMin);
+                            thresholdFretMaxField.setText(thresholdFretMax);
                         }
                         log("Loaded parameters from: " + path);
                     } catch (IOException ioe) {
@@ -1454,8 +1470,16 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                         "IBG_T",
                                         "IBG_A",
                                         "IBG_AF",
-                                        "THRES_MIN",
-                                        "THRES_MAX").print(writer);
+                                        "THRES_D_MIN",
+                                        "THRES_D_MAX",
+                                        "THRES_T_MIN",
+                                        "THRES_T_MAX",
+                                        "THRES_A_MIN",
+                                        "THRES_A_MAX",
+                                        "THRES_AF_MIN",
+                                        "THRES_AF_MAX",
+                                        "THRES_FRET_MIN",
+                                        "THRES_FRET_MAX").print(writer);
                         printer.printRecord(
                                 getS1Factor(),
                                 getS2Factor(),
@@ -1476,6 +1500,14 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                                 autoflAInDField.getText(),
                                 autoflAInAField.getText(),
                                 autoflAFField.getText(),
+                                thresholdDonorMinField.getText(),
+                                thresholdDonorMaxField.getText(),
+                                thresholdTransferMinField.getText(),
+                                thresholdTransferMaxField.getText(),
+                                thresholdAcceptorMinField.getText(),
+                                thresholdAcceptorMaxField.getText(),
+                                thresholdAFMinField.getText(),
+                                thresholdAFMaxField.getText(),
                                 thresholdFretMinField.getText(),
                                 thresholdFretMaxField.getText());
                         printer.flush();
