@@ -3590,13 +3590,13 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         if (autofluorescenceCorrectionMenuItem.isSelected()) {
             this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "subtractAutofluorescenceImage"));
         }
-        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "createFretImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdDonorInDImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdDonorInAImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdAcceptorInAImage"));
         if (autofluorescenceCorrectionMenuItem.isSelected()) {
             this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdAutofluorescenceImage"));
         }
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "createFretImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdFretImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "saveFretImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "nextImage"));
