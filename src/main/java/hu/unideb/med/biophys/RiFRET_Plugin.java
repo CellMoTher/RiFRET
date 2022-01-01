@@ -999,7 +999,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.fill = GridBagConstraints.NONE;
         createFretImgPanel.add(new JLabel("Step 4: create FRET image   "));
         correctedImagesCB = new JCheckBox("Show corrected donor and acceptor images", false);
-        correctedImagesCB.setSelected(false);
+        correctedImagesCB.setEnabled(false);
         createFretImgPanel.add(correctedImagesCB);
         container.add(createFretImgPanel, gc);
         createButton = new JButton("Create");
@@ -3387,6 +3387,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         thresholdAFMinField.setVisible(true);
                         thresholdAFMaxField.setVisible(true);
                         thresholdAutofluorescenceImageButton.setVisible(true);
+                        correctedImagesCB.setEnabled(true);
                         if (s1S3Dialog != null) {
                             s1S3Dialog.setVisible(false);
                             s1S3Dialog.dispose();
@@ -3427,6 +3428,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         thresholdAFMinField.setVisible(false);
                         thresholdAFMaxField.setVisible(false);
                         thresholdAutofluorescenceImageButton.setVisible(false);
+                        correctedImagesCB.setEnabled(false);
                         if (s1S3S5Dialog != null) {
                             s1S3S5Dialog.setVisible(false);
                             s1S3S5Dialog.dispose();
