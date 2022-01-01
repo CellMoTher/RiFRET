@@ -3151,65 +3151,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                             transferImage = new ImagePlus("FRET image - " + timeStampFormat.format(OffsetDateTime.now()), transferStack);
                             transferImage.setCalibration(donorInDImage.getCalibration());
                             transferImage.show();
-
-                            analyzer = new Analyzer();
-                            resultsTable = Analyzer.getResultsTable();
-                            resultsTable.setPrecision(3);
-                            resultsTable.incrementCounter();
-                            int widthTi = transferImage.getWidth();
-                            int heightTi = transferImage.getHeight();
-                            int currentRow = resultsTable.getCounter();
-                            if (currentlyProcessedFileName != null) {
-                                resultsTable.setValue("File", currentRow, currentlyProcessedFileName);
-                            }
-                            if (transferImage.getRoi() != null) {
-                                Roi roi = transferImage.getRoi();
-                                int count = 0;
-                                int notNan = 0;
-                                for (int i = 0; i < widthTi; i++) {
-                                    for (int j = 0; j < heightTi; j++) {
-                                        if (roi.contains(i, j)) {
-                                            count++;
-                                            if (transferImage.getStack().getProcessor(1).getPixelValue(i, j) >= -1) {
-                                                notNan++;
-                                            }
-                                        }
-                                    }
-                                }
-                                resultsTable.addValue("Pixels", count);
-                                resultsTable.addValue("Not NaN p.", notNan);
-                            } else {
-                                int notNan = 0;
-                                for (int i = 0; i < widthTi; i++) {
-                                    for (int j = 0; j < heightTi; j++) {
-                                        if (transferImage.getStack().getProcessor(1).getPixelValue(i, j) >= -1) {
-                                            notNan++;
-                                        }
-                                    }
-                                }
-                                resultsTable.addValue("Pixels", widthTi * heightTi);
-                                resultsTable.addValue("Not NaN p.", notNan);
-                            }
-                            ImageStatistics isMean = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.MEAN, null);
-                            resultsTable.addValue("Mean", (float) isMean.mean);
-                            ImageStatistics isMedian = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.MEDIAN, null);
-                            resultsTable.addValue("Median", (float) isMedian.median);
-                            ImageStatistics isStdDev = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.STD_DEV, null);
-                            resultsTable.addValue("Std. dev.", (float) isStdDev.stdDev);
-                            ImageStatistics isMinMax = ImageStatistics.getStatistics(transferImage.getStack().getProcessor(1), Measurements.MIN_MAX, null);
-                            resultsTable.addValue("Min", (float) isMinMax.min);
-                            resultsTable.addValue("Max", (float) isMinMax.max);
-                            if (transferImage.getRoi() != null) {
-                                donorInDImage.setRoi(transferImage.getRoi());
-                                donorInAImage.setRoi(transferImage.getRoi());
-                                acceptorInAImage.setRoi(transferImage.getRoi());
-                            } else {
-                                donorInDImage.killRoi();
-                                donorInAImage.killRoi();
-                                acceptorInAImage.killRoi();
-                            }
-                            analyzer.displayResults();
-                            analyzer.updateHeadings();
                         }
                     }
                     donorInDImage.changes = false;
@@ -3256,6 +3197,9 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         logError("FRET image is required.");
                         return;
                     }
+                    analyzer = new Analyzer();
+                    resultsTable = Analyzer.getResultsTable();
+                    resultsTable.setPrecision(3);
                     resultsTable.incrementCounter();
                     currentSlice = transferImage.getCurrentSlice();
                     int width = transferImage.getWidth();
@@ -3599,6 +3543,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "createFretImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "thresholdFretImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "saveFretImage"));
+        this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "measureFretImage"));
         this.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "nextImage"));
     }
 
