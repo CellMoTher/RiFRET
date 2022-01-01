@@ -2634,6 +2634,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     donorInAImage.setStack(donorInAImage.getTitle(), newStack);
                     donorInAImage.getProcessor().setColorModel(donorInAImageSave.getColorModel());
                     donorInAImage.updateAndDraw();
+                    log("Transfer channel threshold has been reset.");
                     thresholdDonorInAImageButton.setBackground(originalButtonColor);
                     thresholdDonorInAImageButton.setOpaque(false);
                     thresholdDonorInAImageButton.setBorderPainted(true);
@@ -2661,6 +2662,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     acceptorInAImage.setStack(acceptorInAImage.getTitle(), newStack);
                     acceptorInAImage.getProcessor().setColorModel(acceptorInAImageSave.getColorModel());
                     acceptorInAImage.updateAndDraw();
+                    log("Acceptor channel threshold has been reset.");
                     thresholdAcceptorInAImageButton.setBackground(originalButtonColor);
                     thresholdAcceptorInAImageButton.setOpaque(false);
                     thresholdAcceptorInAImageButton.setBorderPainted(true);
@@ -2688,6 +2690,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     autofluorescenceImage.setStack(autofluorescenceImage.getTitle(), newStack);
                     autofluorescenceImage.getProcessor().setColorModel(autofluorescenceImageSave.getColorModel());
                     autofluorescenceImage.updateAndDraw();
+                    log("Autofluorescence channel threshold has been reset.");
                     thresholdAutofluorescenceImageButton.setBackground(originalButtonColor);
                     thresholdAutofluorescenceImageButton.setOpaque(false);
                     thresholdAutofluorescenceImageButton.setBorderPainted(true);
@@ -2715,6 +2718,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     transferImage.setStack(transferImage.getTitle(), newStack);
                     transferImage.getProcessor().setColorModel(transferImageSave.getColorModel());
                     transferImage.updateAndDraw();
+                    log("FRET image threshold has been reset.");
                     thresholdFretImageButton.setBackground(originalButtonColor);
                     thresholdFretImageButton.setOpaque(false);
                     thresholdFretImageButton.setBorderPainted(true);
