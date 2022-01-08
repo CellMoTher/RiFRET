@@ -3496,7 +3496,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
             outputPath = null;
             return;
         }
-        if (!automaticallyProcessedFiles[currentFile].isFile() || !(automaticallyProcessedFiles[currentFile].getName().endsWith(".lsm") || automaticallyProcessedFiles[currentFile].getName().endsWith(".LSM") || automaticallyProcessedFiles[currentFile].getName().endsWith(".czi") || automaticallyProcessedFiles[currentFile].getName().endsWith(".CZI"))) {
+        if (!automaticallyProcessedFiles[currentFile].isFile() || !(automaticallyProcessedFiles[currentFile].getName().toLowerCase().endsWith(".lsm") || automaticallyProcessedFiles[currentFile].getName().toLowerCase().endsWith(".czi"))) {
             processFile(++currentlyProcessedFile);
             return;
         }
