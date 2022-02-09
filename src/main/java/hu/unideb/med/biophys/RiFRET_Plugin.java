@@ -3358,8 +3358,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                     JOptionPane optionPane = new JOptionPane();
                     optionPane.setMessage("RiFRET - an ImageJ plugin for intensity-based three-filter set (ratiometric) FRET\n"
                             + "Homepage: https://imagej.net/plugins/rifret\n"
-                            + "Written by: János Roszik (janosr@med.unideb.hu), Duarte Lisboa (duarte@med.unideb.hu),\n"
-                            + "János Szöllősi (szollo@med.unideb.hu) and György Vereb (vereb@med.unideb.hu)\n"
                             + "Tested with: (Fiji Is Just) ImageJ " + imagej2Version + "/" + imagejVersion + ";" + " Java " + javaVersion + ".\n");
                     optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
                     JDialog dialog = optionPane.createDialog(this, "About");
