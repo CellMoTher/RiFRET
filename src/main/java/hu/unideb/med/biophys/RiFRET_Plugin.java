@@ -994,7 +994,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 10;
         gc.gridx = 0;
         gc.gridy = 30;
-        JLabel thInfo = new JLabel("Threshold setting: set threshold, click Apply, then click Set to NaN");
+        JLabel thInfo = new JLabel("Threshold setting: set threshold, then click Apply");
         container.add(thInfo, gc);
         gc.gridx = 10;
         gc.gridy = 30;
