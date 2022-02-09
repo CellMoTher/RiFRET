@@ -883,7 +883,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 10;
         gc.gridx = 0;
         gc.gridy = 22;
-        JLabel backgroundInfo = new JLabel("Subtract background (average ROI and constant):");
+        JLabel backgroundInfo = new JLabel("Subtract background (average of ROI or constant):");
         container.add(backgroundInfo, gc);
         gc.gridx = 10;
         gc.gridy = 22;

@@ -157,7 +157,7 @@ public class S2S4S6Dialog extends JDialog implements ActionListener {
         gc.gridwidth = 2;
         gc.gridx = 0;
         gc.gridy = 6;
-        JLabel subtractionLabel = new JLabel("Subtract bg. (avg. ROI and constant):");
+        JLabel subtractionLabel = new JLabel("Subtract bg. (avg. of ROI or constant):");
         panel.add(subtractionLabel, gc);
 
         gc.gridwidth = GridBagConstraints.REMAINDER;
