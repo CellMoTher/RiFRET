@@ -990,36 +990,6 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         line4.setBackground(Color.lightGray);
         container.add(line4, gc);
 
-        // Create FRET image panel
-        JPanel createFretImgPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        gc.gridwidth = 10;
-        gc.gridx = 0;
-        gc.gridy = 28;
-        gc.insets = new Insets(2, 2, 2, 2);
-        gc.fill = GridBagConstraints.NONE;
-        createFretImgPanel.add(new JLabel("Step 4: create FRET image   "));
-        correctedImagesCB = new JCheckBox("Show corrected donor and acceptor images", false);
-        correctedImagesCB.setEnabled(false);
-        createFretImgPanel.add(correctedImagesCB);
-        container.add(createFretImgPanel, gc);
-        createButton = new JButton("Create");
-        createButton.addActionListener(this);
-        createButton.setActionCommand("createFretImage");
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.gridx = 10;
-        gc.gridy = 28;
-        container.add(createButton, gc);
-
-        // Separator panel 5
-        gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.gridx = 0;
-        gc.gridy = 29;
-        JPanel line5 = new JPanel();
-        line5.setPreferredSize(new Dimension(windowWidth - 35, 1));
-        line5.setBackground(Color.lightGray);
-        container.add(line5, gc);
-
         // Threshold information label */
         gc.gridwidth = 10;
         gc.gridx = 0;
@@ -1035,11 +1005,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         JLabel thresholdMaxLabel = new JLabel("Max:");
         container.add(thresholdMaxLabel, gc);
 
-        // Step 5a: Threshold donor channel
+        // Step 4a: Threshold donor channel
         gc.gridwidth = 10;
         gc.gridx = 0;
         gc.gridy = 31;
-        container.add(new JLabel("Step 5a: set threshold for donor channel image"), gc);
+        container.add(new JLabel("Step 4a: set threshold for donor channel image"), gc);
 
         gc.gridwidth = 1;
         gc.gridx = 9;
@@ -1074,11 +1044,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridy = 31;
         container.add(thresholdDonorInDImageButton, gc);
 
-        // Step 5b: Threshold transfer channel
+        // Step 4b: Threshold transfer channel
         gc.gridwidth = 10;
         gc.gridx = 0;
         gc.gridy = 32;
-        container.add(new JLabel("Step 5b: set threshold for transfer channel image"), gc);
+        container.add(new JLabel("Step 4b: set threshold for transfer channel image"), gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 32;
@@ -1112,11 +1082,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridy = 32;
         container.add(thresholdDonorInAImageButton, gc);
 
-        // Step 5c: Threshold acceptor channel
+        // Step 4c: Threshold acceptor channel
         gc.gridwidth = 10;
         gc.gridx = 0;
         gc.gridy = 33;
-        container.add(new JLabel("Step 5c: set threshold for acceptor channel image"), gc);
+        container.add(new JLabel("Step 4c: set threshold for acceptor channel image"), gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
         gc.gridy = 33;
@@ -1150,11 +1120,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridy = 33;
         container.add(thresholdAcceptorInAImageButton, gc);
 
-        // Step 5d: Threshold autofluorescence channel
+        // Step 4d: Threshold autofluorescence channel
         gc.gridwidth = 10;
         gc.gridx = 0;
         gc.gridy = 34;
-        thresholdAutofluorescenceImageLabel = new JLabel("Step 5d: set threshold for autofluorescence channel image");
+        thresholdAutofluorescenceImageLabel = new JLabel("Step 4d: set threshold for autofluorescence channel image");
         container.add(thresholdAutofluorescenceImageLabel, gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
@@ -1196,14 +1166,53 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
             thresholdAutofluorescenceImageButton.setVisible(false);
         }
 
-        // Step 5b: Threshold FRET channel
-        gc.gridwidth = 10;
+        // Separator panel 5
+        gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 0;
         gc.gridy = 35;
-        container.add(new JLabel("Step 5e: set threshold for FRET image"), gc);
+        JPanel line5 = new JPanel();
+        line5.setPreferredSize(new Dimension(windowWidth - 35, 1));
+        line5.setBackground(Color.lightGray);
+        container.add(line5, gc);
+
+        // Create FRET image panel
+        JPanel createFretImgPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        gc.gridwidth = 10;
+        gc.gridx = 0;
+        gc.gridy = 36;
+        gc.insets = new Insets(2, 2, 2, 2);
+        gc.fill = GridBagConstraints.NONE;
+        createFretImgPanel.add(new JLabel("Step 5: create FRET image   "));
+        correctedImagesCB = new JCheckBox("Show corrected donor and acceptor images", false);
+        correctedImagesCB.setEnabled(false);
+        createFretImgPanel.add(correctedImagesCB);
+        container.add(createFretImgPanel, gc);
+        createButton = new JButton("Create");
+        createButton.addActionListener(this);
+        createButton.setActionCommand("createFretImage");
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 10;
+        gc.gridy = 36;
+        container.add(createButton, gc);
+
+        // Separator panel 6
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.gridx = 0;
+        gc.gridy = 37;
+        JPanel line6 = new JPanel();
+        line6.setPreferredSize(new Dimension(windowWidth - 35, 1));
+        line6.setBackground(Color.lightGray);
+        container.add(line6, gc);
+
+        // Step 6: Threshold FRET channel
+        gc.gridwidth = 10;
+        gc.gridx = 0;
+        gc.gridy = 38;
+        container.add(new JLabel("Step 6: set threshold for FRET image"), gc);
         gc.gridwidth = 1;
         gc.gridx = 9;
-        gc.gridy = 35;
+        gc.gridy = 38;
         resetFretButton = new JButton("Reset");
         resetFretButton.setToolTipText("Resets threshold settings");
         resetFretButton.setMargin(new Insets(0, 0, 0, 0));
@@ -1216,14 +1225,14 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         thresholdFretMinField.setHorizontalAlignment(JTextField.RIGHT);
         gc.gridwidth = 1;
         gc.gridx = 10;
-        gc.gridy = 35;
+        gc.gridy = 38;
         container.add(thresholdFretMinField, gc);
 
         thresholdFretMaxField = new JTextField("2", 5);
         thresholdFretMaxField.setHorizontalAlignment(JTextField.RIGHT);
         gc.gridwidth = 1;
         gc.gridx = 11;
-        gc.gridy = 35;
+        gc.gridy = 38;
         container.add(thresholdFretMaxField, gc);
 
         thresholdFretImageButton = new JButton("Apply");
@@ -1231,25 +1240,26 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         thresholdFretImageButton.setActionCommand("thresholdFretImage");
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 13;
-        gc.gridy = 35;
+        gc.gridy = 38;
         container.add(thresholdFretImageButton, gc);
 
+        // Separator panel 7
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 0;
-        gc.gridy = 36;
-        JPanel line6 = new JPanel();
-        line6.setPreferredSize(new Dimension(windowWidth - 35, 1));
-        line6.setBackground(Color.lightGray);
-        container.add(line6, gc);
+        gc.gridy = 39;
+        JPanel line7 = new JPanel();
+        line7.setPreferredSize(new Dimension(windowWidth - 35, 1));
+        line7.setBackground(Color.lightGray);
+        container.add(line7, gc);
 
         // Save FRET image panel
         JPanel saveFretImgPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         gc.gridwidth = 10;
         gc.gridx = 0;
-        gc.gridy = 37;
+        gc.gridy = 40;
         gc.insets = new Insets(2, 2, 2, 2);
         gc.fill = GridBagConstraints.NONE;
-        saveFretImgPanel.add(new JLabel("Step 6: save FRET image as TIFF       "));
+        saveFretImgPanel.add(new JLabel("Step 7: save FRET image as TIFF       "));
         container.add(saveFretImgPanel, gc);
         saveButton = new JButton("Save");
         saveButton.addActionListener(this);
@@ -1257,21 +1267,22 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 10;
-        gc.gridy = 37;
+        gc.gridy = 40;
         container.add(saveButton, gc);
 
+        // Separator panel 8
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridx = 0;
-        gc.gridy = 38;
-        JPanel line7 = new JPanel();
-        line7.setPreferredSize(new Dimension(windowWidth - 35, 1));
-        line7.setBackground(Color.lightGray);
-        container.add(line7, gc);
+        gc.gridy = 41;
+        JPanel line8 = new JPanel();
+        line8.setPreferredSize(new Dimension(windowWidth - 35, 1));
+        line8.setBackground(Color.lightGray);
+        container.add(line8, gc);
 
         gc.gridwidth = 7;
         gc.gridx = 0;
-        gc.gridy = 39;
-        container.add(new JLabel("Step 7: select ROIs and make measurements"), gc);
+        gc.gridy = 42;
+        container.add(new JLabel("Step 8: select ROIs and make measurements"), gc);
         gc.gridx = 9;
         gc.gridwidth = 1;
         closeImagesButton = new JButton("Close images");
@@ -1287,7 +1298,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         measureButton.addActionListener(this);
         measureButton.setActionCommand("measureFretImage");
         gc.gridx = 10;
-        gc.gridy = 39;
+        gc.gridy = 42;
         gc.gridwidth = 6;
         container.add(measureButton, gc);
         nextButton = new JButton("Next");
@@ -1295,7 +1306,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         nextButton.addActionListener(this);
         nextButton.setActionCommand("nextImage");
         gc.gridx = 16;
-        gc.gridy = 39;
+        gc.gridy = 42;
         gc.gridwidth = GridBagConstraints.REMAINDER;
         container.add(nextButton, gc);
         nextButton.setVisible(false);
