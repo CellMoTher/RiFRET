@@ -634,7 +634,7 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
         gc.gridwidth = 9;
         gc.gridx = 0;
         gc.gridy = 9;
-        eRatioLabel = new JLabel("Calculate / set \u03B5d / \u03B5a:");
+        eRatioLabel = new JLabel("Set ratio of epsilons:");
         container.add(eRatioLabel, gc);
         if (!autofluorescenceCorrectionMenuItem.isSelected()) {
             eRatioLabel.setVisible(false);
