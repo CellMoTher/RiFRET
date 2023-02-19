@@ -14,7 +14,7 @@
     <version>2.0.0-SNAPSHOT</version>
 
     <name>RiFRET</name>
-    <description>an ImageJ plugin for intensity-based three-filter set (ratiometric) FRET.</description>
+    <description>an ImageJ plugin for intensity-based three-filter set FRET.</description>
     <url>https://biophys.med.unideb.hu/en/rifret/</url>
     <inceptionYear>2009</inceptionYear>
     <organization>
