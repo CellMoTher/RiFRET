@@ -1,3 +1,5 @@
+[![Build Status](https://github.com/CellMoTher/RiFRET/actions/workflows/build.yml/badge.svg)](https://github.com/CellMoTher/RiFRET/actions/workflows/build.yml)
+
 # RiFRET
 
 An [ImageJ](https://imagej.net) plugin for intensity-based three-filter set (ratiometric) FRET which works with unknown varying donor/accepter ratios, corrects for channel crosstalk and instrument calibration, and yields quantitative FRET E values.
