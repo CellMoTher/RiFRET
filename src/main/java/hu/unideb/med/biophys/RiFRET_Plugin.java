@@ -1781,11 +1781,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         }
 
                         GenericDialog gd = new GenericDialog("Set Channel Order");
-                        gd.addNumericField("Donor Channel:", donorInDSlice, 0);
-                        gd.addNumericField("Transfer Channel:", donorInASlice, 0);
-                        gd.addNumericField("Acceptor Channel:", acceptorInASlice, 0);
+                        gd.addNumericField("Donor Channel:", 1, 0);
+                        gd.addNumericField("Transfer Channel:", 2, 0);
+                        gd.addNumericField("Acceptor Channel:", 3, 0);
                         if (autofluorescenceCorrectionMenuItem.isSelected()) {
-                            gd.addNumericField("Autofluorescence Channel:", autofluorescenceSlice, 0);
+                            gd.addNumericField("Autofluorescence Channel:", 4, 0);
                         }
                         gd.showDialog();
                         if (gd.wasCanceled()) {
@@ -3311,11 +3311,11 @@ public class RiFRET_Plugin extends JFrame implements ActionListener, WindowListe
                         automaticallyProcessedFiles = dir.listFiles();
                         log("Please set the channel order...");
                         GenericDialog gd = new GenericDialog("Set Channel Order");
-                        gd.addNumericField("Donor Channel:", donorInDSlice, 0);
-                        gd.addNumericField("Transfer Channel:", donorInASlice, 0);
-                        gd.addNumericField("Acceptor Channel:", acceptorInASlice, 0);
+                        gd.addNumericField("Donor Channel:", 1, 0);
+                        gd.addNumericField("Transfer Channel:", 2, 0);
+                        gd.addNumericField("Acceptor Channel:", 3, 0);
                         if (autofluorescenceCorrectionMenuItem.isSelected()) {
-                            gd.addNumericField("Autofluorescence Channel:", autofluorescenceSlice, 0);
+                            gd.addNumericField("Autofluorescence Channel:", 4, 0);
                         }
                         gd.showDialog();
                         if (gd.wasCanceled()) {
