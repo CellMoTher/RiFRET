@@ -108,7 +108,7 @@ public class AlphaDialog extends JDialog implements ActionListener {
         panel.add(infoLabel, gc);
         gc.gridx = 0;
         gc.gridy = 1;
-        calculateRatioEps = new JCheckBox("Calculate the ratio of epsilons", false);
+        calculateRatioEps = new JCheckBox("Calculate \u03B5d/\u03B5a", false);
         calculateRatioEps.setActionCommand("calculateRatioEps");
         calculateRatioEps.addActionListener(this);
         calculateRatioEps.setToolTipText("<html>If this checkbox is checked, the ratio of epsilons is<br>calculated. It requires donor images of the double<br>labeled sample before and after photobleaching<br>the acceptor.</html>");
