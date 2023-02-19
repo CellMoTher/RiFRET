@@ -83,7 +83,7 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener {
         gc.gridwidth = 2;
         gc.gridx = 0;
         gc.gridy = 0;
-        JLabel infoLabel = new JLabel("<html><center>After setting an image to mask and a mask image (with NaN background pixels), two images will be created. The first one will contain the pixels which are not NaN in the mask, and the second one the others.</center></html>");
+        JLabel infoLabel = new JLabel("<html><center>Creates two new 32-bit images. Masked image 1 contains pixels in the mask, with values outside the selection set to NaN. Masked image 2 contains the inverse.</center></html>");
         panel.add(infoLabel, gc);
         gc.insets = new Insets(2, 2, 2, 2);
         gc.gridx = 0;
@@ -94,7 +94,7 @@ public class ApplyMaskRiDialog extends JDialog implements ActionListener {
         panel.add(setToMaskImgButton, gc);
         gc.gridx = 0;
         gc.gridy = 2;
-        setMaskImgButton = new JButton("Set mask image (with NaN bg. pixels)");
+        setMaskImgButton = new JButton("Set mask image");
         setMaskImgButton.addActionListener(this);
         setMaskImgButton.setActionCommand("setMaskImage");
         panel.add(setMaskImgButton, gc);
