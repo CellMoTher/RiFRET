@@ -1,12 +1,11 @@
 # RiFRET
 
-An [ImageJ](https://imagej.net) plugin for intensity-based three-filter set FRET.
+An [ImageJ](https://imagej.net) plugin for intensity-based three-filter set (ratiometric) FRET which works with unknown varying donor/accepter ratios, corrects for channel crosstalk and instrument calibration, and yields quantitative FRET E values.
 
 ## Getting started
 1. Download the latest version of [Fiji](https://fiji.sc/). 
 2. Enable the FRET Imaging [update site](https://imagej.net/update-sites/following).
 3. Once installed, go to _Plugins > FRET Imaging > RiFRET_.
-* ImageJ 1.x users can download the latest version of RiFRET from the releases page [here](https://github.com/CellMoTher/RiFRET/releases).
 
 ## Citation
 ***This software is based on a publication. If you use it in your work, please cite:***
