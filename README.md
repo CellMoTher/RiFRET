@@ -11,7 +11,10 @@ An [ImageJ](https://imagej.net) plugin for intensity-based three-filter set (rat
 
 ## Citation
 ***This software is based on a publication. If you use it in your work, please cite:***
-* Roszik J, Lisboa D, Szöllosi J, Vereb G. [Evaluation of intensity-based ratiometric FRET in image cytometry--approaches and a software solution](https://onlinelibrary.wiley.com/doi/pdf/10.1002/cyto.a.20747). Cytometry A. 2009;75(9):761–767. doi:10.1002/cyto.a.20747
+
+1. Rebenku, I., Lloyd, C.B., Szöllősi, J. et al. Pixel-by-pixel autofluorescence corrected FRET in fluorescence microscopy improves accuracy for samples with spatially varied autofluorescence to signal ratio. Sci Rep 13, 2934 (2023). https://doi.org/10.1038/s41598-023-30098-w
+
+2. Roszik, J., Lisboa, D., Szöllősi, J. and Vereb, G. (2009), Evaluation of intensity-based ratiometric FRET in image cytometry—Approaches and a software solution. Cytometry, 75A: 761-767. https://doi.org/10.1002/cyto.a.20747
 
 ## See also
 If you are using the acceptor photobleaching FRET method, we recommend our other FRET plugin [AccPbFRET](https://github.com/CellMoTher/AccPbFRET).
